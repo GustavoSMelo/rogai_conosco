@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'describe.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   runApp(const MyApp());
 }
 
@@ -11,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Color.fromRGBO(188, 126, 75, 1)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(188, 126, 75, 1)),
       ),
       home: const MyHomePage(),
     );
@@ -77,6 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialPageRoute(builder: (context) => DescribePage()),
                   );
                 },
+                style: TextButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(188, 126, 75, 1),
+                ),
                 child: Text(
                   'Avancar',
                   style: TextStyle(
@@ -84,9 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(245, 237, 220, 1),
                   ),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(188, 126, 75, 1),
                 ),
               ),
             ),
