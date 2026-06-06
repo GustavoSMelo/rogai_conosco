@@ -66,6 +66,9 @@ flutter:
         - assets/images/saddiest.png
         - assets/images/saddiest_gray.png
         - assets/images/cross_image.png
+        - assets/images/cartoon_cross.png
+        - assets/images/background.png
+        - assets/images/bible.png
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/to/resolution-aware-images

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mini_church/words.dart';
 
 class DescribePage extends StatefulWidget {
+  const DescribePage({super.key});
+
   @override
   State<DescribePage> createState() => DescribePageState();
 }
@@ -141,6 +143,14 @@ class DescribePageState extends State<DescribePage> {
                             : Color.fromRGBO(211, 176, 146, 1),
                         width: 1,
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.lightGreen,
+                          blurRadius: selectedHumor == 'happy' ? 2 : 0,
+                          blurStyle: BlurStyle.normal,
+                        ),
+                      ],
+                      color: Color.fromRGBO(245, 237, 220, 1),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -199,6 +209,14 @@ class DescribePageState extends State<DescribePage> {
                             : Color.fromRGBO(211, 176, 146, 1),
                         width: 1,
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.orangeAccent,
+                          blurRadius: selectedHumor == 'neutral' ? 2 : 0,
+                          blurStyle: BlurStyle.normal,
+                        ),
+                      ],
+                      color: Color.fromRGBO(245, 237, 220, 1),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -257,6 +275,14 @@ class DescribePageState extends State<DescribePage> {
                             : Color.fromRGBO(211, 176, 146, 1),
                         width: 1,
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.redAccent,
+                          blurRadius: selectedHumor == 'sad' ? 2 : 0,
+                          blurStyle: BlurStyle.normal,
+                        ),
+                      ],
+                      color: Color.fromRGBO(245, 237, 220, 1),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -311,9 +337,14 @@ class DescribePageState extends State<DescribePage> {
                     padding: EdgeInsets.fromLTRB(25.0, 20.0, 22.0, 10.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color.fromRGBO(211, 176, 146, 1),
-                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(188, 126, 75, 1),
+                            blurRadius: 2,
+                            blurStyle: BlurStyle.normal,
+                          ),
+                        ],
+                        color: Color.fromRGBO(245, 237, 220, 1),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Padding(

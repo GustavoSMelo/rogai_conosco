@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'describe.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.bottom],
+  );
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   runApp(const MyApp());
 }
@@ -16,7 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(188, 126, 75, 1)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color.fromRGBO(188, 126, 75, 1),
+        ),
       ),
       home: const MyHomePage(),
     );
@@ -33,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(245, 237, 220, 1),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -99,7 +104,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      backgroundColor: Color.fromRGBO(245, 237, 220, 1),
     );
   }
 }
