@@ -1,4 +1,4 @@
-# mini_church
+# orai_conosco
 
 A new Flutter project.
 
