@@ -1,0 +1,54 @@
+{
+  "features": {
+    "ghcr.io/devcontainers-extra/features/vscode-cli:1": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainers-extra/features/vscode-cli@sha256:f9c7d0342e95778c602d770d4ba88c5f9e67b1e4e13aa7cd53505279a536f758",
+      "integrity": "sha256:f9c7d0342e95778c602d770d4ba88c5f9e67b1e4e13aa7cd53505279a536f758"
+    },
+    "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+      "version": "0.0.5",
+      "resolved": "ghcr.io/devcontainers-extra/features/zsh-plugins@sha256:4dcc8e97307345cff26c2b4dfd840c2947b8b5bb20f492a68bdb9fbe9ccb67ba",
+      "integrity": "sha256:4dcc8e97307345cff26c2b4dfd840c2947b8b5bb20f492a68bdb9fbe9ccb67ba"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "version": "2.5.9",
+      "resolved": "ghcr.io/devcontainers/features/common-utils@sha256:cb0c4d3c276f157eed17935747e364178d75fee17f55c4e129966f64633deb3a",
+      "integrity": "sha256:cb0c4d3c276f157eed17935747e364178d75fee17f55c4e129966f64633deb3a"
+    },
+    "ghcr.io/jsburckhardt/devcontainer-features/tmux:2": {
+      "version": "2.0.0",
+      "resolved": "ghcr.io/jsburckhardt/devcontainer-features/tmux@sha256:65d1809a7e1b03b3a5d272443b5ab1832ed795439aec0ed3c655c73856bc6c8a",
+      "integrity": "sha256:65d1809a7e1b03b3a5d272443b5ab1832ed795439aec0ed3c655c73856bc6c8a"
+    },
+    "ghcr.io/larsnieuwenhuizen/features/neovim:0": {
+      "version": "0.0.2",
+      "resolved": "ghcr.io/larsnieuwenhuizen/features/neovim@sha256:dbb6bc74e7b3f52d82a8c86e9bc75120144098567ae6365fad04202b0da97c64",
+      "integrity": "sha256:dbb6bc74e7b3f52d82a8c86e9bc75120144098567ae6365fad04202b0da97c64"
+    },
+    "ghcr.io/postfinance/devcontainer-features/opencode:1": {
+      "version": "1.0.0",
+      "resolved": "ghcr.io/postfinance/devcontainer-features/opencode@sha256:3f9857e8013bafcaa802a3983313fdf62d36952d40ce0b2a94a287b1f57ab80f",
+      "integrity": "sha256:3f9857e8013bafcaa802a3983313fdf62d36952d40ce0b2a94a287b1f57ab80f"
+    },
+    "ghcr.io/rodribus/devcontainer-features/pi-coding-agent:0": {
+      "version": "0.1.0",
+      "resolved": "ghcr.io/rodribus/devcontainer-features/pi-coding-agent@sha256:6254dbe0d98b8156c9c7776b8db17641088c7a72cbd5aa99010c3af958dc6fc0",
+      "integrity": "sha256:6254dbe0d98b8156c9c7776b8db17641088c7a72cbd5aa99010c3af958dc6fc0"
+    },
+    "ghcr.io/siri404/devcontainer-ai-features/claude-code:1": {
+      "version": "1.0.1",
+      "resolved": "ghcr.io/siri404/devcontainer-ai-features/claude-code@sha256:e01d8c69a1a863388811b56e3afe4342a3a54d5ed79a4dc088794215b75a89b2",
+      "integrity": "sha256:e01d8c69a1a863388811b56e3afe4342a3a54d5ed79a4dc088794215b75a89b2"
+    },
+    "ghcr.io/sliekens/devcontainer-features/codex:1": {
+      "version": "1.1.2",
+      "resolved": "ghcr.io/sliekens/devcontainer-features/codex@sha256:f109114053968fa79369bb20430905fa55809c90d9b91bf1b5ddcb15991920b7",
+      "integrity": "sha256:f109114053968fa79369bb20430905fa55809c90d9b91bf1b5ddcb15991920b7"
+    },
+    "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {
+      "version": "0.0.6",
+      "resolved": "ghcr.io/stuartleeks/dev-container-features/shell-history@sha256:f266af2d093e0611921ccf510046e53affeccb353405ee05d2b91fcc4f69c1c9",
+      "integrity": "sha256:f266af2d093e0611921ccf510046e53affeccb353405ee05d2b91fcc4f69c1c9"
+    }
+  }
+}

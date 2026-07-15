@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Rogai Conosco - DevContainer",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie",
+	"initializeCommand": "mkdir -p \"$HOME/.codex\" \"$HOME/.config/opencode\"",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {},
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+		"ghcr.io/jsburckhardt/devcontainer-features/tmux:2": {},
+		"ghcr.io/larsnieuwenhuizen/features/neovim:0": {},
+		"ghcr.io/devcontainers-extra/features/zsh-plugins:0": {},
+		"ghcr.io/siri404/devcontainer-ai-features/claude-code:1": {},
+		"ghcr.io/sliekens/devcontainer-features/codex:1": {},
+		"ghcr.io/postfinance/devcontainer-features/opencode:1": {},
+		"ghcr.io/rodribus/devcontainer-features/pi-coding-agent:0": {
+			"configImportRoot": "/mnt/pi-coding-agent-import",
+			"mapAllConfigurations": true
+		},
+		"ghcr.io/devcontainers-extra/features/vscode-cli:1": {}
+	},
+	"mounts": [
+		{
+			"source": "${localEnv:HOME}/.config/opencode",
+			"target": "/home/node/.config/opencode",
+			"type": "bind"
+		},
+		{
+			"source": "${localEnv:HOME}/.claude.json",
+			"target": "/home/node/.claude.json",
+			"type": "bind"
+		},
+		{
+			"source": "${localEnv:HOME}/.pi/agent",
+			"target": "/mnt/pi-coding-agent-import",
+			"type": "bind"
+		}
+	]
+}
