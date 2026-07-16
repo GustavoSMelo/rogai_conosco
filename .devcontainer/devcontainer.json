@@ -25,6 +25,11 @@
 	"mounts": [
 		"source=${localEnv:SSH_AUTH_SOCK},target=/tmp/ssh.sock,type=bind",
 		{
+			"source": "$HOME/.ssh",
+			"target": "/root/.ssh",
+			"type": "bind"
+		},
+		{
 			"source": "$HOME/.config/opencode",
 			"target": "/home/node/.config/opencode",
 			"type": "bind"
