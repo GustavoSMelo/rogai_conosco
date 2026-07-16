@@ -1,0 +1,23 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+context:
+  Tech stack: Laravel, MariaDB, Livewire, PHPUnit, Larastan and
+  Commits: We use conventional commits
+  Obrigatory: Every single piece of php code should have a test associated for it, the covarage should be more than 75%
+  Tests: Should uses the PSRs to code standart and checker with Larastan (PHPStan) and Laravel Pint
+  Others:
+    - Does not apply spec without ask user authorization
+
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

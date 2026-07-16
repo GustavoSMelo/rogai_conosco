@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes brand-reveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-brand-reveal {
+    animation: brand-reveal 1.5s ease-out forwards;
+}
+
+.animate-fade-in {
+    animation: fade-in 1s ease-out 0.5s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-brand-reveal,
+    .animate-fade-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}

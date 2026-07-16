@@ -5,9 +5,12 @@
 .env.production
 .phpactor.json
 .phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
+/.codex/*
+/.cursor/*
+/.idea/*
+/.pi/*
+/.opencode/*
+/.claude/*
 /.nova
 /.phpunit.cache
 /.vscode
