@@ -1,0 +1,77 @@
+# Rogai Conosco — Agentic Coding Guide
+
+## Project Overview
+
+> Prayer request platform — anonymous prayer requests with 3 delivery forms:
+> 1. **Recorded prayer** (audio/video, delivered via WhatsApp/email, 24-48h SLA)
+> 2. **Instant prayer** (pre-written biblical prayers)
+> 3. **AI-generated prayer** (LLM-based instant prayer)
+
+Users may request anonymously or register. Registered users can view history, leave reviews, and track emotional trends.
+
+## Tech Stack
+
+- **Backend:** PHP 8.3, Laravel 13
+- **Frontend:** Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8
+- **Testing:** PHPUnit 12 (Unit + Feature tests)
+- **Agentic coding:** [OpenSpec](https://github.com/fissionai/openspec) (`@fission-ai/openspec`)
+
+## TDD First — Required
+
+**Every** function, component, and class must follow strict TDD:
+
+1. **Write the OpenSpec spec** — define behavior, inputs, outputs, edge cases
+2. **Write tests first** — PHPUnit Unit or Feature tests in `tests/`
+3. **Implement** — only enough code to pass the tests
+4. **Coverage ≥ 75%** — run `php artisan test --coverage` to verify
+
+Test location conventions:
+- `tests/Unit/` — models, services, actions, value objects
+- `tests/Feature/` — Livewire components, HTTP controllers, Volt pages
+
+## Running Tests
+
+```bash
+php artisan test                    # all tests
+php artisan test --coverage         # with coverage report
+php artisan test --filter=SomeTest  # single test class
+```
+
+Coverage is measured for the `app/` directory (configured in `phpunit.xml`).
+
+## OpenSpec Workflow
+
+1. Create a `.spec.md` file (e.g., `specs/prayer-request.spec.md` or alongside the code)
+2. Run `openspec` to scaffold tests from the spec
+3. Write the test, watch it fail (red)
+4. Implement, watch it pass (green)
+5. Refactor if needed
+
+## Architecture Notes
+
+- **Livewire Volt** for page-level components (`resources/views/livewire/`)
+- **Livewire full components** for complex interactions (`app/Livewire/`)
+- **Actions pattern** for business logic (`app/Actions/`)
+- **Queued jobs** for recorded prayer processing (audio/video rendering)
+- **WhatsApp notifications** via Laravel notifications
+- **Database:** SQLite (dev), MariaDB (prod — docker-compose)
+
+## Commit Convention
+
+```
+<type>(<scope>): <description>
+
+types: ✨ feat, 🐛 fix, 🧪 test, ♻️ refactor, 📄 spec, 📝 docs, 🔧 chore
+```
+
+Always run `php artisan test` before committing. Do not commit without passing tests.
+
+## Dev Environment
+
+```bash
+git config core.hooksPath .githooks  # enable pre-commit hooks
+composer run dev                     # starts server, queue, logs, vite concurrently
+composer run setup                   # fresh install
+```
+
+The pre-commit hook in `.githooks/pre-commit` runs **Pint**, **Larastan**, and **PHPUnit** before every commit. It is version-controlled so everyone gets it automatically after running `git config core.hooksPath .githooks`.

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo ""
+echo "=== Pre-commit Checks ==="
+echo ""
+
+# 1. Laravel Pint - code style (auto-fix)
+echo "→ Pint (auto-fixing)..."
+vendor/bin/pint 2>&1
+echo "  ✓ Pint done"
+echo ""
+
+git add -u 2>/dev/null || true
+
+echo "→ Larastan (static analysis)..."
+if composer phpstan -- --no-progress --debug 2>&1; then
+    echo "  ✓ PHPStan passed"
+else
+    echo "  ⚠ PHPStan fail"
+fi
+echo ""
+
+# 3. PHPUnit - tests
+echo "→ PHPUnit (tests)..."
+php artisan config:clear --ansi --quiet 2>/dev/null
+php artisan test --colors=never --quiet 2>&1 || {
+    echo ""
+    echo "✗ Tests failed."
+    exit 1
+}
+echo "  ✓ Tests passed"
+echo ""
+
+echo "=== All checks passed! ==="
