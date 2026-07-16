@@ -1,39 +1,63 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+// README at: https://github.com/devcontainers/templates/tree/main/src/php-mariadb
 {
-	"name": "Rogai Conosco - DevContainer",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie",
-	"initializeCommand": "mkdir -p \"$HOME/.codex\" \"$HOME/.config/opencode\"",
+	"name": "Rogai Conosco - DevContainer PHP",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
+	"forwardPorts": [
+		8080,
+		3306
+	],
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
-		"ghcr.io/jsburckhardt/devcontainer-features/tmux:2": {},
-		"ghcr.io/larsnieuwenhuizen/features/neovim:0": {},
-		"ghcr.io/devcontainers-extra/features/zsh-plugins:0": {},
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
+		"ghcr.io/devcontainers-extra/features/composer:1": {},
 		"ghcr.io/siri404/devcontainer-ai-features/claude-code:1": {},
-		"ghcr.io/sliekens/devcontainer-features/codex:1": {},
-		"ghcr.io/postfinance/devcontainer-features/opencode:1": {},
-		"ghcr.io/rodribus/devcontainer-features/pi-coding-agent:0": {
-			"configImportRoot": "/mnt/pi-coding-agent-import",
-			"mapAllConfigurations": true
-		},
-		"ghcr.io/devcontainers-extra/features/vscode-cli:1": {}
+		"ghcr.io/postfinance/devcontainer-features/node:1": {},
+		"ghcr.io/postfinance/devcontainer-features/opencode:1": {}
 	},
 	"mounts": [
 		{
-			"source": "${localEnv:HOME}/.config/opencode",
+			"source": "$HOME/.config/opencode",
 			"target": "/home/node/.config/opencode",
 			"type": "bind"
 		},
 		{
-			"source": "${localEnv:HOME}/.claude.json",
+			"source": "$HOME/.claude.json",
 			"target": "/home/node/.claude.json",
 			"type": "bind"
 		},
 		{
-			"source": "${localEnv:HOME}/.pi/agent",
+			"source": "$HOME/.pi/agent",
 			"target": "/mnt/pi-coding-agent-import",
 			"type": "bind"
 		}
-	]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-containers",
+				"mikestead.dotenv",
+				"DEVSENSE.composer-php-vscode",
+				"EditorConfig.EditorConfig",
+				"laravel.vscode-laravel"
+			]
+		}
+	},
+
+	"remoteUser": "root",
+	"postCreateCommand": "npm install -g --ignore-scripts @earendil-works/pi-coding-agent @fission-ai/openspec@latest @openai/codex"
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 }
