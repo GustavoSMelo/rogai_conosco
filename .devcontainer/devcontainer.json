@@ -23,6 +23,7 @@
 		"ghcr.io/postfinance/devcontainer-features/opencode:1": {}
 	},
 	"mounts": [
+		"source=${localEnv:SSH_AUTH_SOCK},target=/tmp/ssh.sock,type=bind",
 		{
 			"source": "$HOME/.config/opencode",
 			"target": "/home/node/.config/opencode",
@@ -39,6 +40,9 @@
 			"type": "bind"
 		}
 	],
+	"containerEnv": {
+		"SSH_AUTH_SOCK": "/tmp/ssh.sock"
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
