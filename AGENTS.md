@@ -75,3 +75,24 @@ composer run setup                   # fresh install
 ```
 
 The pre-commit hook in `.githooks/pre-commit` runs **Pint**, **Larastan**, and **PHPUnit** before every commit. It is version-controlled so everyone gets it automatically after running `git config core.hooksPath .githooks`.
+
+## Design Context
+
+Brand and design decisions are captured in `PRODUCT.md` (strategy) and `DESIGN.md` (visual system). Key anchors:
+
+- **Register:** Brand (marketing-first). The site communicates mission before features.
+- **Personality:** Peaceful, trustworthy, humble. Quiet confidence, no hype.
+- **Palette:** Pure white bg, muted olive primary (`oklch(0.55 0.10 115)`), deep terracotta accent (`oklch(0.40 0.12 28)`). OKLCH throughout.
+- **Typography:** Source Serif 4 (headings, reverent warmth) + Figtree (body, clean approachability).
+- **Motion:** Gentle fade-up reveals, slow ease-out-quart. No bounce, no elastic. `prefers-reduced-motion` respected.
+- **Theme:** Light. Pure white surface, not tinted. Brand color carried by accents, not background.
+- **Anti-references:** No generic SaaS, no megachurch flash, no gothic/dark moods.
+- **Reference:** Hallow (calm, beautiful, reverent prayer app).
+
+Run `/impeccable` to see available design commands (`critique`, `craft`, `polish`, `live`, etc.).
+
+## Frontend Design (Impeccable Skill)
+
+The **impeccable** skill handles all frontend/UI work: critique, craft, polish, animate, audit, distill, and live-iterate on interfaces. It covers Tailwind, Livewire Volt, typography, spacing, layout, color, motion, accessibility, responsive behavior, and the visual system in `DESIGN.md`.
+
+Load it with `/skill impeccable` when working on any UI task.

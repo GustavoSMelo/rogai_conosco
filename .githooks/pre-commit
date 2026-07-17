@@ -15,7 +15,7 @@ echo ""
 git add -u 2>/dev/null || true
 
 echo "→ Larastan (static analysis)..."
-if composer phpstan -- --no-progress --debug 2>&1; then
+if composer phpstan -- --no-progress 2>&1; then
     echo "  ✓ PHPStan passed"
 else
     echo "  ⚠ PHPStan fail"
