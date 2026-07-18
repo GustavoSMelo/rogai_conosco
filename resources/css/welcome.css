@@ -52,7 +52,7 @@
 }
 
 .welcome-section {
-    @apply px-6 py-24 sm:px-8 sm:py-32;
+    @apply px-6 py-16 sm:px-8 sm:py-24;
 }
 
 .welcome-section-heading {
@@ -86,10 +86,10 @@
 }
 
 .welcome-hero-btn {
-    @apply inline-block rounded-sm bg-brand-accent px-10 py-4 font-medium text-white no-underline transition-all duration-150;
+    @apply inline-block rounded-sm border border-white/70 px-10 py-4 font-medium text-white no-underline transition-all duration-150;
 }
 .welcome-hero-btn:hover {
-    @apply bg-brand-accent/90 shadow-lg;
+    @apply border-brand-accent bg-brand-accent shadow-lg;
 }
 
 .welcome-hero-link {
@@ -100,11 +100,11 @@
 }
 
 .welcome-step {
-    @apply relative flex flex-col sm:flex-row sm:items-center sm:gap-12;
+    @apply relative flex flex-col sm:flex-row sm:items-center sm:gap-12 mt-[15px] mb-[15px];
 }
 
 .welcome-step-body {
-    @apply flex flex-1 flex-col rounded-sm p-6 sm:flex-row sm:items-center sm:gap-10 sm:p-10;
+    @apply flex flex-1 flex-col rounded-sm p-6 sm:flex-row sm:items-center sm:gap-10 sm:px-10 sm:py-12;
 }
 
 .welcome-step-number {
@@ -120,7 +120,7 @@
 }
 
 .welcome-step-connector {
-    @apply mt-2 h-24 w-px;
+    @apply mt-2 h-32 w-px;
 }
 
 .welcome-modal-btn {
@@ -254,7 +254,7 @@
 }
 
 .welcome-hero-title {
-    @apply text-balance font-serif text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.1] tracking-[-0.02em] text-white;
+    @apply text-balance font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.1] tracking-[-0.02em] text-white;
 }
 
 .welcome-hero-subtitle {
@@ -314,4 +314,104 @@
 
 .welcome-step-label {
     @apply mt-4 shrink-0 sm:mt-0;
+}
+
+.welcome-features-list {
+    @apply mt-10 flex flex-wrap gap-6;
+}
+
+.welcome-delivery-subtitle {
+    @apply mt-4 text-lg leading-relaxed text-brand-muted;
+}
+
+.welcome-steps-wrapper {
+    @apply mt-16 flex flex-col;
+}
+
+.welcome-step-content {
+    @apply flex-1;
+}
+
+.welcome-open-source-subtitle {
+    @apply mt-6 text-lg leading-relaxed text-brand-ink/80;
+}
+
+.welcome-cards-grid {
+    @apply mt-10 grid gap-8 text-left sm:grid-cols-2;
+}
+
+.welcome-btn-wrapper {
+    @apply mt-10;
+}
+
+.welcome-footer {
+    @apply border-t border-brand-primary/20 px-6 py-16 sm:px-8;
+}
+
+.welcome-footer-inner {
+    @apply flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left;
+}
+
+.welcome-footer-brand-text {
+    @apply font-serif text-base text-brand-ink;
+}
+
+.welcome-footer-tagline {
+    @apply mt-1 text-sm text-brand-muted;
+}
+
+.welcome-footer-links {
+    @apply flex flex-col items-center gap-2 sm:items-end;
+}
+
+.welcome-footer-mission-text {
+    @apply text-sm text-brand-muted;
+}
+
+.welcome-footer-bottom {
+    @apply mt-12 border-t border-brand-primary/10 pt-6 text-center;
+}
+
+.welcome-footer-copyright {
+    @apply text-xs text-brand-muted/70;
+}
+
+.welcome-modal-buttons {
+    @apply flex gap-3 pt-2;
+}
+
+.welcome-success-text {
+    @apply font-serif text-lg text-brand-accent;
+}
+
+.welcome-char-count-row {
+    @apply mt-1 flex items-center justify-between;
+}
+
+.welcome-hero-break {
+    @apply hidden sm:inline;
+}
+
+.welcome-sidebar-btn:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.welcome-modal-cancel:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.welcome-hero-link:focus-visible {
+    @apply outline-2 outline-offset-2 outline-white;
+}
+
+.welcome-form-input:hover {
+    @apply border-brand-primary/50;
+}
+
+.welcome-modal-close:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.welcome-mobile-nav-btn:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
 }

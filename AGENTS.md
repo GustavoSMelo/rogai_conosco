@@ -12,9 +12,9 @@ Users may request anonymously or register. Registered users can view history, le
 ## Tech Stack
 
 - **Backend:** PHP 8.5, Laravel 13
-- **Frontend:** Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8
+- **Frontend:** Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8, Blade
 - **Testing:** PHPUnit 12 (Unit + Feature tests)
-- **Agentic coding:** [OpenSpec](https://github.com/fissionai/openspec) (`@fission-ai/openspec`)
+- **Agentic coding:** [OpenSpec](https://github.com/fissionai/openspec) (`@fission-ai/openspec`) [Impeccable](https://impeccable.style/) (`npx impeccable install`)
 
 ## TDD First — Required
 
@@ -70,11 +70,42 @@ Always run `php artisan test` before committing. Do not commit without passing t
 
 ```bash
 git config core.hooksPath .githooks  # enable pre-commit hooks
+composer install                     # install dependencies
 composer run dev                     # starts server, queue, logs, vite concurrently
 composer run setup                   # fresh install
 ```
 
 The pre-commit hook in `.githooks/pre-commit` runs **Pint**, **Larastan**, and **PHPUnit** before every commit. It is version-controlled so everyone gets it automatically after running `git config core.hooksPath .githooks`.
+
+## Installing Skills
+
+Skills are version-controlled in `.github/skills/` as the canonical source. To install them into your agentic coding harness, symlink from the harness's skills directory:
+
+```bash
+# One-time install — adjust <harness-skills-dir> to match your tool
+mkdir -p <harness-skills-dir>
+for skill in .github/skills/*/; do
+  name=$(basename "$skill")
+  ln -sfn "$(pwd)/.github/skills/$name" "<harness-skills-dir>/$name"
+done
+```
+
+For example:
+
+| Harness  |   Skills directory  |
+|----------|---------------------|
+| OpenCode | `.opencode/skills/` |
+| Cline    | `.cline/skills/`    |
+| Roo      | `.roo/skills/`      |
+| Claude   | `.claude/skills`    |
+| Codex    | `.codex/skills`     |
+| Pi       | `.pi/skills`        |
+| Cursor   | `.cursor/skills`    |
+
+Re-run after pulling skill updates. Verify with:
+```bash
+ls -la <harness-skills-dir>/  # should show 7 entries
+```
 
 ## Design Context
 
@@ -89,7 +120,7 @@ Brand and design decisions are captured in `PRODUCT.md` (strategy) and `DESIGN.m
 - **Anti-references:** No generic SaaS, no megachurch flash, no gothic/dark moods.
 - **Reference:** Hallow (calm, beautiful, reverent prayer app).
 
-Run `/impeccable` to see available design commands (`critique`, `craft`, `polish`, `live`, etc.).
+Run `/skill impeccable` and then use its built-in commands (`critique`, `craft`, `polish`, `live`, etc.).
 
 ## Frontend Design (Impeccable Skill)
 

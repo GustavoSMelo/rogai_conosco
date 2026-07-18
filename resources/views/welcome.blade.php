@@ -33,6 +33,7 @@
             <a href="#hero" class="welcome-sidebar-link">Inicio</a>
             <a href="#about" class="welcome-sidebar-link">Sobre</a>
             <a href="#delivery" class="welcome-sidebar-link">Como funciona</a>
+            <a href="#anonymity" class="welcome-sidebar-link">Anonimato</a>
             <a href="#opensource" class="welcome-sidebar-link">Open Source</a>
             <button type="button"
                     onclick="document.getElementById('prayer-modal').showModal()"
@@ -58,7 +59,7 @@
                     aria-expanded="false"
                     aria-controls="side-nav"
                     type="button">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                     <line x1="4" y1="7" x2="20" y2="7"/>
                     <line x1="4" y1="12" x2="20" y2="12"/>
                     <line x1="4" y1="17" x2="20" y2="17"/>
@@ -76,7 +77,7 @@
                         class="welcome-nav-close-btn"
                         aria-label="Close menu"
                         type="button">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                         <line x1="6" y1="6" x2="18" y2="18"/>
                         <line x1="18" y1="6" x2="6" y2="18"/>
                     </svg>
@@ -86,6 +87,7 @@
                 <a href="#hero" class="nav-link welcome-mobile-nav-link">Inicio</a>
                 <a href="#about" class="nav-link welcome-mobile-nav-link">Sobre</a>
                 <a href="#delivery" class="nav-link welcome-mobile-nav-link">Como funciona</a>
+                <a href="#anonymity" class="nav-link welcome-mobile-nav-link">Anonimato</a>
                 <a href="#opensource" class="nav-link welcome-mobile-nav-link">Open Source</a>
                 <button type="button"
                         class="nav-link welcome-mobile-nav-btn"
@@ -119,7 +121,7 @@
                 </h1>
                 <p class="welcome-hero-subtitle">
                     Oração anônima de pessoas reais, não de robôs.
-                    <br class="hidden sm:inline">
+                    <br class="welcome-hero-break">
                     Grátis. Privado. Para todos.
                 </p>
                 <div class="welcome-hero-cta">
@@ -209,22 +211,22 @@
                             expandir nosso alcance.
                         </p>
                     </div>
-                    <div class="mt-10 flex flex-wrap gap-6">
+                    <div class="welcome-features-list">
                         <div class="welcome-feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon" aria-hidden="true">
                                 <path d="M12 21.35C10.55 20.25 5 16 5 11.5 5 8.5 7.5 6 10.5 6c1.5 0 2.85.67 3.75 1.71C15.15 6.67 16.5 6 18 6 21 6 23.5 8.5 23.5 11.5c0 4.5-5.55 8.75-7 9.85L19.5 19 12 21.35Z"/>
                             </svg>
                             <span>Grátis e sempre será</span>
                         </div>
                         <div class="welcome-feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon" aria-hidden="true">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                             <span>Privado e anônimo</span>
                         </div>
                         <div class="welcome-feature-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon" aria-hidden="true">
                                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
                             </svg>
                             <span>Sustentado por doações</span>
@@ -241,11 +243,11 @@
                     <h2 class="welcome-section-heading">
                         Como sua oração chega até você
                     </h2>
-                    <p class="mt-4 text-lg leading-relaxed text-brand-muted">
+                    <p class="welcome-delivery-subtitle">
                         Três formas de receber oração. Escolha a que melhor se encaixa para você.
                     </p>
                 </div>
-                <div class="reveal mt-16 flex flex-col gap-12 sm:gap-0">
+                <div class="reveal welcome-steps-wrapper">
                     {{-- Step 1 --}}
                     <div class="welcome-step">
                         <div class="welcome-step-divider">
@@ -254,7 +256,7 @@
                         </div>
                         <div class="welcome-step-body sm:bg-brand-primary-light">
                             <span class="welcome-step-number-sm bg-brand-primary">1</span>
-                            <div class="flex-1">
+                            <div class="welcome-step-content">
                                 <h3 class="welcome-step-title">Oração gravada</h3>
                                 <p class="welcome-step-text">
                                     Uma oração real, gravada em áudio ou vídeo e entregue por WhatsApp ou e-mail em até 24&ndash;48 horas.
@@ -273,7 +275,7 @@
                         </div>
                         <div class="welcome-step-body sm:max-w-xl sm:bg-brand-accent-light">
                             <span class="welcome-step-number-sm bg-brand-accent">2</span>
-                            <div class="flex-1">
+                            <div class="welcome-step-content">
                                 <h3 class="welcome-step-title">Oração instantânea</h3>
                                 <p class="welcome-step-text">
                                     Orações bíblicas pré-escritas que você pode ler ou receber imediatamente. Baseadas nas Escrituras e prontas quando você precisar.
@@ -291,7 +293,7 @@
                         </div>
                         <div class="welcome-step-body sm:bg-brand-ink/5">
                             <span class="welcome-step-number-sm bg-brand-ink">3</span>
-                            <div class="flex-1">
+                            <div class="welcome-step-content">
                                 <h3 class="welcome-step-title">Oração por IA</h3>
                                 <p class="welcome-step-text">
                                     Uma oração personalizada, composta por inteligência artificial sob medida para o seu pedido. Gerada instantaneamente.
@@ -306,6 +308,63 @@
             </div>
         </section>
 
+        {{-- Por que o anonimato importa --}}
+        <section id="anonymity" class="bg-brand-surface welcome-section">
+            <div class="mx-auto max-w-6xl">
+                <div class="reveal mx-auto max-w-measure text-center">
+                    <h2 class="welcome-section-heading">
+                        Por que o anonimato importa
+                    </h2>
+                    <p class="welcome-delivery-subtitle">
+                        Às vezes é mais fácil compartilhar o que pesa no coração com alguém que não te conhece.
+                        O anonimato torna a oração acessível a todos, sem medo.
+                    </p>
+                </div>
+                <div class="reveal welcome-cards-grid">
+                    <div class="welcome-card group">
+                        <div class="welcome-flex-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-primary" aria-hidden="true">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                            <h3 class="welcome-card-title">Sem o peso do julgamento</h3>
+                        </div>
+                        <p class="welcome-card-text">
+                            Um estranho não tem histórico, reputação nem contexto para te julgar.
+                            Você pode ser sincero sem medo do "o que vão pensar de mim depois?".
+                        </p>
+                    </div>
+                    <div class="welcome-card group">
+                        <div class="welcome-flex-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-accent" aria-hidden="true">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <h3 class="welcome-card-title">Apenas a oração</h3>
+                        </div>
+                        <p class="welcome-card-text">
+                            Você não precisa de um vínculo pessoal com quem ora. Basta que alguém
+                            faça uma oração genuína em seu nome. Sem obrigações, sem cobranças,
+                            sem mudança de tratamento.
+                        </p>
+                    </div>
+                    <div class="welcome-card group">
+                        <div class="welcome-flex-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-ink/60" aria-hidden="true">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            <h3 class="welcome-card-title">Acolhimento sem distância</h3>
+                        </div>
+                        <p class="welcome-card-text">
+                            Quem não faz parte de uma comunidade religiosa — ou sente vergonha
+                            dentro dela — ainda merece apoio espiritual. O anonimato acolhe
+                            sem exigir pertencimento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {{-- Comunidade Open Source --}}
         <section id="opensource" class="bg-brand-primary-light welcome-section">
             <div class="mx-auto max-w-6xl">
@@ -313,14 +372,14 @@
                     <h2 class="welcome-section-heading">
                         Comunidade Open Source
                     </h2>
-                    <p class="mt-6 text-lg leading-relaxed text-brand-ink/80">
+                    <p class="welcome-open-source-subtitle">
                         Este projeto é <strong>código aberto</strong>. Acreditamos que a oração deve ser acessível a todos,
                         e o código também.
                     </p>
-                    <div class="mt-10 grid gap-8 text-left sm:grid-cols-2">
+                    <div class="welcome-cards-grid">
                         <div class="welcome-card group">
                             <div class="welcome-flex-center">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-primary">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-primary" aria-hidden="true">
                                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 5.77 5.07 5.07 0 0 0 19.91 3S18.73.65 15 2.48a13.38 13.38 0 0 0-7 0C4.27.65 3.09 3 3.09 3A5.07 5.07 0 0 0 3 5.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 7 19.13V22"/>
                                 </svg>
                                 <h3 class="welcome-card-title">Código aberto</h3>
@@ -333,7 +392,7 @@
                         </div>
                         <div class="welcome-card group">
                             <div class="welcome-flex-center">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-accent">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="welcome-svg-icon text-brand-accent" aria-hidden="true">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                 </svg>
                                 <h3 class="welcome-card-title">Contribua</h3>
@@ -345,7 +404,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="mt-10">
+                    <div class="welcome-btn-wrapper">
                         <a href="https://github.com/anomalyco/rogai_conosco"
                            target="_blank"
                            rel="noopener noreferrer"
@@ -360,15 +419,15 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="main-content border-t border-brand-primary/20 px-6 py-16 sm:px-8">
+    <footer class="main-content welcome-footer">
         <div class="mx-auto max-w-6xl">
-            <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+            <div class="welcome-footer-inner">
                 <div>
-                    <p class="font-serif text-base text-brand-ink">Rogai Conosco</p>
-                    <p class="mt-1 text-sm text-brand-muted">Alguém está orando por você.</p>
+                    <p class="welcome-footer-brand-text">Rogai Conosco</p>
+                    <p class="welcome-footer-tagline">Alguém está orando por você.</p>
                 </div>
-                <div class="flex flex-col items-center gap-2 sm:items-end">
-                    <p class="text-sm text-brand-muted">
+                <div class="welcome-footer-links">
+                    <p class="welcome-footer-mission-text">
                         Grátis &middot; Privado &middot; Sustentado por doações
                     </p>
                     <a href="/doar" class="welcome-footer-link">
@@ -376,8 +435,8 @@
                     </a>
                 </div>
             </div>
-            <div class="mt-12 border-t border-brand-primary/10 pt-6 text-center">
-                <p class="text-xs text-brand-muted/70">
+            <div class="welcome-footer-bottom">
+                <p class="welcome-footer-copyright">
                     Rogai Conosco &copy; {{ date('Y') }}. Feito com fé.
                 </p>
             </div>
@@ -393,7 +452,7 @@
                 onclick="document.getElementById('prayer-modal').close()"
                 class="welcome-modal-close"
                 aria-label="Close">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <line x1="6" y1="6" x2="18" y2="18"/>
                 <line x1="18" y1="6" x2="6" y2="18"/>
             </svg>
@@ -404,7 +463,7 @@
 
         @if (session('success'))
             <div class="welcome-modal-success">
-                <p class="font-serif text-lg text-brand-accent">{{ session('success') }}</p>
+                <p class="welcome-success-text">{{ session('success') }}</p>
             </div>
         @endif
 
@@ -435,7 +494,7 @@
                               maxlength="2000"
                               placeholder="Compartilhe pelo que você gostaria de orar..."
                               class="welcome-form-input">{{ old('message') }}</textarea>
-                    <div class="mt-1 flex items-center justify-between">
+                    <div class="welcome-char-count-row">
                         <span id="char-count" class="welcome-char-count">0 / 2000</span>
                         @error('message')
                             <p class="welcome-form-error">{{ $message }}</p>
@@ -490,7 +549,7 @@
                     </p>
                 </div>
 
-                <div class="flex gap-3 pt-2">
+                <div class="welcome-modal-buttons">
                     <button type="submit"
                             id="submit-btn"
                             class="welcome-modal-btn bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60">
