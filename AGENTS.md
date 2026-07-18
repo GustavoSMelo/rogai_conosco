@@ -12,7 +12,7 @@ Users may request anonymously or register. Registered users can view history, le
 ## Tech Stack
 
 - **Backend:** PHP 8.5, Laravel 13
-- **Frontend:** Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8, Blade
+- **Frontend:** Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8, TypeScript, Blade
 - **Testing:** PHPUnit 12 (Unit + Feature tests)
 - **Agentic coding:** [OpenSpec](https://github.com/fissionai/openspec) (`@fission-ai/openspec`) [Impeccable](https://impeccable.style/) (`npx impeccable install`)
 

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "noImplicitAny": true,
+        "strict": false,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowImportingTsExtensions": true,
+        "isolatedModules": true,
+        "noEmit": true
+    },
+    "include": ["resources/js/**/*.ts"],
+    "exclude": ["node_modules", "vendor", "public"]
+}

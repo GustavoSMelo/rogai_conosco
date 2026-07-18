@@ -573,7 +573,7 @@
     </div>
 </dialog>
 
-@vite(['resources/js/welcome.js', 'resources/css/welcome.css'])
+@vite(['resources/js/welcome.ts', 'resources/css/welcome.css'])
 
 </body>
 </html>

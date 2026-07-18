@@ -214,11 +214,11 @@
 }
 
 .welcome-brand-logo {
-    @apply h-10 w-10 rounded-full object-contain;
+    @apply h-10 w-10 object-contain;
 }
 
 .welcome-brand-logo-sm {
-    @apply h-7 w-7 rounded-full object-contain;
+    @apply h-7 w-7 object-contain;
 }
 
 .welcome-brand-text {
