@@ -20,7 +20,7 @@
 }
 
 .welcome-sidebar-btn {
-    @apply mt-4 self-start rounded border border-brand-accent px-5 py-2 text-sm font-medium text-brand-accent no-underline transition-colors duration-150;
+    @apply mt-4 self-start rounded-[5px] border border-brand-accent px-5 py-2 text-sm font-medium text-brand-accent no-underline transition-colors duration-150;
 }
 .welcome-sidebar-btn:hover {
     @apply bg-brand-accent-light;
@@ -31,21 +31,21 @@
 }
 
 .welcome-menu-btn {
-    @apply relative flex h-10 w-10 items-center justify-center text-brand-ink transition-colors duration-150;
+    @apply relative flex h-10 w-10 items-center justify-center rounded-[5px] text-brand-ink transition-colors duration-150;
 }
 .welcome-menu-btn:hover {
     @apply text-brand-primary;
 }
 
 .welcome-nav-close-btn {
-    @apply flex h-10 w-10 items-center justify-center text-brand-ink transition-colors duration-150;
+    @apply flex h-10 w-10 items-center justify-center rounded-[5px] text-brand-ink transition-colors duration-150;
 }
 .welcome-nav-close-btn:hover {
     @apply text-brand-primary;
 }
 
 .welcome-mobile-nav-btn {
-    @apply mt-4 self-start rounded border border-brand-accent px-5 py-2 text-base font-medium text-brand-accent transition-colors duration-150;
+    @apply mt-4 self-start rounded-[5px] border border-brand-accent px-5 py-2 text-base font-medium text-brand-accent transition-colors duration-150;
 }
 .welcome-mobile-nav-btn:hover {
     @apply bg-brand-accent-light;
@@ -79,14 +79,14 @@
 }
 
 .welcome-btn-outline {
-    @apply inline-block rounded-sm border border-brand-accent px-8 py-3 font-medium text-brand-accent no-underline transition-all duration-150;
+    @apply inline-block rounded-[5px] border border-brand-accent px-8 py-3 font-medium text-brand-accent no-underline transition-all duration-150;
 }
 .welcome-btn-outline:hover {
     @apply bg-brand-accent text-white;
 }
 
 .welcome-hero-btn {
-    @apply inline-block rounded-sm border border-white/70 px-10 py-4 font-medium text-white no-underline transition-all duration-150;
+    @apply inline-block rounded-[5px] border border-white/70 px-10 py-4 font-medium text-white no-underline transition-all duration-150;
 }
 .welcome-hero-btn:hover {
     @apply border-brand-accent bg-brand-accent shadow-lg;
@@ -124,7 +124,7 @@
 }
 
 .welcome-modal-btn {
-    @apply flex-1 rounded-sm px-6 py-3 font-medium text-white transition-all duration-150;
+    @apply flex-1 rounded-[5px] px-6 py-3 font-medium text-white transition-all duration-150;
 }
 .welcome-modal-btn:hover {
     @apply shadow-md;
@@ -134,17 +134,21 @@
 }
 
 .welcome-modal-cancel {
-    @apply rounded-sm border border-brand-primary/30 bg-white px-6 py-3 font-medium text-brand-muted transition-all duration-150;
+    @apply rounded-[5px] border border-brand-primary/30 bg-white px-6 py-3 font-medium text-brand-muted transition-all duration-150;
 }
 .welcome-modal-cancel:hover {
     @apply bg-brand-primary-light text-brand-ink;
 }
 
 .welcome-modal-close {
-    @apply absolute right-4 top-4 flex h-8 w-8 items-center justify-center text-brand-muted transition-colors duration-150;
+    @apply absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-[5px] text-brand-muted transition-colors duration-150;
 }
 .welcome-modal-close:hover {
     @apply text-brand-ink;
+}
+
+textarea.welcome-form-input {
+    resize: none;
 }
 
 .welcome-form-input {
@@ -293,10 +297,6 @@
     @apply text-sm text-brand-accent;
 }
 
-.welcome-contact-fields {
-    @apply space-y-5;
-}
-
 .welcome-footer-link {
     @apply text-sm text-brand-primary no-underline transition-colors duration-150;
 }
@@ -430,4 +430,28 @@
 
 .welcome-modal-step-leave {
     @apply opacity-0 -translate-y-3;
+}
+
+.welcome-step-indicator {
+    @apply flex items-center justify-center gap-2 mt-6 mb-2;
+}
+
+.welcome-step-dot {
+    @apply flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium border-2 border-brand-primary/30 text-brand-muted transition-all duration-300;
+}
+
+.welcome-step-dot-active {
+    @apply border-brand-accent bg-brand-accent text-white;
+}
+
+.welcome-step-connector-line {
+    @apply h-px w-8 bg-brand-primary/30;
+}
+
+.welcome-step-label {
+    @apply ml-2 text-xs text-brand-muted;
+}
+
+.welcome-step-heading {
+    @apply font-serif text-lg text-brand-ink mb-4;
 }

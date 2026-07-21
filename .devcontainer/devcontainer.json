@@ -56,7 +56,8 @@
 				"DEVSENSE.composer-php-vscode",
 				"EditorConfig.EditorConfig",
 				"laravel.vscode-laravel",
-				"bradlc.vscode-tailwindcss"
+				"bradlc.vscode-tailwindcss",
+				"shufo.vscode-blade-formatter"
 			]
 		}
 	},

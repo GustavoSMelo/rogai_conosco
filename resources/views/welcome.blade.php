@@ -17,8 +17,10 @@
 {{-- Splash intro --}}
 <div id="splash" aria-hidden="true">
     <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="splash-logo">
-    <span class="splash-line">Rogai</span>
-    <span class="splash-line splash-line-2">Conosco</span>
+    <span>
+        <h1 class="splash-line">Rogai</h1>
+        <h1 class="splash-line splash-line-2">Conosco</h1>
+    </span>
 </div>
 
 <div id="page">
@@ -27,7 +29,7 @@
     <aside class="sidebar" aria-label="Main navigation">
         <a href="/" class="welcome-brand-link">
             <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="welcome-brand-logo">
-            <span class="welcome-brand-text">Rogai Conosco</span>
+            <span class="welcome-brand-text">Rogai <br />Conosco</span>
         </a>
         <nav class="welcome-nav-column">
             <a href="#hero" class="welcome-sidebar-link">Inicio</a>
@@ -461,6 +463,14 @@
         <h2 id="modal-title" class="welcome-modal-title">Pedir oração</h2>
         <p class="welcome-modal-subtitle">Compartilhe o que está no seu coração. Não precisa de cadastro.</p>
 
+        {{-- Step indicator --}}
+        <div class="welcome-step-indicator" id="step-indicator">
+            <div class="welcome-step-dot welcome-step-dot-active" id="step-dot-1">1</div>
+            <div class="welcome-step-connector-line"></div>
+            <div class="welcome-step-dot" id="step-dot-2">2</div>
+            <span class="welcome-step-label" id="step-label">Passo 1 de 2</span>
+        </div>
+
         @if (session('success'))
             <div class="welcome-modal-success">
                 <p class="welcome-success-text">{{ session('success') }}</p>
@@ -470,65 +480,56 @@
         <form method="POST" action="{{ url('/prayer-request') }}" class="mt-8" id="prayer-form">
             @csrf
 
-            {{-- Step 1: Name, delivery, contact --}}
+            {{-- Step 1: Name, WhatsApp, Email --}}
             <div id="modal-step-1" class="welcome-form-row welcome-modal-step">
+                <h3 class="welcome-step-heading">Seus dados</h3>
                 <div>
                     <label for="modal-name" class="welcome-form-label">
-                        Seu nome
+                        Seu nome <span class="welcome-form-hint">(opcional)</span>
                     </label>
                     <input type="text"
                            id="modal-name"
                            name="name"
                            value="{{ old('name') }}"
-                           required
                            placeholder="Como podemos te chamar?"
-                           class="welcome-form-input">
+                           class="welcome-form-input"
+                           maxlength="100"
+                    >
                 </div>
 
                 <div>
-                    <label for="modal-delivery" class="welcome-form-label">
-                        Como você gostaria de receber sua oração?
+                    <label for="modal-whatsapp" class="welcome-form-label">
+                        WhatsApp
                     </label>
-                    <select id="modal-delivery"
-                            name="delivery"
-                            required
-                            class="welcome-form-input">
-                        <option value="recorded" {{ old('delivery') === 'recorded' ? 'selected' : '' }}>Oração gravada (áudio/vídeo, 24-48h)</option>
-                        <option value="instant" {{ old('delivery') === 'instant' ? 'selected' : '' }}>Oração instantânea</option>
-                        <option value="ai" {{ old('delivery') === 'ai' ? 'selected' : '' }}>Oração por IA</option>
-                    </select>
+                    <input type="tel"
+                           id="modal-whatsapp"
+                           name="whatsapp"
+                           value="{{ old('whatsapp') }}"
+                            placeholder="+55 (11) 99999-9999"
+                           class="welcome-form-input">
+                    <p id="whatsapp-error" class="welcome-form-error hidden mt-1">WhatsApp é obrigatório</p>
                 </div>
 
-                <div id="modal-contact-fields" class="welcome-contact-fields">
-                    <div>
-                        <label for="modal-email" class="welcome-form-label">
-                            E-mail <span class="welcome-form-hint">(para entrega da oração gravada)</span>
-                        </label>
-                        <input type="email"
-                               id="modal-email"
-                               name="email"
-                               value="{{ old('email') }}"
-                               placeholder="seu@email.com"
-                               class="welcome-form-input">
-                    </div>
-                    <div>
-                        <label for="modal-whatsapp" class="welcome-form-label">
-                            WhatsApp <span class="welcome-form-hint">(opcional)</span>
-                        </label>
-                        <input type="tel"
-                               id="modal-whatsapp"
-                               name="whatsapp"
-                               value="{{ old('whatsapp') }}"
-                               placeholder="+55 (11) 99999-9999"
-                               class="welcome-form-input">
-                    </div>
+                <div>
+                    <label for="modal-email" class="welcome-form-label">
+                        E-mail
+                    </label>
+                    <input type="email"
+                           id="modal-email"
+                           name="email"
+                           value="{{ old('email') }}"
+                           placeholder="seu@email.com"
+                           inputmode="email"
+                           autocomplete="email"
+                           class="welcome-form-input"
+                           maxlength="255">
+                    <p id="email-error" class="welcome-form-error hidden mt-1">E-mail inválido</p>
                 </div>
 
                 <div class="welcome-modal-info-box">
                     <p class="welcome-modal-info-text">
-                        <strong class="text-brand-ink">O que acontece depois?</strong>
-                        Seu pedido é recebido por uma pessoa real de fé que orará por você com sinceridade.
-                        Você receberá a oração no formato escolhido — sem julgamento, sem rastreamento, sem custo.
+                        <strong class="text-brand-ink">Informações de contato</strong>
+                        São opcionais, mas nos ajudam a entrar em contato se você solicitar uma oração gravada em vídeo.
                     </p>
                 </div>
 
@@ -546,8 +547,9 @@
                 </div>
             </div>
 
-            {{-- Step 2: Prayer message, submit --}}
+            {{-- Step 2: Prayer description, religion, prayer type --}}
             <div id="modal-step-2" class="welcome-form-row welcome-modal-step hidden">
+                <h3 class="welcome-step-heading">Seu pedido</h3>
                 <div>
                     <label for="modal-message" class="welcome-form-label">
                         Seu pedido de oração
@@ -561,18 +563,51 @@
                               class="welcome-form-input">{{ old('message') }}</textarea>
                     <div class="welcome-char-count-row">
                         <span id="char-count" class="welcome-char-count">0 / 2000</span>
+                        <p id="description-error" class="welcome-form-error hidden">O pedido de oração não pode estar vazio</p>
                         @error('message')
                             <p class="welcome-form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
+                <div>
+                    <label for="modal-religion" class="welcome-form-label">
+                        Religião
+                    </label>
+                    <select id="modal-religion"
+                            name="religion"
+                            class="welcome-form-input">
+                        <option value="catholic" {{ old('religion') === 'catholic' ? 'selected' : '' }}>Católica</option>
+                        <option value="orthodox" {{ old('religion') === 'orthodox' ? 'selected' : '' }}>Ortodoxa</option>
+                        <option value="protestant" {{ old('religion') === 'protestant' ? 'selected' : '' }}>Protestante</option>
+                        <option value="muslim" {{ old('religion') === 'muslim' ? 'selected' : '' }}>Muçulmana</option>
+                        <option value="jewish" {{ old('religion') === 'jewish' ? 'selected' : '' }}>Judia</option>
+                        <option value="buddhist" {{ old('religion') === 'buddhist' ? 'selected' : '' }}>Budista</option>
+                        <option value="hindu" {{ old('religion') === 'hindu' ? 'selected' : '' }}>Hindu</option>
+                        <option value="other" {{ old('religion') === 'other' ? 'selected' : '' }}>Outra</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modal-prayer-type" class="welcome-form-label">
+                        Tipo de oração
+                    </label>
+                    <select id="modal-prayer-type"
+                            name="prayer_type"
+                            required
+                            class="welcome-form-input">
+                        <option value="ai" {{ old('prayer_type') === 'ai' ? 'selected' : '' }}>Oração por IA</option>
+                        <option value="instant" {{ old('prayer_type') === 'instant' ? 'selected' : '' }}>Oração instantânea</option>
+                        <option value="person-prayer" {{ old('prayer_type') === 'person-prayer' ? 'selected' : '' }}>Apenas oração (pessoa)</option>
+                        <option value="person-bible" {{ old('prayer_type') === 'person-bible' ? 'selected' : '' }}>Apenas palavra bíblica (pessoa)</option>
+                        <option value="person-bible-prayer" {{ old('prayer_type') === 'person-bible-prayer' ? 'selected' : '' }}>Palavra bíblica + oração (pessoa)</option>
+                    </select>
+                </div>
+
                 <div class="welcome-modal-info-box">
                     <p class="welcome-modal-info-text">
                         <strong class="text-brand-ink">Oração para:</strong>
                         <span id="step-2-name-display" class="text-brand-ink/85"></span>
-                        &middot;
-                        <span id="step-2-delivery-display" class="text-brand-ink/85"></span>
                     </p>
                 </div>
 

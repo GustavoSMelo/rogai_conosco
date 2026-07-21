@@ -9,9 +9,10 @@ class PrayerRequest extends Model
     protected $fillable = [
         'name',
         'message',
-        'delivery',
         'email',
         'whatsapp',
+        'religion',
+        'prayer_type',
     ];
 
     protected function casts(): array

@@ -1,3 +1,5 @@
+import IMask from 'imask';
+
 document.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('splash');
     const page = document.getElementById('page')!;
@@ -7,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navOverlay = document.getElementById('nav-overlay');
     const navLinks = document.querySelectorAll<HTMLElement>('.nav-link');
     const modal = document.getElementById('prayer-modal') as HTMLDialogElement | null;
-    const modalDelivery = document.getElementById('modal-delivery') as HTMLSelectElement | null;
-    const modalContactFields = document.getElementById('modal-contact-fields');
     const prayerForm = document.getElementById('prayer-form') as HTMLFormElement | null;
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
     const submitText = document.getElementById('submit-text');
@@ -21,7 +21,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('step-2-back');
     const nameInput = document.getElementById('modal-name') as HTMLInputElement | null;
     const step2NameDisplay = document.getElementById('step-2-name-display');
-    const step2DeliveryDisplay = document.getElementById('step-2-delivery-display');
+    const whatsappInput = document.getElementById('modal-whatsapp') as HTMLInputElement | null;
+    const emailInput = document.getElementById('modal-email') as HTMLInputElement | null;
+    const stepDot1 = document.getElementById('step-dot-1');
+    const stepDot2 = document.getElementById('step-dot-2');
+    const stepLabel = document.getElementById('step-label');
+
+    const clearStep1Errors = (): void => {
+        const errors = document.querySelectorAll('#modal-step-1 .welcome-form-error');
+        errors.forEach((el) => el.classList.add('hidden'));
+    };
+
+    const clearDescriptionError = (): void => {
+        const err = document.getElementById('description-error');
+        if (err) err.classList.add('hidden');
+    };
+
+    let whatsappMask: ReturnType<typeof IMask> | null = null;
+
+    if (whatsappInput) {
+        whatsappMask = IMask(whatsappInput, { mask: '+{55} (00) 00000-0000' });
+        whatsappInput.addEventListener('input', () => {
+            const error = document.getElementById('whatsapp-error');
+            if (error && whatsappMask?.masked.isComplete) error.classList.add('hidden');
+        });
+    }
+
+    if (emailInput) {
+        const emailError = document.getElementById('email-error');
+        const validateEmail = (): boolean => {
+            const value = emailInput.value.trim();
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            if (emailError) {
+                emailError.classList.toggle('hidden', valid || !value);
+            }
+            return valid;
+        };
+        emailInput.addEventListener('input', () => {
+            emailInput.value = emailInput.value.replace(/\s/g, '').toLowerCase();
+            validateEmail();
+        });
+    }
 
     const toggleMobileNav = (open: boolean): void => {
         if (!sideNav || !navOverlay) return;
@@ -50,46 +90,61 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const deliveryLabels: Record<string, string> = {
-        recorded: 'Oração gravada',
-        instant: 'Oração instantânea',
-        ai: 'Oração por IA',
+    const updateStepIndicator = (activeStep: number): void => {
+        if (!stepDot1 || !stepDot2 || !stepLabel) return;
+        stepDot1.classList.toggle('welcome-step-dot-active', activeStep === 1);
+        stepDot2.classList.toggle('welcome-step-dot-active', activeStep === 2);
+        stepLabel.textContent = `Passo ${activeStep} de 2`;
     };
-
-    const showContactFields = (): void => {
-        if (modalContactFields && modalDelivery) {
-            modalContactFields.classList.toggle('hidden', modalDelivery.value !== 'recorded');
-        }
-    };
-
-    if (modalDelivery && modalContactFields) {
-        modalDelivery.addEventListener('change', showContactFields);
-        showContactFields();
-    }
-
-    if (modalDelivery) {
-        modalDelivery.addEventListener('mousedown', (e: MouseEvent) => {
-            e.stopPropagation();
-        });
-    }
 
     const goToStep = (toStep: number): void => {
         if (!step1 || !step2) return;
-        const show = toStep === 1;
-        step1.classList.toggle('hidden', !show);
-        step2.classList.toggle('hidden', show);
-        step1.classList.toggle('welcome-modal-step-leave', !show);
-        step2.classList.toggle('welcome-modal-step-enter', show);
+        const goingForward = toStep === 2;
+
+        step1.classList.toggle('hidden', goingForward);
+        step2.classList.toggle('hidden', !goingForward);
+
+        step1.classList.remove('welcome-modal-step-enter', 'welcome-modal-step-enter-active', 'welcome-modal-step-leave');
+        step2.classList.remove('welcome-modal-step-enter', 'welcome-modal-step-enter-active', 'welcome-modal-step-leave');
+
+        if (goingForward) {
+            step1.classList.add('welcome-modal-step-leave');
+            step2.classList.add('welcome-modal-step-enter');
+            requestAnimationFrame(() => {
+                step2.classList.add('welcome-modal-step-enter-active');
+            });
+        } else {
+            clearStep1Errors();
+            clearDescriptionError();
+        }
+
+        updateStepIndicator(toStep);
     };
 
-    if (continueBtn && nameInput && step2NameDisplay && step2DeliveryDisplay && modalDelivery) {
+    if (continueBtn && step2NameDisplay && nameInput) {
         continueBtn.addEventListener('click', () => {
-            if (!nameInput.value.trim()) {
-                nameInput.reportValidity();
-                return;
+            const whatsappError = document.getElementById('whatsapp-error');
+            const emailError = document.getElementById('email-error');
+            const whatsappValue = whatsappInput?.value.trim() || '';
+            const emailValue = emailInput?.value.trim() || '';
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+            let hasError = false;
+
+            if (!whatsappMask?.masked.isComplete) {
+                if (whatsappError) { whatsappError.classList.remove('hidden'); hasError = true; }
+            } else {
+                if (whatsappError) whatsappError.classList.add('hidden');
             }
-            step2NameDisplay.textContent = nameInput.value.trim();
-            step2DeliveryDisplay.textContent = deliveryLabels[modalDelivery.value] || modalDelivery.value;
+
+            if (!emailValid) {
+                if (emailError) { emailError.classList.remove('hidden'); hasError = true; }
+            } else {
+                if (emailError) emailError.classList.add('hidden');
+            }
+
+            if (hasError) return;
+
+            step2NameDisplay.textContent = nameInput.value.trim() || 'Anônimo';
             goToStep(2);
         });
     }
@@ -101,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
         modal.addEventListener('click', (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            if (target.tagName === 'SELECT') return;
+            if (target.closest('select')) return;
             const rect = (modal.querySelector('.modal-content') as HTMLElement).getBoundingClientRect();
             const isInDialog = rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
                 rect.left <= e.clientX && e.clientX <= rect.left + rect.width;
@@ -149,7 +204,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (prayerForm && submitBtn) {
-        prayerForm.addEventListener('submit', () => {
+        const descriptionError = document.getElementById('description-error');
+        prayerForm.addEventListener('submit', (e) => {
+            if (!textarea?.value.trim()) {
+                e.preventDefault();
+                if (descriptionError) descriptionError.classList.remove('hidden');
+                return;
+            }
             submitBtn.disabled = true;
             if (submitText) submitText.classList.add('hidden');
             if (submitSpinner) submitSpinner.classList.remove('hidden');
@@ -157,8 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (textarea && charCount) {
+        const descriptionError = document.getElementById('description-error');
         textarea.addEventListener('input', () => {
             charCount.textContent = textarea.value.length + ' / 2000';
+            if (descriptionError && textarea.value.trim()) {
+                descriptionError.classList.add('hidden');
+            }
         });
     }
 

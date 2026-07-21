@@ -14,13 +14,17 @@ class PrayerRequestController extends Controller
         $validated = $request->validate([
             'name' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:10000'],
-            'delivery' => ['required', 'in:recorded,instant,ai'],
             'email' => ['nullable', 'email', 'max:255'],
             'whatsapp' => ['nullable', 'string', 'max:30'],
+            'religion' => ['nullable', 'string', 'max:100'],
+            'prayer_type' => ['required', 'string', 'in:ai,instant,person-prayer,person-bible,person-bible-prayer'],
         ]);
 
         PrayerRequest::create($validated);
 
-        return redirect('/#request')->with('success', 'Your prayer request has been received. Someone is praying for you.');
+        $type = $validated['prayer_type'];
+        $religion = $validated['religion'] ?? 'generic';
+
+        return redirect("/prayer/result?type={$type}&religion={$religion}");
     }
 }
