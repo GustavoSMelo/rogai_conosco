@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitSpinner = document.getElementById('submit-spinner');
     const textarea = document.getElementById('modal-message') as HTMLTextAreaElement | null;
     const charCount = document.getElementById('char-count');
+    const step1 = document.getElementById('modal-step-1');
+    const step2 = document.getElementById('modal-step-2');
+    const continueBtn = document.getElementById('step-1-continue');
+    const backBtn = document.getElementById('step-2-back');
+    const nameInput = document.getElementById('modal-name') as HTMLInputElement | null;
+    const step2NameDisplay = document.getElementById('step-2-name-display');
+    const step2DeliveryDisplay = document.getElementById('step-2-delivery-display');
 
     const toggleMobileNav = (open: boolean): void => {
         if (!sideNav || !navOverlay) return;
@@ -43,6 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const deliveryLabels: Record<string, string> = {
+        recorded: 'Oração gravada',
+        instant: 'Oração instantânea',
+        ai: 'Oração por IA',
+    };
+
     const showContactFields = (): void => {
         if (modalContactFields && modalDelivery) {
             modalContactFields.classList.toggle('hidden', modalDelivery.value !== 'recorded');
@@ -54,8 +67,41 @@ document.addEventListener('DOMContentLoaded', () => {
         showContactFields();
     }
 
+    if (modalDelivery) {
+        modalDelivery.addEventListener('mousedown', (e: MouseEvent) => {
+            e.stopPropagation();
+        });
+    }
+
+    const goToStep = (toStep: number): void => {
+        if (!step1 || !step2) return;
+        const show = toStep === 1;
+        step1.classList.toggle('hidden', !show);
+        step2.classList.toggle('hidden', show);
+        step1.classList.toggle('welcome-modal-step-leave', !show);
+        step2.classList.toggle('welcome-modal-step-enter', show);
+    };
+
+    if (continueBtn && nameInput && step2NameDisplay && step2DeliveryDisplay && modalDelivery) {
+        continueBtn.addEventListener('click', () => {
+            if (!nameInput.value.trim()) {
+                nameInput.reportValidity();
+                return;
+            }
+            step2NameDisplay.textContent = nameInput.value.trim();
+            step2DeliveryDisplay.textContent = deliveryLabels[modalDelivery.value] || modalDelivery.value;
+            goToStep(2);
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', () => goToStep(1));
+    }
+
     if (modal) {
         modal.addEventListener('click', (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'SELECT') return;
             const rect = (modal.querySelector('.modal-content') as HTMLElement).getBoundingClientRect();
             const isInDialog = rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
                 rect.left <= e.clientX && e.clientX <= rect.left + rect.width;
@@ -63,9 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         modal.addEventListener('close', () => {
             document.body.style.overflow = '';
+            goToStep(1);
         });
         modal.addEventListener('open', () => {
             document.body.style.overflow = 'hidden';
+            goToStep(1);
         });
     }
 

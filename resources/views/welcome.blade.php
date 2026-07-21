@@ -470,36 +470,19 @@
         <form method="POST" action="{{ url('/prayer-request') }}" class="mt-8" id="prayer-form">
             @csrf
 
-            <div class="welcome-form-row">
+            {{-- Step 1: Name, delivery, contact --}}
+            <div id="modal-step-1" class="welcome-form-row welcome-modal-step">
                 <div>
                     <label for="modal-name" class="welcome-form-label">
-                        Seu nome <span class="welcome-form-hint">(opcional)</span>
+                        Seu nome
                     </label>
                     <input type="text"
                            id="modal-name"
                            name="name"
                            value="{{ old('name') }}"
-                           placeholder="Ou deixe em branco para anônimo"
+                           required
+                           placeholder="Como podemos te chamar?"
                            class="welcome-form-input">
-                </div>
-
-                <div>
-                    <label for="modal-message" class="welcome-form-label">
-                        Seu pedido de oração
-                    </label>
-                    <textarea id="modal-message"
-                              name="message"
-                              rows="4"
-                              required
-                              maxlength="2000"
-                              placeholder="Compartilhe pelo que você gostaria de orar..."
-                              class="welcome-form-input">{{ old('message') }}</textarea>
-                    <div class="welcome-char-count-row">
-                        <span id="char-count" class="welcome-char-count">0 / 2000</span>
-                        @error('message')
-                            <p class="welcome-form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
 
                 <div>
@@ -550,6 +533,55 @@
                 </div>
 
                 <div class="welcome-modal-buttons">
+                    <button type="button"
+                            id="step-1-continue"
+                            class="welcome-modal-btn bg-brand-accent">
+                        Continuar
+                    </button>
+                    <button type="button"
+                            onclick="document.getElementById('prayer-modal').close()"
+                            class="welcome-modal-cancel">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+
+            {{-- Step 2: Prayer message, submit --}}
+            <div id="modal-step-2" class="welcome-form-row welcome-modal-step hidden">
+                <div>
+                    <label for="modal-message" class="welcome-form-label">
+                        Seu pedido de oração
+                    </label>
+                    <textarea id="modal-message"
+                              name="message"
+                              rows="4"
+                              required
+                              maxlength="2000"
+                              placeholder="Compartilhe pelo que você gostaria de orar..."
+                              class="welcome-form-input">{{ old('message') }}</textarea>
+                    <div class="welcome-char-count-row">
+                        <span id="char-count" class="welcome-char-count">0 / 2000</span>
+                        @error('message')
+                            <p class="welcome-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="welcome-modal-info-box">
+                    <p class="welcome-modal-info-text">
+                        <strong class="text-brand-ink">Oração para:</strong>
+                        <span id="step-2-name-display" class="text-brand-ink/85"></span>
+                        &middot;
+                        <span id="step-2-delivery-display" class="text-brand-ink/85"></span>
+                    </p>
+                </div>
+
+                <div class="welcome-modal-buttons">
+                    <button type="button"
+                            id="step-2-back"
+                            class="welcome-modal-cancel">
+                        Voltar
+                    </button>
                     <button type="submit"
                             id="submit-btn"
                             class="welcome-modal-btn bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60">
@@ -561,11 +593,6 @@
                             </svg>
                             Enviando...
                         </span>
-                    </button>
-                    <button type="button"
-                            onclick="document.getElementById('prayer-modal').close()"
-                            class="welcome-modal-cancel">
-                        Cancelar
                     </button>
                 </div>
             </div>

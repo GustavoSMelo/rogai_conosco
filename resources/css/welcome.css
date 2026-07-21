@@ -294,7 +294,7 @@
 }
 
 .welcome-contact-fields {
-    @apply hidden space-y-5;
+    @apply space-y-5;
 }
 
 .welcome-footer-link {
@@ -414,4 +414,20 @@
 
 .welcome-mobile-nav-btn:focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.welcome-modal-step {
+    @apply transition-all duration-300 ease-out;
+}
+
+.welcome-modal-step-enter {
+    @apply opacity-0 -translate-y-3;
+}
+
+.welcome-modal-step-enter-active {
+    @apply opacity-100 translate-y-0;
+}
+
+.welcome-modal-step-leave {
+    @apply opacity-0 -translate-y-3;
 }
