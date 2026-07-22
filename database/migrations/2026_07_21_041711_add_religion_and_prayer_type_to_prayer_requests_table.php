@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('prayer_requests', function (Blueprint $table) {
             $table->string('religion', 100)->nullable()->after('whatsapp');
             $table->string('prayer_type', 50)->nullable()->after('religion');
+            $table->boolean('has_answered')->default(false)->nullable(false);
+            $table->date('date_answered')->nullable();
         });
     }
 

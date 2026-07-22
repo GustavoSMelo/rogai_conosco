@@ -127,3 +127,11 @@ Run `/skill impeccable` and then use its built-in commands (`critique`, `craft`,
 The **impeccable** skill handles all frontend/UI work: critique, craft, polish, animate, audit, distill, and live-iterate on interfaces. It covers Tailwind, Livewire Volt, typography, spacing, layout, color, motion, accessibility, responsive behavior, and the visual system in `DESIGN.md`.
 
 Load it with `/skill impeccable` when working on any UI task.
+
+## CSS Convention
+
+All `*.css` files SHALL use Tailwind `@apply` directives instead of raw CSS values whenever a corresponding utility class exists. This keeps the codebase in sync with `tailwind.config.js` design tokens.
+
+- `@keyframes` and `@media` at-rules may remain as raw CSS
+- Values without Tailwind equivalents (e.g., `clamp()`, `rgba()` with multi-stop values, `animation` with custom cubic-bezier) may remain as raw CSS
+- Reference `resources/css/welcome.css` for the canonical `@apply` pattern

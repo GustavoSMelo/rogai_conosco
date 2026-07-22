@@ -30,6 +30,20 @@ class PrayerResultController extends Controller
             $prayer = $list[array_rand($list)];
         }
 
-        return view('prayer.result', compact('type', 'religion', 'prayer'));
+        $meta = [
+            'title' => match ($type) {
+                'ai' => 'Rogai Conosco — Sua oração foi ouvida',
+                'instant' => 'Rogai Conosco — Uma bênção para seu momento',
+                default => 'Rogai Conosco — Sua intenção está em oração',
+            },
+            'description' => match ($type) {
+                'ai' => 'Receba uma oração gerada por IA, inspirada pela sua fé e tradição religiosa.',
+                'instant' => 'Uma oração previamente escrita para seu momento de fé e reflexão.',
+                default => 'Sua intenção de oração foi recebida. Uma pessoa real está orando por você.',
+            },
+            'image' => asset('images/ovelhinha.png'),
+        ];
+
+        return view('prayer.result', compact('type', 'religion', 'prayer', 'meta'));
     }
 }

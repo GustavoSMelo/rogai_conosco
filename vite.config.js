@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/js/app.ts',
                 'resources/css/welcome.css',
                 'resources/js/welcome.ts',
+                'resources/css/result.css',
             ],
             refresh: true,
         }),

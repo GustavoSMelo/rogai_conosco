@@ -20,7 +20,13 @@ class PrayerRequestController extends Controller
             'prayer_type' => ['required', 'string', 'in:ai,instant,person-prayer,person-bible,person-bible-prayer'],
         ]);
 
-        PrayerRequest::create($validated);
+        $delivery = match ($validated['prayer_type']) {
+            'ai' => 'ai',
+            'instant' => 'instant',
+            default => 'person',
+        };
+
+        PrayerRequest::create([...$validated, 'delivery' => $delivery]);
 
         $type = $validated['prayer_type'];
         $religion = $validated['religion'] ?? 'generic';

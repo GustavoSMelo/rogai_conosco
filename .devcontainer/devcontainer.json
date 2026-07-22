@@ -63,7 +63,7 @@
 	},
 
 	"remoteUser": "root",
-	"postCreateCommand": "npm install -g --ignore-scripts @earendil-works/pi-coding-agent @fission-ai/openspec@latest @openai/codex"
+	"postCreateCommand": "npm install -g --ignore-scripts @earendil-works/pi-coding-agent @fission-ai/openspec@latest @openai/codex && npx impeccable install"
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 
