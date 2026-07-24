@@ -598,9 +598,12 @@
                             class="welcome-form-input">
                         <option value="ai" {{ old('prayer_type') === 'ai' ? 'selected' : '' }}>Oração por IA</option>
                         <option value="instant" {{ old('prayer_type') === 'instant' ? 'selected' : '' }}>Oração instantânea</option>
-                        <option value="person-prayer" {{ old('prayer_type') === 'person-prayer' ? 'selected' : '' }}>Apenas oração (pessoa)</option>
-                        <option value="person-bible" {{ old('prayer_type') === 'person-bible' ? 'selected' : '' }}>Apenas palavra bíblica (pessoa)</option>
-                        <option value="person-bible-prayer" {{ old('prayer_type') === 'person-bible-prayer' ? 'selected' : '' }}>Palavra bíblica + oração (pessoa)</option>
+                        <option value="person-prayer-audio" {{ old('prayer_type') === 'person-prayer-audio' ? 'selected' : '' }}>Apenas oração (áudio)</option>
+                        <option value="person-prayer-video" {{ old('prayer_type') === 'person-prayer-video' ? 'selected' : '' }}>Apenas oração (vídeo)</option>
+                        <option value="person-bible-audio" {{ old('prayer_type') === 'person-bible-audio' ? 'selected' : '' }}>Apenas palavra (áudio)</option>
+                        <option value="person-bible-video" {{ old('prayer_type') === 'person-bible-video' ? 'selected' : '' }}>Apenas palavra (vídeo)</option>
+                        <option value="person-bible-prayer-audio" {{ old('prayer_type') === 'person-bible-prayer-audio' ? 'selected' : '' }}>Oração + palavra (áudio)</option>
+                        <option value="person-bible-prayer-video" {{ old('prayer_type') === 'person-bible-prayer-video' ? 'selected' : '' }}>Oração + palavra (vídeo)</option>
                     </select>
                 </div>
 

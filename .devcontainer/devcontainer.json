@@ -1,74 +1,72 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/php-mariadb
 {
-	"name": "Rogai Conosco - DevContainer PHP",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
-	"forwardPorts": [
-		8080,
-		3306
-	],
-	"features": {
-		"ghcr.io/devcontainers/features/common-utils:2": {},
-		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
-		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
-		"ghcr.io/devcontainers-extra/features/composer:1": {},
-		"ghcr.io/siri404/devcontainer-ai-features/claude-code:1": {},
-		"ghcr.io/postfinance/devcontainer-features/node:1": {},
-		"ghcr.io/postfinance/devcontainer-features/opencode:1": {}
-	},
-	"mounts": [
-		"source=${localEnv:SSH_AUTH_SOCK},target=/tmp/ssh.sock,type=bind",
-		{
-			"source": "$HOME/.ssh",
-			"target": "/root/.ssh",
-			"type": "bind"
-		},
-		{
-			"source": "$HOME/.config/opencode",
-			"target": "/home/node/.config/opencode",
-			"type": "bind"
-		},
-		{
-			"source": "$HOME/.claude.json",
-			"target": "/home/node/.claude.json",
-			"type": "bind"
-		},
-		{
-			"source": "$HOME/.pi/agent",
-			"target": "/mnt/pi-coding-agent-import",
-			"type": "bind"
-		}
-	],
-	"containerEnv": {
-		"SSH_AUTH_SOCK": "/tmp/ssh.sock"
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-azuretools.vscode-containers",
-				"mikestead.dotenv",
-				"DEVSENSE.composer-php-vscode",
-				"EditorConfig.EditorConfig",
-				"laravel.vscode-laravel",
-				"bradlc.vscode-tailwindcss",
-				"shufo.vscode-blade-formatter"
-			]
-		}
-	},
+    "name": "Rogai Conosco - DevContainer PHP",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+    // For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
+    "forwardPorts": [8000, 3306, 5173],
+    "appPort": ["8000:8000", "3306:3306", "5173:5173"],
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+        "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {},
+        "ghcr.io/devcontainers-extra/features/composer:1": {},
+        "ghcr.io/siri404/devcontainer-ai-features/claude-code:1": {},
+        "ghcr.io/postfinance/devcontainer-features/node:1": {},
+        "ghcr.io/postfinance/devcontainer-features/opencode:1": {},
+    },
+    "mounts": [
+        "source=${localEnv:SSH_AUTH_SOCK},target=/tmp/ssh.sock,type=bind",
+        {
+            "source": "$HOME/.ssh",
+            "target": "/root/.ssh",
+            "type": "bind",
+        },
+        {
+            "source": "$HOME/.config/opencode",
+            "target": "/home/node/.config/opencode",
+            "type": "bind",
+        },
+        {
+            "source": "$HOME/.claude.json",
+            "target": "/home/node/.claude.json",
+            "type": "bind",
+        },
+        {
+            "source": "$HOME/.pi/agent",
+            "target": "/mnt/pi-coding-agent-import",
+            "type": "bind",
+        },
+    ],
+    "containerEnv": {
+        "SSH_AUTH_SOCK": "/tmp/ssh.sock",
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-containers",
+                "mikestead.dotenv",
+                "DEVSENSE.composer-php-vscode",
+                "EditorConfig.EditorConfig",
+                "laravel.vscode-laravel",
+                "bradlc.vscode-tailwindcss",
+                "shufo.vscode-blade-formatter",
+            ],
+        },
+    },
 
-	"remoteUser": "root",
-	"postCreateCommand": "npm install -g --ignore-scripts @earendil-works/pi-coding-agent @fission-ai/openspec@latest @openai/codex && npx impeccable install"
+    "remoteUser": "root",
+    "postCreateCommand": "npm install -g --ignore-scripts @earendil-works/pi-coding-agent @fission-ai/openspec@latest @openai/codex && npx impeccable install && cp .env.devcontainer .env && composer install && npm install && npm run build",
 
-	// Use 'postCreateCommand' to run commands after the container is created.
+    // Use 'postCreateCommand' to run commands after the container is created.
 
-	// Configure tool-specific properties.
-	// "customizations": {},
+    // Configure tool-specific properties.
+    // "customizations": {},
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 }

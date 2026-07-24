@@ -71,7 +71,7 @@ Always run `php artisan test` before committing. Do not commit without passing t
 ```bash
 git config core.hooksPath .githooks  # enable pre-commit hooks
 composer install                     # install dependencies
-composer run dev                     # starts server, queue, logs, vite concurrently
+php artisan serve                    # starts server, queue, logs, vite concurrently
 composer run setup                   # fresh install
 ```
 

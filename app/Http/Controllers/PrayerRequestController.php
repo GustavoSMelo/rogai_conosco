@@ -17,7 +17,7 @@ class PrayerRequestController extends Controller
             'email' => ['nullable', 'email', 'max:255'],
             'whatsapp' => ['nullable', 'string', 'max:30'],
             'religion' => ['nullable', 'string', 'max:100'],
-            'prayer_type' => ['required', 'string', 'in:ai,instant,person-prayer,person-bible,person-bible-prayer'],
+            'prayer_type' => ['required', 'string', 'in:ai,instant,person-prayer-audio,person-prayer-video,person-bible-audio,person-bible-video,person-bible-prayer-audio,person-bible-prayer-video'],
         ]);
 
         $delivery = match ($validated['prayer_type']) {

@@ -203,6 +203,19 @@ document.addEventListener('DOMContentLoaded', () => {
         reveals.forEach((el: HTMLElement) => { observer.observe(el); });
     };
 
+    if (prayerForm) {
+        prayerForm.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                const step1 = document.getElementById('modal-step-1');
+                if (step1 && !step1.classList.contains('hidden')) {
+                    e.preventDefault();
+                    const continueBtn = document.getElementById('step-1-continue');
+                    if (continueBtn) continueBtn.click();
+                }
+            }
+        });
+    }
+
     if (prayerForm && submitBtn) {
         const descriptionError = document.getElementById('description-error');
         prayerForm.addEventListener('submit', (e) => {
