@@ -4,7 +4,7 @@ use App\Actions\GenerateAiPrayer;
 use Livewire\Component;
 
 new class extends Component {
-    public string $type = 'person-prayer';
+    public string $type = 'person-prayer-audio';
     public string $religion = 'generic';
     public ?string $description = null;
     public mixed $prayer = null;
@@ -12,14 +12,14 @@ new class extends Component {
 
     public function mount(): void
     {
-        $this->type = request()->query('type', 'person-prayer');
+        $this->type = request()->query('type', 'person-prayer-audio');
         $this->religion = request()->query('religion', 'generic');
         $this->description = request()->query('description', '');
 
-        $validTypes = ['ai', 'instant', 'person-prayer', 'person-bible', 'person-bible-prayer'];
+        $validTypes = ['ai', 'instant', 'person-prayer-audio', 'person-prayer-video', 'person-bible-audio', 'person-bible-video', 'person-bible-prayer-audio', 'person-bible-prayer-video'];
 
         if (!in_array($this->type, $validTypes, true)) {
-            $this->type = 'person-prayer';
+            $this->type = 'person-prayer-audio';
         }
 
         if ($this->type === 'ai') {
@@ -64,7 +64,7 @@ new class extends Component {
                 {{ $prayer }}
             </div>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
-                <a href="{{ url('/livewire/prayer/result?type=instant&religion=' . urlencode($religion)) }}"
+                <a href="{{ route('prayer.result', ['type' => 'instant', 'religion' => $religion]) }}"
                    class="result-btn-primary">
                     Pedir oração instantânea
                 </a>
@@ -83,7 +83,7 @@ new class extends Component {
                 {{ $prayer['body'] }}
             </div>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
-                <a href="{{ url('/livewire/prayer/result?type=ai&religion=' . urlencode($religion)) }}"
+                <a href="{{ route('prayer.result', ['type' => 'ai', 'religion' => $religion]) }}"
                    class="result-btn-primary">
                     Pedir oração por IA
                 </a>
@@ -101,18 +101,18 @@ new class extends Component {
                 Sua intenção foi recebida com fé e respeito.
                 <strong>Uma pessoa real está orando por você.</strong>
             </p>
-            @if (in_array($type, ['person-prayer', 'person-bible', 'person-bible-prayer']))
+            @if (in_array($type, ['person-prayer-audio', 'person-prayer-video', 'person-bible-audio', 'person-bible-video', 'person-bible-prayer-audio', 'person-bible-prayer-video']))
                 <p class="result-body mb-8 reveal visible reveal-delay-2">
                     A oração em vídeo será gravada e estará disponível em até <strong>2 dias</strong>.
                     Você receberá uma notificação quando estiver pronta.
                 </p>
             @endif
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
-                <a href="{{ url('/livewire/prayer/result?type=ai&religion=' . urlencode($religion)) }}"
+                <a href="{{ route('prayer.result', ['type' => 'ai', 'religion' => $religion]) }}"
                    class="result-btn-primary">
                     Pedir oração por IA
                 </a>
-                <a href="{{ url('/livewire/prayer/result?type=instant&religion=' . urlencode($religion)) }}"
+                <a href="{{ route('prayer.result', ['type' => 'instant', 'religion' => $religion]) }}"
                    class="result-btn-secondary">
                     Pedir oração instantânea
                 </a>
@@ -124,7 +124,7 @@ new class extends Component {
         </div>
     @endif
 
-    <a href="/livewire" class="result-back-link">
+    <a href="{{ route('welcome') }}" class="result-back-link">
         Voltar para página inicial
     </a>
 </div>
