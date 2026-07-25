@@ -175,6 +175,10 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                         <br class="welcome-hero-break">
                         Grátis. Privado. Para todos.
                     </p>
+
+                    <h3 class="welcome-hero-verse">
+                        Tiago 5:16 - Portanto, confessem os seus pecados uns aos outros e orem uns pelos outros para serem curados. A oração de um justo é poderosa e eficaz
+                    </h3>
                     <div class="welcome-hero-cta">
                         <button type="button"
                                 onclick="document.getElementById('prayer-modal').showModal()"
@@ -308,7 +312,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                             <div class="welcome-step-body sm:bg-brand-primary-light">
                                 <span class="welcome-step-number-sm bg-brand-primary">1</span>
                                 <div class="welcome-step-content">
-                                    <h3 class="welcome-step-title">Oração gravada</h3>
+                                    <h3 class="welcome-step-title">Oração gravada - Mais pedida</h3>
                                     <p class="welcome-step-text">
                                         Uma oração real, gravada em áudio ou vídeo e entregue por WhatsApp ou e-mail em até 24&ndash;48 horas.
                                     </p>
@@ -329,7 +333,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                                 <div class="welcome-step-content">
                                     <h3 class="welcome-step-title">Oração instantânea</h3>
                                     <p class="welcome-step-text">
-                                        Orações bíblicas pré-escritas que você pode ler ou receber imediatamente. Baseadas nas Escrituras e prontas quando você precisar.
+                                        Orações bíblicas pré-escritas que você pode ler ou receber imediatamente. Baseadas nas Escrituras e pelos Santos e prontas quando você precisar.
                                     </p>
                                 </div>
                                 <div class="welcome-step-label">
@@ -357,6 +361,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section id="motherMaria">
+                <span>
+                    <h2>Santa Mae de Deus, Maria</h2>
+                    <h4>Rogai Por nos pecadores agora e na hora de nossa morte</h4>
+                </span>
             </section>
 
             {{-- Por que o anonimato importa --}}

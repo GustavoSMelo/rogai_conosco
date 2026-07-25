@@ -258,11 +258,16 @@ textarea.welcome-form-input {
 }
 
 .welcome-hero-title {
-    @apply text-balance font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.1] tracking-[-0.02em] text-white;
+    @apply text-balance font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.1] tracking-[-0.02em] text-black;
 }
 
-.welcome-hero-subtitle {
-    @apply mt-6 text-balance text-lg leading-relaxed text-white/80 sm:text-xl;
+.welcome-hero-subtitle,
+.welcome-hero-verse {
+    @apply mt-6 text-balance text-lg leading-relaxed text-black sm:text-xl;
+}
+
+.welcome-hero-verse {
+    @apply text-brand-surface font-bold;
 }
 
 .welcome-hero-cta {
@@ -454,4 +459,13 @@ textarea.welcome-form-input {
 
 .welcome-step-heading {
     @apply font-serif text-lg text-brand-ink mb-4;
+}
+
+#motherMaria {
+    background-image: url("../images/mother_maria.jpg");
+    @apply bg-cover bg-center bg-no-repeat bg-fixed w-full h-72 border-brand-primary border-8;
+
+    span {
+        @apply w-full h-full flex flex-col items-center justify-center bg-brand-backgroundShadowTransparent text-white text-2xl font-semibold;
+    }
 }
