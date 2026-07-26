@@ -1,6 +1,6 @@
 ## 1. Instant Prayer Library
 
-- [x] 1.1 Create `resources/data/instant-prayers.php` with prayers keyed by religion (Catholic, Orthodox, Protestant, Muslim), each with title and body
+- [x] 1.1 Create `resources/data/prays.php` with prayers keyed by religion (Catholic, Orthodox, Protestant, Muslim), each with title and body
 - [x] 1.2 Add generic/Christian (psalms) fallback prayers for unknown religions
 
 ## 2. AI Prayer Action

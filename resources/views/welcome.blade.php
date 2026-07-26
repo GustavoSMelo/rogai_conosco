@@ -4,8 +4,9 @@ use App\Models\PrayerRequest;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Crypt;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for you')] class extends Component {
+new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you')] class extends Component {
     public ?string $name = null;
     public ?string $whatsapp = null;
     public ?string $email = null;
@@ -43,12 +44,14 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
 
         PrayerRequest::create([
             'name' => $this->name,
-            'message' => $this->message,
+            'message' => Crypt::encryptString($this->message),
             'email' => $this->email,
             'whatsapp' => $this->whatsapp,
             'religion' => $this->religion,
             'prayer_type' => $this->prayerType,
             'delivery' => $delivery,
+            'has_answered' => $delivery === 'person' ? false : true,
+            'date_answered' => $delivery === 'person' ? null : now(),
         ]);
 
         $this->showSuccess = true;
@@ -170,11 +173,6 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                     <h1 class="welcome-hero-title">
                         Sua oração, carregada por alguém que se importa.
                     </h1>
-                    <p class="welcome-hero-subtitle">
-                        Oração anônima de pessoas reais, não de robôs.
-                        <br class="welcome-hero-break">
-                        Grátis. Privado. Para todos.
-                    </p>
 
                     <h3 class="welcome-hero-verse">
                         Tiago 5:16 - Portanto, confessem os seus pecados uns aos outros e orem uns pelos outros para serem curados. A oração de um justo é poderosa e eficaz
@@ -252,7 +250,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                         <div class="welcome-section-content">
                             <p>
                                 Rogai Conosco existe para que ninguém precise enfrentar suas lutas sozinho.
-                                Cada pedido é recebido com dignidade, respeito e oração real de uma pessoa real —
+                                Cada pedido é recebido com dignidade, respeito e oração real de uma pessoa real
                                 sem julgamento, sem rastreamento, sem custo.
                             </p>
                             <p>
@@ -418,8 +416,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                                 <h3 class="welcome-card-title">Acolhimento sem distância</h3>
                             </div>
                             <p class="welcome-card-text">
-                                Quem não faz parte de uma comunidade religiosa — ou sente vergonha
-                                dentro dela — ainda merece apoio espiritual. O anonimato acolhe
+                                Quem não faz parte de uma comunidade religiosa ou sente vergonha
+                                dentro dela ainda merece apoio espiritual. O anonimato acolhe
                                 sem exigir pertencimento.
                             </p>
                         </div>
@@ -448,7 +446,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                                 </div>
                                 <p class="welcome-card-text">
                                     Todo o código-fonte está disponível publicamente. Você pode auditá-lo,
-                                    modificá-lo e sugerir melhorias. Transparência não é apenas um valor —
+                                    modificá-lo e sugerir melhorias. Transparência não é apenas um valor
                                     é uma prática.
                                 </p>
                             </div>
@@ -460,7 +458,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Someone is praying for 
                                     <h3 class="welcome-card-title">Contribua</h3>
                                 </div>
                                 <p class="welcome-card-text">
-                                    Desenvolvedores, designers, tradutores — todos são bem-vindos.
+                                    Desenvolvedores, designers, tradutores todos são bem-vindos.
                                     O projeto está sempre aberto a novos contribuidores que queiram
                                     ajudar a levar oração a mais pessoas.
                                 </p>

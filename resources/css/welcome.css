@@ -258,16 +258,23 @@ textarea.welcome-form-input {
 }
 
 .welcome-hero-title {
-    @apply text-balance font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.1] tracking-[-0.02em] text-black;
+    @apply text-balance font-serif text-[clamp(2.25rem,4vw,4rem)] leading-[1.1] tracking-[-0.02em] text-white;
 }
 
 .welcome-hero-subtitle,
 .welcome-hero-verse {
-    @apply mt-6 text-balance text-lg leading-relaxed text-black sm:text-xl;
+    @apply mt-6 text-balance text-lg leading-relaxed text-white sm:text-xl;
 }
 
 .welcome-hero-verse {
-    @apply text-brand-surface font-bold;
+    @apply text-brand-surface font-bold text-center p-2;
+
+    span {
+        h2,
+        h4 {
+            @apply text-center p-2;
+        }
+    }
 }
 
 .welcome-hero-cta {
@@ -466,6 +473,21 @@ textarea.welcome-form-input {
     @apply bg-cover bg-center bg-no-repeat bg-fixed w-full h-72 border-brand-primary border-8;
 
     span {
-        @apply w-full h-full flex flex-col items-center justify-center bg-brand-backgroundShadowTransparent text-white text-2xl font-semibold;
+        @apply w-full
+            h-full
+            flex
+            flex-col
+            items-center
+            justify-center
+            bg-brand-backgroundShadowTransparent
+            text-white
+            text-2xl
+            font-semibold
+            text-center
+            p-3;
+
+        h2 {
+            @apply mb-8;
+        }
     }
 }

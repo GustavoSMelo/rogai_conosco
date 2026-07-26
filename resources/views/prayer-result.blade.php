@@ -27,7 +27,7 @@ new class extends Component {
         }
 
         if ($this->type === 'instant') {
-            $prayers = require resource_path('data/instant-prayers.php');
+            $prayers = require resource_path('data/prays.php');
             $list = $prayers[$this->religion] ?? $prayers['generic'] ?? [];
             $this->prayer = $list[array_rand($list)];
         }

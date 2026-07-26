@@ -36,4 +36,4 @@ The current prayer modal lacks religion context and flexible prayer delivery opt
 - New view `resources/views/prayer/result.blade.php`
 - New Livewire component or Blade component for the result page
 - New service/action `GenerateAiPrayer` (stub)
-- New data file `resources/data/instant-prayers.php`
+- New data file `resources/data/prays.php`

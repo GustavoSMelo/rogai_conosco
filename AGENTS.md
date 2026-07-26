@@ -135,3 +135,9 @@ All `*.css` files SHALL use Tailwind `@apply` directives instead of raw CSS valu
 - `@keyframes` and `@media` at-rules may remain as raw CSS
 - Values without Tailwind equivalents (e.g., `clamp()`, `rgba()` with multi-stop values, `animation` with custom cubic-bezier) may remain as raw CSS
 - Reference `resources/css/welcome.css` for the canonical `@apply` pattern
+
+## User Requests
+
+To prevent lost files for unnecessary reasons or IA allucinations
+
+- Before delete any file, ask first for user authorization
