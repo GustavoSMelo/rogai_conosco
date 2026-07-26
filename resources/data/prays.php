@@ -690,6 +690,139 @@ return [
             'body' =>
                 'Senhor, apresento o meu corpo como sacrifício vivo, santo e agradável a ti, que é o meu culto racional. Não me conforme com este mundo, mas transforma-me pela renovação da minha mente. Tudo o que sou e tudo o que tenho pertence a ti. Usa-me para a tua glória. Em nome de Jesus, amém.',
         ],
+        [
+            'title' => 'Glória ao Pai',
+            'category' => 'geral',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Glória ao Pai, e ao Filho, e ao Espírito Santo, como era no princípio, agora e sempre, por todos os séculos. Amém.',
+        ],
+        [
+            'title' => 'Oferecimento do Dia',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Senhor Deus, eu te ofereço este novo dia. Que cada pensamento, palavra e ação seja para a tua glória. Usa as minhas mãos para servir, a minha mente para aprender e o meu coração para amar. Que eu seja sal e luz neste mundo. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de Agradecimento',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Senhor, com todo o meu ser eu te agradeço. Obrigado pela vida que me deste, pela salvação em Jesus Cristo e pelo Espírito Santo que me guia. Agradeço por cada bênção grande e pequena. Que a minha gratidão se expresse em obediência e amor. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de Louvor',
+            'category' => 'amor',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Grande és tu, Senhor, e digno de todo louvor! A minha alma te engrandece e o meu espírito se alegra em ti. Cantarei o teu amor para sempre e proclamarei a tua fidelidade a todas as gerações. Não há Deus como tu, ó Senhor. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração antes das Refeições',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Senhor Deus, abençoa este alimento que vamos receber. Assim como sustentas o nosso corpo, alimenta também a nossa alma com a tua palavra. Lembra-nos dos que têm fome e ajuda-nos a compartilhar com generosidade. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração pela Paz',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'paz'],
+            'body' =>
+                'Senhor Jesus, Príncipe da Paz, derrama a tua paz sobre o mundo. Acalma os corações aflitos, reconcilia os que estão em conflito e ensina-nos a viver em unidade. Que a tua paz, que excede todo o entendimento, guarde os nossos corações. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração pelos Enfermos',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'cura'],
+            'body' =>
+                'Pai de amor, estende a tua mão curadora sobre todos os enfermos. Restaura a saúde dos corpos e a paz das almas. Fortalece os que cuidam e dá esperança aos que sofrem. Nada é impossível para ti. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração pela Família',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'fe'],
+            'body' =>
+                'Senhor, protege e abençoa as nossas famílias. Que o teu amor seja o fundamento de cada lar. Concede-nos paciência, perdão e compreensão mútua. Ensina-nos a amar como Cristo amou a igreja. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de São Francisco',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'paz'],
+            'body' =>
+                'Senhor, fazei-me instrumento da vossa paz. Onde houver ódio, que eu leve o amor; onde houver ofensa, que eu leve o perdão; onde houver discórdia, que eu leve a união; onde houver dúvida, que eu leve a fé; onde houver desespero, que eu leve a esperança; onde houver trevas, que eu leve a luz. Porque é dando que se recebe, é perdoando que se é perdoado. Amém.',
+        ],
+        [
+            'title' => 'Magnificat',
+            'category' => 'amor',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'A minha alma engrandece ao Senhor, e o meu espírito se alegra em Deus, meu Salvador, porque olhou para a humildade da sua serva. Desde agora me chamarão bem-aventurada todas as gerações, porque o Poderoso fez em mim grandes coisas. Santo é o seu nome, e a sua misericórdia se estende de geração em geração sobre os que o temem.',
+        ],
+        [
+            'title' => 'Oração pelos que Sofrem',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'esperanca'],
+            'body' =>
+                'Deus de toda consolação, olha com compaixão para todos os que estão sofrendo. Enxuga as lágrimas, cura as feridas e renova a esperança. Usa-nos como canais do teu amor e da tua misericórdia. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de entrega à vontade de Deus',
+            'category' => 'fe',
+            'subcategory' => ['entrega', 'confianca'],
+            'body' =>
+                'Senhor, entrego a minha vida nas tuas mãos. Confio que os teus planos para mim são de bem e não de mal, para me dar um futuro e uma esperança. Ajuda-me a confiar em ti mesmo quando não entendo. Que a tua vontade seja feita, não a minha. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Cordeiro de Deus',
+            'category' => 'fe',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Cordeiro de Deus, que tiras o pecado do mundo, tem piedade de nós. Cordeiro de Deus, que tiras o pecado do mundo, tem piedade de nós. Cordeiro de Deus, que tiras o pecado do mundo, dá-nos a paz.',
+        ],
+        [
+            'title' => 'Oração de Confissão',
+            'category' => 'arrependimento',
+            'subcategory' => ['arrependimento', 'perdao'],
+            'body' =>
+                'Senhor Deus, confesso os meus pecados diante de ti. Perdoa as minhas transgressões e purifica o meu coração. Cria em mim um coração puro e renova dentro de mim um espírito reto. Restaura a alegria da tua salvação. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração ao Espírito Santo',
+            'category' => 'santificacao',
+            'subcategory' => ['espirito_santo', 'santificacao'],
+            'body' =>
+                'Espírito Santo, enche-me da tua presença. Ensina-me todas as coisas e guia-me em toda a verdade. Produze em mim o teu fruto: amor, alegria, paz, paciência, bondade, fidelidade, mansidão e domínio próprio. Capacita-me para servir. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração pelos Filhos',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'fe'],
+            'body' =>
+                'Senhor, abençoa e protege os nossos filhos. Guia-os pelo caminho da verdade e dá-lhes sabedoria. Que eles cresçam no conhecimento e no amor de Deus. Guarda-os de todo mal e faze deles instrumentos de bênção. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração pelo Trabalho',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'trabalho'],
+            'body' =>
+                'Senhor Deus, abençoa o trabalho das nossas mãos. Dá-nos sabedoria e diligência em tudo o que fazemos. Que o nosso trabalho seja feito com excelência, integridade e para a tua glória. Abre portas de oportunidade segundo a tua vontade. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de Davi',
+            'category' => 'amor',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Bendito és tu, Senhor Deus de Israel, por todos os séculos. Teu é o reino, o poder e a glória. Tudo o que temos vem de ti, e do que é teu te damos. Tu és exaltado acima de tudo. Que o teu nome seja louvado para sempre. Em nome de Jesus, amém.',
+        ],
+        [
+            'title' => 'Oração de Elias',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'intercessao'],
+            'body' =>
+                'Senhor Deus de Abraão, Isaque e Jacó, faze conhecido que tu és Deus. Responde-nos quando clamamos e mostra o teu poder. Não há outro Deus além de ti. Renova a nossa fé e confiança no teu cuidado. Em nome de Jesus, amém.',
+        ],
     ],
     'orthodox' => [
         [
@@ -887,6 +1020,146 @@ return [
             'subcategory' => ['fe', 'alegria'],
             'body' =>
                 'Senhor, concede-me a verdadeira alegria do Espírito Santo. Que eu irradie a tua paz e o teu amor por onde quer que vá. Ajuda-me a receber a todos com mansidão e bondade, vendo em cada pessoa a imagem de Deus. Salva-nos, Senhor, e dá-nos a tua paz. Amém.',
+        ],
+        [
+            'title' => 'Oração de Agradecimento',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Graças te damos, Senhor Deus de todos, por todos os teus benefícios. Pela vida que nos deste, pela criação que nos rodeia e pela tua infinita misericórdia. Bendito sejas pelos séculos. Glória a ti, Senhor, por tudo. Amém.',
+        ],
+        [
+            'title' => 'Oração de Louvor',
+            'category' => 'amor',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Bendito sejas, Senhor Deus de nossos pais, louvado e exaltado acima de tudo para sempre. Bendito seja o teu santo nome, louvado e exaltado acima de tudo para sempre. Bendito sejas no firmamento do céu. Louvemos e exaltemos a Deus acima de tudo para sempre. Amém.',
+        ],
+        [
+            'title' => 'Glória ao Pai',
+            'category' => 'geral',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Glória ao Pai, e ao Filho, e ao Espírito Santo, agora e sempre e pelos séculos dos séculos. Amém. Glória a ti, nosso Deus, glória a ti.',
+        ],
+        [
+            'title' => 'Oração antes das Refeições',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Cristo Deus, abençoa estes alimentos que vamos receber da tua bondade. Assim como alimentas o nosso corpo, alimenta a nossa alma com a tua graça. Pois tu és o pão da vida e a fonte de toda bênção. Glória a ti, Senhor. Amém.',
+        ],
+        [
+            'title' => 'Oração depois das Refeições',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'Graças te damos, Cristo nosso Deus, porque nos saciaste com teus dons terrenos. Não nos prives do teu reino celestial. Glória a ti, Senhor, que enches de bondade a nossa vida. Amém.',
+        ],
+        [
+            'title' => 'Oração pela Paz',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'paz'],
+            'body' =>
+                'Senhor Jesus Cristo, príncipe da paz, concede a paz ao mundo. Acalma as tempestades das nações e reconcilia os corações divididos. Derrama o teu Espírito de amor e unidade sobre todos os povos. Pela intercessão da Theotokos e de todos os santos, tem piedade de nós. Amém.',
+        ],
+        [
+            'title' => 'Oração pelos Enfermos',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'cura'],
+            'body' =>
+                'Senhor Jesus Cristo, médico das almas e dos corpos, visita com a tua misericórdia todos os enfermos. Estende a tua mão curadora e concede-lhes saúde e paciência. Fortalece os que cuidam e dá esperança aos que sofrem. Glória a ti, Senhor. Amém.',
+        ],
+        [
+            'title' => 'Oração pela Família',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'fe'],
+            'body' =>
+                'Senhor Deus, abençoa e protege as nossas famílias. Que o teu amor seja o fundamento dos nossos lares. Concede-nos paciência, perdão e compreensão. Santifica a nossa convivência e guia-nos pelo caminho da salvação. Pela intercessão da Theotokos, tem piedade de nós. Amém.',
+        ],
+        [
+            'title' => 'Oração pelos que Sofrem',
+            'category' => 'intercessao',
+            'subcategory' => ['intercessao', 'esperanca'],
+            'body' =>
+                'Senhor, olha com amor para todos os que sofrem e estão aflitos. Conforta os tristes, cura os doentes, acolhe os desamparados. Enxuga toda lágrima e dá repouso às almas cansadas. Pois tu és o Deus de toda consolação. Amém.',
+        ],
+        [
+            'title' => 'Oração pelo Trabalho',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'trabalho'],
+            'body' =>
+                'Senhor Jesus Cristo, abençoa o trabalho das nossas mãos. Concede-nos sabedoria e diligência em nossas tarefas. Que o nosso trabalho seja uma oferta a ti e uma bênção para o próximo. Glória a ti, que nos sustentas com a tua mão generosa. Amém.',
+        ],
+        [
+            'title' => 'Oração de Consagração',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'santificacao'],
+            'body' =>
+                'Senhor e Mestre da minha vida, a ti ofereço todo o meu ser. Que os meus pensamentos, palavras e ações sejam para a tua glória. Purifica-me, santifica-me e guarda-me no teu amor. Pois tu és o meu Deus e a ti entrego a minha vida. Amém.',
+        ],
+        [
+            'title' => 'Oração de Davi',
+            'category' => 'amor',
+            'subcategory' => ['adoracao', 'fe'],
+            'body' =>
+                'Bendito és tu, Senhor Deus de Israel, por todos os séculos. Teu é o reino, o poder e a glória. Que o teu nome seja exaltado acima de todo nome. Louvemos e exaltemos a Deus acima de tudo para sempre. Amém.',
+        ],
+        [
+            'title' => 'Oração de Ana',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'adoracao'],
+            'body' =>
+                'O meu coração se alegra no Senhor, a minha força é exaltada no meu Deus. Não há santo como o Senhor, não há rocha como o nosso Deus. Ele guarda os pés dos seus santos e exalta os humildes. Glória a ti, Senhor, por todos os séculos. Amém.',
+        ],
+        [
+            'title' => 'Oração de Elias',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'intercessao'],
+            'body' =>
+                'Senhor Deus de Abraão, Isaque e Israel, faze conhecido que tu és Deus. Responde ao clamor do teu povo e mostra a tua glória. Converte os corações e renova a nossa fé. Pois tu és o único Deus verdadeiro. Glória a ti, Senhor. Amém.',
+        ],
+        [
+            'title' => 'Oração de entrega à vontade de Deus',
+            'category' => 'fe',
+            'subcategory' => ['fe', 'confianca'],
+            'body' =>
+                'Senhor Jesus Cristo, nas tuas mãos entrego o meu espírito. Confio na tua santa vontade e aceito tudo o que vier de ti. Concede-me paciência nas tribulações e gratidão nas alegrias. Glória a ti, que tudo dispões com sabedoria e amor. Amém.',
+        ],
+        [
+            'title' => 'Cordeiro de Deus',
+            'category' => 'arrependimento',
+            'subcategory' => ['perdao', 'fe'],
+            'body' =>
+                'Cordeiro de Deus, Filho do Pai, que tiras o pecado do mundo, tem piedade de nós. Cordeiro de Deus, que tiras o pecado do mundo, tem piedade de nós. Cordeiro de Deus, que tiras o pecado do mundo, concede-nos a paz. Santo Deus, Santo Forte, Santo Imortal, tem piedade de nós.',
+        ],
+        [
+            'title' => 'Oração a São Miguel Arcanjo',
+            'category' => 'protecao',
+            'subcategory' => ['protecao', 'batalha_espiritual'],
+            'body' =>
+                'São Miguel Arcanjo, comandante das hostes celestes, defendei-nos no combate espiritual. Protegei-nos de toda cilada do inimigo e guiai-nos para a salvação. Pela vossa intercessão, que o Senhor nos conceda a vitória sobre as forças do mal. Amém.',
+        ],
+        [
+            'title' => 'Oração a São Jorge',
+            'category' => 'protecao',
+            'subcategory' => ['protecao', 'fe'],
+            'body' =>
+                'São Jorge, grande mártir e vencedor, que testemunhaste a fé em Cristo até o fim, intercede por nós diante do trono de Deus. Ajuda-nos a vencer as batalhas espirituais e a permanecer firmes na fé. Glorioso São Jorge, rogai por nós. Amém.',
+        ],
+        [
+            'title' => 'Oração de Confissão',
+            'category' => 'arrependimento',
+            'subcategory' => ['arrependimento', 'perdao'],
+            'body' =>
+                'Deus misericordioso, pequei contra ti em pensamentos, palavras e obras. Como o filho pródigo, volto para ti com o coração contrito. Recebe-me e purifica-me com a tua graça. Pois tu não desprezas um coração contrito e humilhado. Concede-me o teu perdão. Amém.',
+        ],
+        [
+            'title' => 'Oração ao Espírito Santo',
+            'category' => 'santificacao',
+            'subcategory' => ['espirito_santo', 'santificacao'],
+            'body' =>
+                'Ó Rei Celestial, Espírito da Verdade, que procedes do Pai e repousas sobre o Filho, vem e habita em nós. Purifica-nos de toda mancha e santifica as nossas almas. Concede-nos os teus dons e guia-nos para a vida eterna. Amém.',
         ],
     ],
 ];
