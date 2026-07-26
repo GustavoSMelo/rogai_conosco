@@ -140,4 +140,5 @@ All `*.css` files SHALL use Tailwind `@apply` directives instead of raw CSS valu
 
 To prevent lost files for unnecessary reasons or IA allucinations
 
+- For prompts, when user request `commit and push`, just follow the git conventions and commit/push as usual, don't do anything extra
 - Before delete any file, ask first for user authorization
