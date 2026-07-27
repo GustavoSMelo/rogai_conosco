@@ -1,11 +1,12 @@
 <?php
 
 use App\Actions\GenerateAiPrayer;
+use App\Data\Prays;
 use Livewire\Component;
 
 new class extends Component {
     public string $type = 'person-prayer-audio';
-    public string $religion = 'generic';
+    public string $religion = 'other';
     public ?string $description = null;
     public mixed $prayer = null;
     public array $meta = [];
@@ -13,7 +14,7 @@ new class extends Component {
     public function mount(): void
     {
         $this->type = request()->query('type', 'person-prayer-audio');
-        $this->religion = request()->query('religion', 'generic');
+        $this->religion = request()->query('religion', 'other');
         $this->description = request()->query('description', '');
 
         $validTypes = ['ai', 'instant', 'person-prayer-audio', 'person-prayer-video', 'person-bible-audio', 'person-bible-video', 'person-bible-prayer-audio', 'person-bible-prayer-video'];
@@ -27,9 +28,9 @@ new class extends Component {
         }
 
         if ($this->type === 'instant') {
-            $prayers = require resource_path('data/prays.php');
-            $list = $prayers[$this->religion] ?? $prayers['generic'] ?? [];
-            $this->prayer = $list[array_rand($list)];
+            $prayers = Prays::getPrays();
+            $list = $prayers[$this->religion] ?? $prayers['other'] ?? [];
+            $this->prayer = !empty($list) ? $list[array_rand($list)] : null;
         }
 
         $this->meta = [

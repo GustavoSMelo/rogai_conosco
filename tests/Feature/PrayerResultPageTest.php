@@ -153,4 +153,12 @@ class PrayerResultPageTest extends TestCase
         $response->assertSee('Pedir oração por IA');
         $response->assertSee('Pedir oração instantânea');
     }
+
+    public function test_instant_prayer_with_other_religion_shows_prayer(): void
+    {
+        $response = $this->get('/prayer/result?type=instant&religion=other');
+
+        $response->assertStatus(200);
+        $response->assertSee('Uma bênção para seu momento');
+    }
 }

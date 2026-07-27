@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Data\Prays;
 use PHPUnit\Framework\TestCase;
 
 class PrayersDataTest extends TestCase
@@ -10,15 +11,16 @@ class PrayersDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->traditions = require __DIR__ . '/../../resources/data/prays.php';
+        $this->traditions = Prays::getPrays();
     }
 
-    public function test_file_returns_array_with_3_tradition_keys(): void
+    public function test_file_returns_array_with_4_tradition_keys(): void
     {
-        $this->assertCount(3, $this->traditions);
+        $this->assertCount(4, $this->traditions);
         $this->assertArrayHasKey('catholic', $this->traditions);
         $this->assertArrayHasKey('protestant', $this->traditions);
         $this->assertArrayHasKey('orthodox', $this->traditions);
+        $this->assertArrayHasKey('other', $this->traditions);
     }
 
     public function test_catholic_section_has_at_least_25_entries(): void
@@ -34,6 +36,11 @@ class PrayersDataTest extends TestCase
     public function test_orthodox_section_has_at_least_25_entries(): void
     {
         $this->assertGreaterThanOrEqual(25, count($this->traditions['orthodox']));
+    }
+
+    public function test_other_section_has_at_least_15_entries(): void
+    {
+        $this->assertGreaterThanOrEqual(15, count($this->traditions['other']));
     }
 
     public function test_each_prayer_has_required_fields(): void
