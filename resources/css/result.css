@@ -10,7 +10,7 @@
 }
 
 .result-page-body {
-    background-image: url('/images/bgrogai-conosco.png');
+    background-image: url('../images/bgrogai-conosco.png');
     @apply bg-cover bg-center bg-no-repeat bg-fixed relative;
 }
 

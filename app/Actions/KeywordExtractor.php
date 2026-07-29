@@ -6,12 +6,18 @@ use App\Data\Prays;
 
 class KeywordExtractor
 {
+    /** @var string[] All known tags from the prayer corpus */
     private readonly array $knownTags;
 
+    /** @var string[] Tags containing spaces (matched first, by substring) */
     private readonly array $multiWordTags;
 
+    /** @var string[] Single-word tags (matched by exact token match) */
     private readonly array $singleWordTags;
 
+    /**
+     * @param string[]|null $tags  Optional custom tag list; defaults to all tags from Prays::getPrays()
+     */
     public function __construct(?array $tags = null)
     {
         $this->knownTags = $tags ?? $this->loadTagsFromPrays();
@@ -25,6 +31,14 @@ class KeywordExtractor
         ));
     }
 
+    /**
+     * Extract known tags present in the given text.
+     *
+     * Multi-word tags matched by substring; single-word tags by exact token match.
+     * Results sorted: multi-word first (longest first), then single-word alphabetically.
+     *
+     * @return string[] Matched tags, deduplicated and sorted
+     */
     public function extract(string $text): array
     {
         if ($text === '') {
@@ -72,11 +86,17 @@ class KeywordExtractor
         return $matched;
     }
 
+    /** @return string[] All known tags sorted alphabetically */
     public function getKnownTags(): array
     {
         return $this->knownTags;
     }
 
+    /**
+     * Collect and sort all unique tags from the prayer corpus.
+     *
+     * @return string[] Sorted unique tags
+     */
     private function loadTagsFromPrays(): array
     {
         $prays = Prays::getPrays();

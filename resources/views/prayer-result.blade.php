@@ -1,7 +1,9 @@
 <?php
 
 use App\Actions\GenerateAiPrayer;
+use App\Actions\KeywordExtractor;
 use App\Data\Prays;
+use App\Services\PrayerMatcher;
 use Livewire\Component;
 
 new class extends Component {
@@ -9,6 +11,8 @@ new class extends Component {
     public string $religion = 'other';
     public ?string $description = null;
     public mixed $prayer = null;
+    public array $extractedTags = [];
+    public ?float $matchScore = null;
     public array $meta = [];
 
     public function mount(): void
@@ -28,9 +32,28 @@ new class extends Component {
         }
 
         if ($this->type === 'instant') {
-            $prayers = Prays::getPrays();
-            $list = $prayers[$this->religion] ?? $prayers['other'] ?? [];
-            $this->prayer = !empty($list) ? $list[array_rand($list)] : null;
+            $matcher = app(PrayerMatcher::class);
+            $extractor = app(KeywordExtractor::class);
+
+            $matched = $matcher->match($this->description ?? '', 3);
+
+            if (!empty($matched)) {
+                $result = $matched[0];
+                $this->prayer = $result['prayer'];
+                $this->matchScore = $result['score'];
+            } else {
+                $prayers = Prays::getPrays();
+                $list = $prayers[$this->religion] ?? $prayers['other'] ?? [];
+                if (empty($list)) {
+                    $this->prayer = null;
+                } elseif (blank($this->description ?? '')) {
+                    $this->prayer = $list[array_rand($list)];
+                } else {
+                    $this->prayer = $list[crc32($this->description ?? '') % count($list)];
+                }
+            }
+
+            $this->extractedTags = $extractor->extract($this->description ?? '');
         }
 
         $this->meta = [
@@ -78,8 +101,22 @@ new class extends Component {
 
     @elseif ($type === 'instant' && $prayer)
         <div class="result-card reveal visible reveal-delay-1">
-            <h1 class="result-heading mb-2">{{ $prayer['title'] }}</h1>
+            <h1 class="result-heading mb-2">{{ $prayer['title'] }}
+                @if ($matchScore !== null)
+                    <span class="inline-block text-xs bg-olive/10 text-olive rounded-full px-2 py-0.5 align-middle ml-2">{{ number_format($matchScore * 100, 0) }}%</span>
+                @endif
+            </h1>
             <p class="result-muted mb-6 reveal visible reveal-delay-2">Uma bênção para seu momento</p>
+            @if (!empty($extractedTags))
+                <div class="mb-6 reveal visible reveal-delay-2">
+                    <p class="text-sm text-olive/70 mb-2">Temas identificados:</p>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        @foreach ($extractedTags as $tag)
+                            <span class="inline-block bg-olive/10 text-olive text-xs rounded-full px-3 py-1">{{ $tag }}</span>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             <div class="result-body text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
                 {{ $prayer['body'] }}
             </div>

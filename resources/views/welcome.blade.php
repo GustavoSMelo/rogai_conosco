@@ -59,6 +59,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
         $this->redirect(route('prayer.result', [
             'type' => $this->prayerType,
             'religion' => $this->religion,
+            'description' => $this->message,
         ]));
     }
 };

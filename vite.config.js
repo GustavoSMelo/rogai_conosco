@@ -10,6 +10,8 @@ export default defineConfig({
                 "resources/js/welcome.ts",
                 "resources/css/result.css",
             ],
+            publicDirectory: "public",
+            assetsDirectory: "public",
             refresh: true,
         }),
     ],

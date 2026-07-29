@@ -67,4 +67,37 @@ class PrayerMatcherTest extends TestCase
         $this->assertNotEmpty($results);
         $this->assertLessThanOrEqual(3, count($results));
     }
+
+    public function test_same_description_returns_same_top1_across_multiple_calls(): void
+    {
+        $firstResult = $this->matcher->match('amor, saude, amizade, tristeza, fe');
+
+        $this->assertNotEmpty($firstResult);
+
+        $firstTitle = $firstResult[0]['prayer']['title'];
+
+        for ($i = 0; $i < 10; $i++) {
+            $result = $this->matcher->match('amor, saude, amizade, tristeza, fe');
+            $this->assertSame($firstTitle, $result[0]['prayer']['title']);
+        }
+    }
+
+    public function test_tied_scores_broken_alphabetically_by_title(): void
+    {
+        $results = $this->matcher->match('amor, saude, amizade, tristeza, fe');
+
+        $this->assertNotEmpty($results);
+
+        $scores = array_column(array_map(fn ($r) => ['score' => $r['score'], 'title' => $r['prayer']['title']], $results), 'score');
+
+        for ($i = 0; $i < count($results) - 1; $i++) {
+            if ($results[$i]['score'] === $results[$i + 1]['score']) {
+                $this->assertLessThan(
+                    0,
+                    $results[$i]['prayer']['title'] <=> $results[$i + 1]['prayer']['title'],
+                    "Tied prayers must be sorted alphabetically by title"
+                );
+            }
+        }
+    }
 }

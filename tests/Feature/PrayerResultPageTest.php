@@ -161,4 +161,56 @@ class PrayerResultPageTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Uma bênção para seu momento');
     }
+
+    public function test_same_short_description_returns_same_fallback_prayer(): void
+    {
+        $first = $this->get('/prayer/result?type=instant&religion=catholic&description=teste');
+        $second = $this->get('/prayer/result?type=instant&religion=catholic&description=teste');
+
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $first->getContent(), $firstTitle);
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $second->getContent(), $secondTitle);
+
+        $this->assertSame(trim($firstTitle[1] ?? ''), trim($secondTitle[1] ?? ''));
+    }
+
+    public function test_different_short_descriptions_may_return_different_prayers(): void
+    {
+        $first = $this->get('/prayer/result?type=instant&religion=catholic&description=abc');
+        $second = $this->get('/prayer/result?type=instant&religion=catholic&description=xyz');
+
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $first->getContent(), $firstTitle);
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $second->getContent(), $secondTitle);
+
+        $this->assertNotSame(trim($firstTitle[1] ?? ''), trim($secondTitle[1] ?? ''));
+    }
+
+    public function test_instant_prayer_with_description_triggers_matcher(): void
+    {
+        $response = $this->get('/prayer/result?type=instant&religion=catholic&description=precisando+de+livramento+buscando+forca+confiando+em+Deus');
+
+        $response->assertStatus(200);
+        $response->assertSee('Uma bênção para seu momento');
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
+        $this->assertNotEmpty(trim($title[1] ?? ''));
+    }
+
+    public function test_instant_prayer_without_description_renders_random_prayer(): void
+    {
+        $response = $this->get('/prayer/result?type=instant&religion=catholic&description=');
+
+        $response->assertStatus(200);
+        $response->assertSee('Uma bênção para seu momento');
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
+        $this->assertNotEmpty(trim($title[1] ?? ''));
+    }
+
+    public function test_instant_prayer_no_description_param_renders_random_prayer(): void
+    {
+        $response = $this->get('/prayer/result?type=instant&religion=catholic');
+
+        $response->assertStatus(200);
+        $response->assertSee('Uma bênção para seu momento');
+        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
+        $this->assertNotEmpty(trim($title[1] ?? ''));
+    }
 }
