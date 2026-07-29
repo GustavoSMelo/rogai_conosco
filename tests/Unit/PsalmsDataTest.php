@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use App\Data\Psalms;
 
 class PsalmsDataTest extends TestCase
 {
@@ -10,7 +11,7 @@ class PsalmsDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->psalms = require __DIR__ . '/../../resources/data/psalms.php';
+        $this->psalms = Psalms::getPsalms();
     }
 
     public function test_file_returns_array_with_150_entries(): void

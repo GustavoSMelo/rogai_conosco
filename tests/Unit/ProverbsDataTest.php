@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use App\Data\Proverbs;
 
 class ProverbsDataTest extends TestCase
 {
@@ -10,7 +11,7 @@ class ProverbsDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->proverbs = require __DIR__ . '/../../resources/data/proverbs.php';
+        $this->proverbs = Proverbs::getProverbs();
     }
 
     public function test_file_returns_array_with_31_entries(): void
