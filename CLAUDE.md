@@ -1,1 +1,1 @@
-read instruction in (AGENTS.md)[AGENTS.md]
+read instructions in (AGENTS.md)[AGENTS.md]
