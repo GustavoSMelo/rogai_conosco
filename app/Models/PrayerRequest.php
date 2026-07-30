@@ -14,12 +14,16 @@ class PrayerRequest extends Model
         'whatsapp',
         'religion',
         'prayer_type',
+        'has_answered',
+        'date_answered',
     ];
 
     protected function casts(): array
     {
         return [
             'created_at' => 'datetime',
+            'whatsapp' => \App\Casts\EncryptedString::class,
+            'email' => \App\Casts\EncryptedString::class,
         ];
     }
 }

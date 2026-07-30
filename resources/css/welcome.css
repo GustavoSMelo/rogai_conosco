@@ -210,7 +210,7 @@ textarea.welcome-form-input {
 }
 
 .welcome-hero-gradient {
-    @apply absolute inset-0 bg-gradient-to-t from-[rgba(28,28,20,0.85)] via-[rgba(125,138,90,0.35)] to-[rgba(28,28,20,0.5)];
+    @apply absolute inset-0 bg-gradient-to-t from-[rgba(28,28,20,0.92)] via-[rgba(125,138,90,0.65)] to-[rgba(16,16,10,0.75)];
 }
 
 .welcome-hero-content {

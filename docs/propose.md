@@ -1,5 +1,3 @@
-
-
 ##### Resumindo o projeto em uma frase:
 
 > Plataforma para requisicao de oracao
@@ -32,4 +30,3 @@ Pessoas que nao compartilham uma comunidade religiosa, ou pessoas que querem uma
 ## Como esse projeto se sustenta ?
 
 Atraves de doacoes, esse projeto precisa ser acessivel para todos. E claro ele precisa ser open-source, qualquer contribuente dentro do projeto sera bem vindo, queremos que pessoas sem experiencia consiga arrumar uma experiencia com nosso projeto ao mesmo tempo que serve ao Senhor.
-

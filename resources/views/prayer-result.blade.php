@@ -121,6 +121,7 @@ new class extends Component {
                 <div class="text-center space-y-2">
                     <p class="font-serif text-lg text-brand-primary">Preparando sua oração...</p>
                     <p class="text-sm text-brand-muted">Buscando a mensagem ideal para seu momento</p>
+                    <p class="text-sm text-brand-muted">(aguarde alguns instantes)</p>
                 </div>
             </div>
         </div>
