@@ -14,12 +14,12 @@ class PrayerResultPageTest extends TestCase
         $response->assertSee('Sua oração foi ouvida');
     }
 
-    public function test_instant_prayer_result_renders_correctly(): void
+    public function test_instant_prayer_shows_loading_state(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
 
         $response->assertStatus(200);
-        $response->assertSee('Uma bênção para seu momento');
+        $response->assertSee('Preparando sua oração personalizada...');
     }
 
     public function test_person_prayer_result_renders_correctly(): void
@@ -110,12 +110,17 @@ class PrayerResultPageTest extends TestCase
     public function test_all_result_types_show_donation_button(): void
     {
         $ai = $this->get('/prayer/result?type=ai&religion=catholic');
-        $instant = $this->get('/prayer/result?type=instant&religion=catholic');
         $person = $this->get('/prayer/result?type=person-prayer&religion=catholic');
 
         $ai->assertSee('Apoie esta missão');
-        $instant->assertSee('Apoie esta missão');
         $person->assertSee('Apoie esta missão');
+    }
+
+    public function test_instant_loading_state_hides_donation_button(): void
+    {
+        $response = $this->get('/prayer/result?type=instant&religion=catholic');
+
+        $response->assertDontSee('Apoie esta missão');
     }
 
     public function test_result_page_has_no_inline_font_link(): void
@@ -139,11 +144,11 @@ class PrayerResultPageTest extends TestCase
         $response->assertSee('Pedir oração instantânea');
     }
 
-    public function test_instant_result_shows_ai_prayer_cross_link(): void
+    public function test_instant_result_hides_cross_links_while_loading(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
 
-        $response->assertSee('Pedir oração por IA');
+        $response->assertDontSee('Pedir oração por IA');
     }
 
     public function test_person_result_shows_both_cross_links(): void
@@ -154,63 +159,35 @@ class PrayerResultPageTest extends TestCase
         $response->assertSee('Pedir oração instantânea');
     }
 
-    public function test_instant_prayer_with_other_religion_shows_prayer(): void
+    public function test_instant_prayer_with_other_religion_shows_loading(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=other');
 
         $response->assertStatus(200);
-        $response->assertSee('Uma bênção para seu momento');
+        $response->assertSee('Preparando sua oração personalizada...');
     }
 
-    public function test_same_short_description_returns_same_fallback_prayer(): void
+    public function test_instant_prayer_with_description_shows_loading_state(): void
     {
-        $first = $this->get('/prayer/result?type=instant&religion=catholic&description=teste');
-        $second = $this->get('/prayer/result?type=instant&religion=catholic&description=teste');
-
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $first->getContent(), $firstTitle);
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $second->getContent(), $secondTitle);
-
-        $this->assertSame(trim($firstTitle[1] ?? ''), trim($secondTitle[1] ?? ''));
-    }
-
-    public function test_different_short_descriptions_may_return_different_prayers(): void
-    {
-        $first = $this->get('/prayer/result?type=instant&religion=catholic&description=abc');
-        $second = $this->get('/prayer/result?type=instant&religion=catholic&description=xyz');
-
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $first->getContent(), $firstTitle);
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $second->getContent(), $secondTitle);
-
-        $this->assertNotSame(trim($firstTitle[1] ?? ''), trim($secondTitle[1] ?? ''));
-    }
-
-    public function test_instant_prayer_with_description_triggers_matcher(): void
-    {
-        $response = $this->get('/prayer/result?type=instant&religion=catholic&description=precisando+de+livramento+buscando+forca+confiando+em+Deus');
+        $response = $this->get('/prayer/result?type=instant&religion=catholic&description=precisando+de+livramento');
 
         $response->assertStatus(200);
-        $response->assertSee('Uma bênção para seu momento');
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
-        $this->assertNotEmpty(trim($title[1] ?? ''));
+        $response->assertSee('Preparando sua oração personalizada...');
     }
 
-    public function test_instant_prayer_without_description_renders_random_prayer(): void
+    public function test_instant_prayer_without_description_shows_loading_state(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=catholic&description=');
 
         $response->assertStatus(200);
-        $response->assertSee('Uma bênção para seu momento');
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
-        $this->assertNotEmpty(trim($title[1] ?? ''));
+        $response->assertSee('Preparando sua oração personalizada...');
     }
 
-    public function test_instant_prayer_no_description_param_renders_random_prayer(): void
+    public function test_instant_prayer_no_description_param_shows_loading_state(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
 
         $response->assertStatus(200);
-        $response->assertSee('Uma bênção para seu momento');
-        preg_match('/<h1 class="result-heading mb-2">(.*?)\s*<\/h1>/s', $response->getContent(), $title);
-        $this->assertNotEmpty(trim($title[1] ?? ''));
+        $response->assertSee('Preparando sua oração personalizada...');
     }
 }

@@ -13,6 +13,7 @@ new class extends Component {
     public mixed $prayer = null;
     public array $extractedTags = [];
     public ?float $matchScore = null;
+    public bool $loadingInstant = false;
     public array $meta = [];
 
     public function mount(): void
@@ -32,28 +33,7 @@ new class extends Component {
         }
 
         if ($this->type === 'instant') {
-            $matcher = app(PrayerMatcherService::class);
-            $extractor = app(KeywordExtractorService::class);
-
-            $matched = $matcher->match($this->description ?? '', 3);
-
-            if (!empty($matched)) {
-                $result = $matched[0];
-                $this->prayer = $result['prayer'];
-                $this->matchScore = $result['score'];
-            } else {
-                $prayers = Prays::getPrays();
-                $list = $prayers[$this->religion] ?? $prayers['other'] ?? [];
-                if (empty($list)) {
-                    $this->prayer = null;
-                } elseif (blank($this->description ?? '')) {
-                    $this->prayer = $list[array_rand($list)];
-                } else {
-                    $this->prayer = $list[crc32($this->description ?? '') % count($list)];
-                }
-            }
-
-            $this->extractedTags = $extractor->extract($this->description ?? '');
+            $this->loadingInstant = true;
         }
 
         $this->meta = [
@@ -70,6 +50,47 @@ new class extends Component {
         ];
     }
 
+    public function loadInstantPrayer(): void
+    {
+        if ($this->type !== 'instant') {
+            return;
+        }
+
+        try {
+            $aiResult = app(AiService::class)->findBestPrayMatch($this->religion, $this->description ?? '');
+            if ($aiResult !== null) {
+                $this->prayer = $aiResult;
+                $this->loadingInstant = false;
+                return;
+            }
+        } catch (\Throwable $e) {
+        }
+
+        $matcher = app(PrayerMatcherService::class);
+        $extractor = app(KeywordExtractorService::class);
+
+        $matched = $matcher->match($this->description ?? '', 3);
+
+        if (!empty($matched)) {
+            $result = $matched[0];
+            $this->prayer = $result['prayer'];
+            $this->matchScore = $result['score'];
+        } else {
+            $prayers = Prays::getPrays();
+            $list = $prayers[$this->religion] ?? $prayers['other'] ?? [];
+            if (empty($list)) {
+                $this->prayer = null;
+            } elseif (blank($this->description ?? '')) {
+                $this->prayer = $list[array_rand($list)];
+            } else {
+                $this->prayer = $list[crc32($this->description ?? '') % count($list)];
+            }
+        }
+
+        $this->extractedTags = $extractor->extract($this->description ?? '');
+        $this->loadingInstant = false;
+    }
+
     public function render()
     {
         return $this->view()
@@ -80,8 +101,22 @@ new class extends Component {
 
 ?>
 
-<div class="mx-auto max-w-measure text-center">
-    @if ($type === 'ai' && $prayer)
+<div wire:init="$wire.loadInstantPrayer()" class="mx-auto max-w-measure text-center">
+
+    @if ($type === 'instant' && $loadingInstant)
+        <div class="result-card reveal visible reveal-delay-1">
+            <div class="flex flex-col items-center justify-center py-16 space-y-4">
+                <div class="loading-spinner" role="status" aria-label="Carregando oração">
+                    <svg class="animate-spin h-10 w-10 text-olive motion-reduce:animate-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <p class="text-olive/70 text-sm">Preparando sua oração personalizada...</p>
+            </div>
+        </div>
+
+    @elseif ($type === 'ai' && $prayer)
         <div class="result-card reveal visible reveal-delay-1">
             <h1 class="result-heading mb-6">Sua oração foi ouvida</h1>
             <div class="result-body text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
