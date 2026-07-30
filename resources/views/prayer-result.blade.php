@@ -4,6 +4,7 @@ use App\Services\AiService;
 use App\Services\KeywordExtractorService;
 use App\Data\Prays;
 use App\Services\PrayerMatcherService;
+use Illuminate\Support\Facades\Crypt;
 use Livewire\Component;
 
 new class extends Component {
@@ -20,7 +21,13 @@ new class extends Component {
     {
         $this->type = request()->query('type', 'person-prayer-audio');
         $this->religion = request()->query('religion', 'other');
-        $this->description = request()->query('description', '');
+
+        $rawDescription = request()->query('description', '');
+        try {
+            $this->description = Crypt::decryptString($rawDescription);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            $this->description = $rawDescription;
+        }
 
         $validTypes = ['ai', 'instant', 'person-prayer-audio', 'person-prayer-video', 'person-bible-audio', 'person-bible-video', 'person-bible-prayer-audio', 'person-bible-prayer-video'];
 
@@ -105,21 +112,23 @@ new class extends Component {
 
     @if ($type === 'instant' && $loadingInstant)
         <div class="result-card reveal visible reveal-delay-1">
-            <div class="flex flex-col items-center justify-center py-16 space-y-4">
-                <div class="loading-spinner" role="status" aria-label="Carregando oração">
-                    <svg class="animate-spin h-10 w-10 text-olive motion-reduce:animate-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+            <div class="flex flex-col items-center justify-center py-20 space-y-8">
+                <div class="flex gap-3" role="status" aria-label="Carregando oração">
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
                 </div>
-                <p class="text-olive/70 text-sm">Preparando sua oração personalizada...</p>
+                <div class="text-center space-y-2">
+                    <p class="font-serif text-lg text-brand-primary">Preparando sua oração...</p>
+                    <p class="text-sm text-brand-muted">Buscando a mensagem ideal para seu momento</p>
+                </div>
             </div>
         </div>
 
     @elseif ($type === 'ai' && $prayer)
         <div class="result-card reveal visible reveal-delay-1">
             <h1 class="result-heading mb-6">Sua oração foi ouvida</h1>
-            <div class="result-body text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
+            <div class="result-quote text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
                 {{ $prayer }}
             </div>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
@@ -136,23 +145,26 @@ new class extends Component {
 
     @elseif ($type === 'instant' && $prayer)
         <div class="result-card reveal visible reveal-delay-1">
-            <h1 class="result-heading mb-2">{{ $prayer['title'] }}
-                @if ($matchScore !== null)
-                    <span class="inline-block text-xs bg-olive/10 text-olive rounded-full px-2 py-0.5 align-middle ml-2">{{ number_format($matchScore * 100, 0) }}%</span>
-                @endif
-            </h1>
+            <h1 class="result-heading mb-2">{{ $prayer['title'] }}</h1>
+            @if (!empty($prayer['subcategory'] ?? []))
+                <div class="flex flex-wrap gap-2 justify-center mb-3 reveal visible reveal-delay-2">
+                    @foreach ($prayer['subcategory'] as $index => $sub)
+                        <span class="subcategory-chip-{{ $index % 4 }} inline-block text-xs rounded-full px-3 py-1">{{ $sub }}</span>
+                    @endforeach
+                </div>
+            @endif
             <p class="result-muted mb-6 reveal visible reveal-delay-2">Uma bênção para seu momento</p>
             @if (!empty($extractedTags))
                 <div class="mb-6 reveal visible reveal-delay-2">
-                    <p class="text-sm text-olive/70 mb-2">Temas identificados:</p>
+                    <p class="text-sm text-brand-muted mb-2">Temas identificados:</p>
                     <div class="flex flex-wrap gap-2 justify-center">
                         @foreach ($extractedTags as $tag)
-                            <span class="inline-block bg-olive/10 text-olive text-xs rounded-full px-3 py-1">{{ $tag }}</span>
+                            <span class="inline-block bg-brand-primary/10 text-brand-primary text-xs rounded-full px-3 py-1">{{ $tag }}</span>
                         @endforeach
                     </div>
                 </div>
             @endif
-            <div class="result-body text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
+            <div class="result-prayer-body text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
                 {{ $prayer['body'] }}
             </div>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">

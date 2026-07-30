@@ -19,7 +19,7 @@ class PrayerResultPageTest extends TestCase
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
 
         $response->assertStatus(200);
-        $response->assertSee('Preparando sua oração personalizada...');
+        $response->assertSee('Preparando sua oração...');
     }
 
     public function test_person_prayer_result_renders_correctly(): void
@@ -164,7 +164,7 @@ class PrayerResultPageTest extends TestCase
         $response = $this->get('/prayer/result?type=instant&religion=other');
 
         $response->assertStatus(200);
-        $response->assertSee('Preparando sua oração personalizada...');
+        $response->assertSee('Preparando sua oração...');
     }
 
     public function test_instant_prayer_with_description_shows_loading_state(): void
@@ -172,7 +172,7 @@ class PrayerResultPageTest extends TestCase
         $response = $this->get('/prayer/result?type=instant&religion=catholic&description=precisando+de+livramento');
 
         $response->assertStatus(200);
-        $response->assertSee('Preparando sua oração personalizada...');
+        $response->assertSee('Preparando sua oração...');
     }
 
     public function test_instant_prayer_without_description_shows_loading_state(): void
@@ -180,7 +180,7 @@ class PrayerResultPageTest extends TestCase
         $response = $this->get('/prayer/result?type=instant&religion=catholic&description=');
 
         $response->assertStatus(200);
-        $response->assertSee('Preparando sua oração personalizada...');
+        $response->assertSee('Preparando sua oração...');
     }
 
     public function test_instant_prayer_no_description_param_shows_loading_state(): void
@@ -188,6 +188,6 @@ class PrayerResultPageTest extends TestCase
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
 
         $response->assertStatus(200);
-        $response->assertSee('Preparando sua oração personalizada...');
+        $response->assertSee('Preparando sua oração...');
     }
 }

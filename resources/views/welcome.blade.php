@@ -59,7 +59,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
         $this->redirect(route('prayer.result', [
             'type' => $this->prayerType,
             'religion' => $this->religion,
-            'description' => $this->message,
+            'description' => Crypt::encryptString($this->message),
         ]));
     }
 };
@@ -590,7 +590,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                     <div class="welcome-modal-buttons">
                         <button type="button"
                                 id="step-1-continue"
-                                class="welcome-modal-btn bg-brand-accent">
+                                class="welcome-modal-btn bg-brand-primary">
                             Continuar
                         </button>
                         <button type="button"
@@ -680,7 +680,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                                     }
                                 "
                                 wire:loading.attr="disabled"
-                                class="welcome-modal-btn bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60">
+                                class="welcome-modal-btn bg-brand-primary disabled:cursor-not-allowed disabled:opacity-60">
                             <span wire:loading.remove wire:target="submit">Enviar pedido de oração</span>
                             <span wire:loading wire:target="submit">
                                 <svg class="inline h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">

@@ -20,10 +20,10 @@
 }
 
 .welcome-sidebar-btn {
-    @apply mt-4 self-start rounded-[5px] border border-brand-accent px-5 py-2 text-sm font-medium text-brand-accent no-underline transition-colors duration-150;
+    @apply mt-4 self-start rounded-[5px] border border-brand-primary px-5 py-2 text-sm font-medium text-brand-primary no-underline transition-colors duration-150;
 }
 .welcome-sidebar-btn:hover {
-    @apply bg-brand-accent-light;
+    @apply bg-brand-primary-light;
 }
 
 .welcome-mobile-header {
@@ -45,10 +45,10 @@
 }
 
 .welcome-mobile-nav-btn {
-    @apply mt-4 self-start rounded-[5px] border border-brand-accent px-5 py-2 text-base font-medium text-brand-accent transition-colors duration-150;
+    @apply mt-4 self-start rounded-[5px] border border-brand-primary px-5 py-2 text-base font-medium text-brand-primary transition-colors duration-150;
 }
 .welcome-mobile-nav-btn:hover {
-    @apply bg-brand-accent-light;
+    @apply bg-brand-primary-light;
 }
 
 .welcome-section {
@@ -155,7 +155,7 @@ textarea.welcome-form-input {
     @apply mt-2 block w-full rounded-sm border border-brand-primary/30 bg-white px-4 py-3 text-brand-ink placeholder:text-brand-muted/60;
 }
 .welcome-form-input:focus {
-    @apply border-brand-accent ring-1 ring-brand-accent;
+    @apply border-brand-primary ring-1 ring-brand-primary;
 }
 
 .welcome-modal-success {

@@ -1,5 +1,5 @@
 .result-card {
-    @apply bg-white p-8 rounded-sm;
+    @apply bg-white p-8 rounded-xl;
     box-shadow: 0 1px 3px rgba(28, 28, 20, 0.08), 0 1px 2px rgba(28, 28, 20, 0.06);
 }
 
@@ -34,7 +34,7 @@
 }
 
 .result-btn-primary {
-    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-white bg-brand-accent;
+    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-white bg-brand-primary;
     transition: all 150ms ease;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .result-btn-secondary {
-    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-white bg-brand-primary;
+    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-white bg-brand-accent;
     transition: all 150ms ease;
 }
 
@@ -52,13 +52,13 @@
 }
 
 .result-btn-outline {
-    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-brand-accent;
-    border: 1px solid #8a5a47;
+    @apply block w-full rounded-[5px] px-6 py-3 font-medium text-center no-underline text-brand-primary;
+    border: 1px solid #7d8a5a;
     transition: all 150ms ease;
 }
 
 .result-btn-outline:hover {
-    @apply bg-brand-accent text-white;
+    @apply bg-brand-primary text-white;
 }
 
 .result-back-link {
@@ -73,6 +73,54 @@
 .result-muted {
     @apply text-sm text-brand-muted;
 }
+
+.result-quote {
+    @apply bg-brand-primary/5 rounded-xl px-6 py-8 text-brand-ink/90 font-serif leading-relaxed border border-brand-primary/15;
+}
+
+.result-quote::before {
+    content: "\201C";
+    @apply block text-3xl leading-none text-brand-primary/30 mb-2;
+}
+
+.result-quote::after {
+    content: "\201D";
+    @apply block text-3xl leading-none text-brand-primary/30 mt-4 text-right;
+}
+
+.result-prayer-body {
+    @apply font-serif text-base leading-relaxed text-brand-ink bg-brand-primary/5 rounded-xl px-6 py-8 border border-brand-primary/15;
+}
+
+.result-prayer-body::before {
+    content: "\201C";
+    @apply block text-3xl leading-none text-brand-primary/30 mb-2;
+}
+
+.result-prayer-body::after {
+    content: "\201D";
+    @apply block text-3xl leading-none text-brand-primary/30 mt-4 text-right;
+}
+
+@keyframes pulse-loading {
+    0%, 100% { opacity: 0.3; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.loading-dot {
+    @apply inline-block w-2 h-2 rounded-full bg-brand-primary;
+    animation: pulse-loading 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) { animation-delay: 0s; }
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Subcategory chips */
+.subcategory-chip-0 { @apply bg-brand-primary-light text-brand-primary; }
+.subcategory-chip-1 { @apply bg-brand-accent-light text-brand-accent; }
+.subcategory-chip-2 { @apply bg-[#d8e8d8] text-[#5a7a5a]; }
+.subcategory-chip-3 { @apply bg-[#e8d8d0] text-[#7a5a4a]; }
 
 /* Fade-up reveal */
 .reveal {
@@ -102,5 +150,10 @@
         opacity: 1 !important;
         transform: none !important;
         animation: none !important;
+    }
+
+    .loading-dot {
+        animation: none !important;
+        @apply opacity-100;
     }
 }
