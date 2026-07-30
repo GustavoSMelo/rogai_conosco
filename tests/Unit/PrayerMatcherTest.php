@@ -2,16 +2,16 @@
 
 namespace Tests\Unit;
 
-use App\Services\PrayerMatcher;
+use App\Services\PrayerMatcherService;
 use PHPUnit\Framework\TestCase;
 
 class PrayerMatcherTest extends TestCase
 {
-    private PrayerMatcher $matcher;
+    private PrayerMatcherService $matcher;
 
     protected function setUp(): void
     {
-        $this->matcher = new PrayerMatcher();
+        $this->matcher = new PrayerMatcherService();
     }
 
     public function test_basic_text_matching(): void

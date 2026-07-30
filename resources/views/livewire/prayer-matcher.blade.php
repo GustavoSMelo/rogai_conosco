@@ -1,7 +1,7 @@
 <?php
 
-use App\Actions\KeywordExtractor;
-use App\Services\PrayerMatcher;
+use App\Services\KeywordExtractorService;
+use App\Services\PrayerMatcherService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -24,9 +24,9 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Encontrar Oração')] c
             return;
         }
 
-        $this->extractedTags = (new KeywordExtractor())->extract($this->text);
+        $this->extractedTags = (new KeywordExtractorService())->extract($this->text);
 
-        $matcher = new PrayerMatcher();
+        $matcher = new PrayerMatcherService();
         $this->results = $matcher->match($this->text);
         $this->hasMatched = true;
     }

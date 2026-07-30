@@ -2,16 +2,16 @@
 
 namespace Tests\Unit;
 
-use App\Actions\KeywordExtractor;
+use App\Services\KeywordExtractorService;
 use PHPUnit\Framework\TestCase;
 
 class KeywordExtractorTest extends TestCase
 {
-    private KeywordExtractor $extractor;
+    private KeywordExtractorService $extractor;
 
     protected function setUp(): void
     {
-        $this->extractor = new KeywordExtractor();
+        $this->extractor = new KeywordExtractorService();
     }
 
     public function test_returns_empty_array_for_empty_string(): void
@@ -83,7 +83,7 @@ class KeywordExtractorTest extends TestCase
 
     public function test_accepts_custom_tag_list(): void
     {
-        $extractor = new KeywordExtractor(['custom tag', 'foo']);
+        $extractor = new KeywordExtractorService(['custom tag', 'foo']);
         $result = $extractor->extract('this is a custom tag test');
 
         $this->assertContains('custom tag', $result);

@@ -1,9 +1,9 @@
 <?php
 
-use App\Actions\GenerateAiPrayer;
-use App\Actions\KeywordExtractor;
+use App\Services\AiService;
+use App\Services\KeywordExtractorService;
 use App\Data\Prays;
-use App\Services\PrayerMatcher;
+use App\Services\PrayerMatcherService;
 use Livewire\Component;
 
 new class extends Component {
@@ -28,12 +28,12 @@ new class extends Component {
         }
 
         if ($this->type === 'ai') {
-            $this->prayer = app(GenerateAiPrayer::class)->generate($this->description, $this->religion);
+            $this->prayer = app(AiService::class)->generate($this->description, $this->religion);
         }
 
         if ($this->type === 'instant') {
-            $matcher = app(PrayerMatcher::class);
-            $extractor = app(KeywordExtractor::class);
+            $matcher = app(PrayerMatcherService::class);
+            $extractor = app(KeywordExtractorService::class);
 
             $matched = $matcher->match($this->description ?? '', 3);
 
