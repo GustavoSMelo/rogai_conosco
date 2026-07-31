@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions;
+namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
 use Mailtrap\MailtrapClient;
 use Mailtrap\Mime\MailtrapEmail;
 use Symfony\Component\Mime\Address;
 
-class SendPrayerResponseEmail
+class SendPrayerResponseEmailService
 {
     public function send(
         string $to,

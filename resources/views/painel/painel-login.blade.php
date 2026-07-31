@@ -50,47 +50,47 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] clas
 
 ?>
 
-<div class="painel-page-body flex min-h-screen flex-col items-center justify-center px-6">
-    <div class="w-full max-w-sm">
-        <div class="text-center mb-10">
-            <a href="{{ route('welcome') }}" class="inline-flex items-center gap-3 no-underline">
-                <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="h-10 w-10 object-contain opacity-85">
-                <span class="font-serif text-xl text-brand-primary">Rogai Conosco</span>
+<div class="painel-page-body painel-login-body">
+    <div class="painel-login-box">
+        <div class="painel-login-header">
+            <a href="{{ route('welcome') }}" class="painel-brand-link-lg">
+                <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="painel-brand-logo-lg">
+                <span class="painel-brand-text-xl">Rogai Conosco</span>
             </a>
         </div>
 
-        <div class="rounded-sm bg-white p-8 shadow-sm">
-            <h1 class="font-serif text-xl text-brand-ink text-center mb-1">Acesso Restrito</h1>
-            <p class="text-sm text-brand-muted text-center mb-8">Digite a senha para continuar.</p>
+        <div class="painel-login-card">
+            <h1 class="painel-login-title">Acesso Restrito</h1>
+            <p class="painel-login-subtitle">Digite a senha para continuar.</p>
 
-            <form class="space-y-5">
+            <form class="painel-form">
                 <div>
-                    <label for="password" class="block text-sm font-medium text-brand-ink mb-2">Senha</label>
+                    <label for="password" class="painel-form-label">Senha</label>
                     <input
                         type="password"
                         id="password"
                         wire:model="password"
                         wire:keydown.enter="login"
                         autocomplete="current-password"
-                        class="mt-1 block w-full rounded-sm border border-brand-primary/30 bg-white px-4 py-3 text-brand-ink placeholder:text-brand-muted/60 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                        class="painel-form-input"
                     >
 
                 @if ($error)
-                    <p class="text-sm text-brand-accent">{{ $error }}</p>
+                    <p class="painel-form-error">{{ $error }}</p>
                 @endif
 
                 <button
                     type="button"
                     wire:click="login"
-                    class="w-full mt-6 rounded-[5px] bg-brand-primary px-6 py-3 font-medium text-white transition-all duration-150 hover:shadow-md"
+                    class="painel-btn-primary-lg"
                 >
                     Entrar
                 </button>
             </form>
         </div>
 
-        <p class="text-center mt-8">
-            <a href="{{ route('welcome') }}" class="text-sm text-brand-primary no-underline transition-colors duration-150 hover:text-brand-accent">
+        <p class="painel-login-footer">
+            <a href="{{ route('welcome') }}" class="painel-footer-link">
                 Voltar ao início
             </a>
         </p>

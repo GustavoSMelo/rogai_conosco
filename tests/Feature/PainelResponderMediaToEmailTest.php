@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\SendPrayerResponseEmail;
+use App\Services\SendPrayerResponseEmailService;
 use App\Models\PrayerRequest;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -31,7 +31,7 @@ class PainelResponderMediaToEmailTest extends TestCase
 
         $captured = null;
 
-        $this->mock(SendPrayerResponseEmail::class)
+        $this->mock(SendPrayerResponseEmailService::class)
             ->shouldReceive('send')
             ->once()
             ->withArgs(function (
@@ -47,7 +47,7 @@ class PainelResponderMediaToEmailTest extends TestCase
                 return true;
             });
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->set('mediaFile', $file)
             ->call('sendEmail')
             ->assertSet('emailSent', true);
@@ -60,7 +60,7 @@ class PainelResponderMediaToEmailTest extends TestCase
         $this->assertSame('oracao.mp3', $mediaFileName);
         $this->assertTrue(file_exists($mediaFilePath), "Attached file missing at {$mediaFilePath}");
 
-        $realAction = new SendPrayerResponseEmail();
+        $realAction = new SendPrayerResponseEmailService();
         $email = $realAction->buildEmail(
             'maria@example.com',
             'Maria',
@@ -93,7 +93,7 @@ class PainelResponderMediaToEmailTest extends TestCase
 
         $captured = null;
 
-        $this->mock(SendPrayerResponseEmail::class)
+        $this->mock(SendPrayerResponseEmailService::class)
             ->shouldReceive('send')
             ->once()
             ->withArgs(function (
@@ -109,7 +109,7 @@ class PainelResponderMediaToEmailTest extends TestCase
                 return true;
             });
 
-        $component = Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        $component = Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->upload('mediaFile', [$file]);
 
         $storedPath = $component->get('mediaFilePath');

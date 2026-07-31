@@ -9,6 +9,7 @@ export default defineConfig({
                 "resources/css/welcome.css",
                 "resources/js/welcome.ts",
                 "resources/css/result.css",
+                "resources/css/painel.css",
             ],
             publicDirectory: "public",
             assetsDirectory: "public",

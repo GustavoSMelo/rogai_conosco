@@ -22,6 +22,7 @@ class PrayerRequest extends Model
     {
         return [
             'created_at' => 'datetime',
+            'date_answered' => 'date',
             'whatsapp' => \App\Casts\EncryptedString::class,
             'email' => \App\Casts\EncryptedString::class,
         ];

@@ -36,7 +36,7 @@ class DashboardAuthTest extends TestCase
 
     public function test_login_with_correct_password_redirects_to_dashboard(): void
     {
-        Livewire::test('app::painel-login')
+        Livewire::test('painel::painel-login')
             ->set('password', 'secret123')
             ->call('login')
             ->assertRedirect('/painel');
@@ -44,7 +44,7 @@ class DashboardAuthTest extends TestCase
 
     public function test_login_with_incorrect_password_shows_error(): void
     {
-        Livewire::test('app::painel-login')
+        Livewire::test('painel::painel-login')
             ->set('password', 'wrong-password')
             ->call('login')
             ->assertNoRedirect()
@@ -53,7 +53,7 @@ class DashboardAuthTest extends TestCase
 
     public function test_login_with_empty_password_shows_error(): void
     {
-        Livewire::test('app::painel-login')
+        Livewire::test('painel::painel-login')
             ->set('password', '')
             ->call('login')
             ->assertNoRedirect()

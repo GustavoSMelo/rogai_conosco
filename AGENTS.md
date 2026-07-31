@@ -55,6 +55,7 @@ Coverage is measured for the `app/` directory (configured in `phpunit.xml`).
 - **Queued jobs** for recorded prayer processing (audio/video rendering)
 - **WhatsApp notifications** via Laravel notifications
 - **Database:** SQLite (dev), MariaDB (prod — docker-compose)
+- **Services** for business logic (`app/Services/`), does not uses `app/Actions/` for anything
 
 ## Commit Convention
 

@@ -10,6 +10,9 @@ use Carbon\Carbon;
 new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends Component {
     public array $requests = [];
     public int $prayerRequestCount = 0;
+    public int $pendingCount = 0;
+    public int $answeredCount = 0;
+    public string $filter = 'pending';
     public bool $isEmpty = true;
 
     public function mount(): void
@@ -22,6 +25,12 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
         $this->loadRequests();
     }
 
+    public function setFilter(string $filter): void
+    {
+        $this->filter = $filter === 'answered' ? 'answered' : 'pending';
+        $this->loadRequests();
+    }
+
     public function logout(): void
     {
         session()->forget('dashboard_authenticated');
@@ -30,14 +39,30 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
 
     private function loadRequests(): void
     {
-        $pending = PrayerRequest::where('has_answered', false)
+        $this->pendingCount = PrayerRequest::where('has_answered', false)
             ->where('delivery', 'person')
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->count();
+
+        $this->answeredCount = PrayerRequest::where('has_answered', true)
+            ->where('delivery', 'person')
+            ->count();
+
+        $isAnsweredFilter = $this->filter === 'answered';
+
+        $query = PrayerRequest::where('has_answered', $isAnsweredFilter)
+            ->where('delivery', 'person');
+
+        if ($isAnsweredFilter) {
+            $query->orderBy('date_answered', 'desc');
+        } else {
+            $query->orderBy('created_at', 'asc');
+        }
+
+        $requests = $query->get();
 
         $this->prayerRequestCount = PrayerRequest::query()->count();
 
-        $this->requests = $pending->map(function (PrayerRequest $req) {
+        $this->requests = $requests->map(function (PrayerRequest $req) use ($isAnsweredFilter) {
             $message = $req->message;
             try {
                 $message = Crypt::decryptString($req->message);
@@ -60,7 +85,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 }
             }
 
-            $isOverdue = $req->created_at->diffInHours(now()) > 48;
+            $isOverdue = !$isAnsweredFilter && $req->created_at->diffInHours(now()) > 48;
 
             return [
                 'id' => $req->id,
@@ -72,7 +97,10 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 'prayer_type' => $req->prayer_type,
                 'religion' => $req->religion,
                 'created_at' => $req->created_at,
-                'elapsed' => $req->created_at->diffForHumans(parts: 2),
+                'date_answered' => $req->date_answered,
+                'elapsed' => $isAnsweredFilter && $req->date_answered
+                    ? 'Respondido em ' . $req->date_answered->format('d/m/Y')
+                    : $req->created_at->diffForHumans(parts: 2),
                 'is_overdue' => $isOverdue,
             ];
         })->toArray();
@@ -125,82 +153,107 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
 ?>
 
 <div class="painel-page-body">
-    <div class="mx-auto max-w-5xl px-6 py-10 sm:px-8">
+    <div class="painel-container">
 
     {{-- Header --}}
-    <div class="flex items-center justify-between mb-10">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('welcome') }}" class="flex items-center gap-2 no-underline transition-opacity duration-150 hover:opacity-70">
-                <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="h-8 w-8 object-contain opacity-85">
-                <span class="font-serif text-lg text-brand-primary font-bold">Rogai Conosco</span>
+    <div class="painel-header">
+        <div class="painel-header-inner">
+            <a href="{{ route('welcome') }}" class="painel-brand-link">
+                <img src="{{ asset('images/ovelhinha.png') }}" alt="" class="painel-brand-logo">
+                <span class="painel-brand-text">Rogai Conosco</span>
             </a>
-            <span class="text-brand-muted/40 text-sm">/</span>
-            <span class="font-serif text-lg text-brand-ink">Painel</span>
+            <span class="painel-crumb-sep">/</span>
+            <span class="painel-crumb-current">Painel</span>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="painel-header-actions">
             <button
                 type="button"
                 wire:click="refresh"
-                class="rounded-[5px] border border-brand-primary/30 bg-white px-4 py-2 text-sm font-medium text-brand-muted transition-all duration-150 hover:bg-brand-primary-light"
+                class="painel-btn-ghost"
             >
                 Atualizar
             </button>
             <button
                 type="button"
                 wire:click="logout"
-                class="rounded-[5px] border border-brand-accent/30 bg-white px-4 py-2 text-sm font-medium text-brand-accent transition-all duration-150 hover:bg-brand-accent-light"
+                class="painel-btn-logout"
             >
                 Sair
             </button>
         </div>
     </div>
 
+    {{-- Filter --}}
+    <div class="painel-filter-row">
+        <button
+            type="button"
+            wire:click="setFilter('pending')"
+            class="painel-filter-btn {{ $filter === 'pending' ? 'painel-filter-btn-active' : 'painel-filter-btn-idle' }}"
+        >
+            Pendentes ({{ $pendingCount }})
+        </button>
+        <button
+            type="button"
+            wire:click="setFilter('answered')"
+            class="painel-filter-btn {{ $filter === 'answered' ? 'painel-filter-btn-active' : 'painel-filter-btn-idle' }}"
+        >
+            Respondidos ({{ $answeredCount }})
+        </button>
+    </div>
+
     {{-- Empty state --}}
     @if ($isEmpty)
-        <div class="flex flex-col items-center justify-center py-24 text-center">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-brand-primary/30 mb-6" aria-hidden="true">
+        <div class="painel-empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="painel-empty-icon" aria-hidden="true">
                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
             </svg>
-            <h2 class="font-serif text-xl text-brand-ink mb-2">Nenhum pedido pendente</h2>
-            <p class="text-sm text-brand-muted max-w-sm">
-                Todos os pedidos de oração foram respondidos. Volte mais tarde para verificar novamente.
-            </p>
+            @if ($filter === 'answered')
+                <h2 class="painel-empty-title">Nenhum pedido respondido</h2>
+                <p class="painel-empty-text">
+                    Nenhum pedido de oração foi respondido até agora.
+                </p>
+            @else
+                <h2 class="painel-empty-title">Nenhum pedido pendente</h2>
+                <p class="painel-empty-text">
+                    Todos os pedidos de oração foram respondidos. Volte mais tarde para verificar novamente.
+                </p>
+            @endif
         </div>
     @endif
 
     {{-- Request cards --}}
     @if (!$isEmpty)
-        <div class="space-y-4">
+        <div class="painel-list">
             @foreach ($requests as $req)
-                <div class="painel-card rounded-sm bg-white p-6 shadow-sm transition-all duration-150 hover:shadow-md">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <div class="painel-card">
+                    <div class="painel-card-top">
+                        <div class="painel-card-main">
+                            <div class="painel-card-title-row">
                                 @if ($req['is_overdue'])
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="painel-overdue-icon" aria-hidden="true">
                                         <circle cx="12" cy="12" r="10"/>
                                         <line x1="12" y1="8" x2="12" y2="12"/>
                                         <line x1="12" y1="16" x2="12.01" y2="16"/>
                                     </svg>
                                 @endif
-                                <h3 class="font-serif text-lg text-brand-ink truncate">
+                                <h3 class="painel-card-title">
                                     @if ($req['name'] === 'Anônimo')
-                                        <span class="text-brand-muted">{{ $req['name'] }}</span>
+                                        <span class="painel-card-title-muted">{{ $req['name'] }}</span>
                                     @else
                                         {{ $req['name'] }}
                                     @endif
                                 </h3>
-                                <span class="inline-block rounded-full px-3 py-0.5 text-xs {{ $req['is_overdue'] ? 'bg-red-100 text-red-700 font-medium' : 'bg-brand-primary-light text-brand-primary' }}">
+                                <span class="painel-badge {{ $req['is_overdue'] ? 'painel-badge-overdue' : ($req['date_answered'] ? 'painel-badge-answered' : 'painel-badge-pending') }}">
                                     {{ $req['elapsed'] }}
                                 </span>
                             </div>
-                            <p class="text-sm leading-relaxed text-brand-ink/85 line-clamp-3">
+                            <p class="painel-message">
                                 {{ $req['message'] }}
                             </p>
                         </div>
-                        <div class="shrink-0">
-                            <div class="flex flex-col items-end gap-2">
-                                <span class="inline-block rounded-sm border border-brand-primary/20 px-3 py-1 text-xs text-brand-muted">
+                        <div class="painel-card-side">
+                            <div class="painel-card-side-inner">
+                                <span class="painel-type-tag">
                                     {{ $this->prayerTypeLabel($req['prayer_type']) }}
                                 </span>
                             </div>
@@ -208,7 +261,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                     </div>
 
                     {{-- Contact details --}}
-                    <div class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-brand-muted/70">
+                    <div class="painel-meta">
                         @if ($req['whatsapp'])
                             <span>WhatsApp: {{ $req['whatsapp'] }}</span>
                         @endif
@@ -221,23 +274,29 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                         <span>Entrega: {{ $this->deliveryLabel($req['delivery']) }}</span>
                     </div>
 
-                    <div class="mt-3 flex items-center justify-between">
-                        <div class="text-xs {{ $req['is_overdue'] ? 'text-red-600 font-medium' : 'text-brand-muted/50' }}">
+                    <div class="painel-card-footer">
+                        <div class="painel-date {{ $req['is_overdue'] ? 'painel-date-overdue' : '' }}">
                             {{ $req['created_at']->format('d/m/Y H:i') }}
                         </div>
-                        <a href="{{ route('painel.responder', $req['id']) }}"
-                           class="rounded-[5px] bg-brand-primary px-4 py-1.5 text-xs font-medium text-white no-underline transition-all duration-150 hover:shadow-md">
-                            Responder
-                        </a>
+                        @if ($req['date_answered'])
+                            <span class="painel-date-answered">
+                                Respondido em {{ $req['date_answered']->format('d/m/Y') }}
+                            </span>
+                        @else
+                            <a href="{{ route('painel.responder', $req['id']) }}"
+                               class="painel-btn-respond">
+                                Responder
+                            </a>
+                        @endif
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <p class="text-center text-xs text-brand-muted/50 mt-8 font-bold">
-            {{ count($requests) }} pedido(s) pendente(s)
+        <p class="painel-footer-count">
+            {{ count($requests) }} pedido(s) {{ $filter === 'answered' ? 'respondido(s)' : 'pendente(s)' }}
         </p>
-        <p class="text-center text-xs text-brand-muted/50 mt-2 font-bold">
+        <p class="painel-footer-count-alt">
             {{ $prayerRequestCount }} oracoes realizadas no total
         </p>
     @endif

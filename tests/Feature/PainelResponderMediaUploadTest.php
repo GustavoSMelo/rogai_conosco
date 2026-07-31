@@ -33,7 +33,7 @@ class PainelResponderMediaUploadTest extends TestCase
 
         $file = UploadedFile::fake()->createWithContent('oracao.mp3', 'fake-mp3-content');
 
-        $component = Livewire::test('app::painel-responder', ['prayerRequest' => $this->createRequest()])
+        $component = Livewire::test('painel::painel-responder', ['prayerRequest' => $this->createRequest()])
             ->set('mediaFile', $file)
             ->assertSet('mediaFileName', 'oracao.mp3')
             ->assertHasNoErrors();
@@ -54,7 +54,7 @@ class PainelResponderMediaUploadTest extends TestCase
 
         $file = UploadedFile::fake()->createWithContent('oracao.mp3', 'fake-mp3-content');
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $this->createRequest()])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $this->createRequest()])
             ->set('mediaFile', $file)
             ->call('removeMedia')
             ->assertSet('mediaFilePath', null)
@@ -69,7 +69,7 @@ class PainelResponderMediaUploadTest extends TestCase
 
         $file = UploadedFile::fake()->create('large.mp3', 61440);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $this->createRequest()])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $this->createRequest()])
             ->set('mediaFile', $file)
             ->assertHasErrors(['mediaFile' => 'The mediaFile field must not be greater than 51200 kilobytes.']);
     }
@@ -80,7 +80,7 @@ class PainelResponderMediaUploadTest extends TestCase
 
         $file = UploadedFile::fake()->create('oracao.mp3', 46080);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $this->createRequest()])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $this->createRequest()])
             ->set('mediaFile', $file)
             ->assertHasNoErrors();
     }
@@ -91,7 +91,7 @@ class PainelResponderMediaUploadTest extends TestCase
 
         $file = UploadedFile::fake()->create('oracao.txt', 100);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $this->createRequest()])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $this->createRequest()])
             ->set('mediaFile', $file)
             ->assertHasErrors(['mediaFile' => 'mimes']);
     }

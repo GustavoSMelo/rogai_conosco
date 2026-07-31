@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\SendPrayerResponseEmail;
+use App\Services\SendPrayerResponseEmailService;
 use App\Models\PrayerRequest;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
@@ -20,7 +20,7 @@ class PainelResponderEmailTest extends TestCase
         file_put_contents($path, 'fake-audio-content');
 
         try {
-            $action = $this->mock(SendPrayerResponseEmail::class);
+            $action = $this->mock(SendPrayerResponseEmailService::class);
             $action->shouldReceive('send')
                 ->once()
                 ->withArgs(fn (string $to, string $name, string $prayerMessage, ?string $mediaUrl, ?string $mediaFilePath, ?string $mediaFileName) =>
@@ -41,7 +41,7 @@ class PainelResponderEmailTest extends TestCase
                 'date_answered' => null,
             ]);
 
-            Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+            Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
                 ->set('mediaUrl', 'https://example.com/audio.mp3')
                 ->set('mediaFilePath', $path)
                 ->set('mediaFileName', 'oracao.mp3')
@@ -56,7 +56,7 @@ class PainelResponderEmailTest extends TestCase
 
     public function test_send_email_without_media_url(): void
     {
-        $action = $this->mock(SendPrayerResponseEmail::class);
+        $action = $this->mock(SendPrayerResponseEmailService::class);
         $action->shouldReceive('send')
             ->once()
             ->withArgs(fn (string $to, string $name, string $prayerMessage, ?string $mediaUrl) =>
@@ -73,14 +73,14 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail')
             ->assertSet('emailSent', true);
     }
 
     public function test_send_email_missing_email_shows_error(): void
     {
-        $this->mock(SendPrayerResponseEmail::class)
+        $this->mock(SendPrayerResponseEmailService::class)
             ->shouldNotReceive('send');
 
         $request = PrayerRequest::create([
@@ -93,7 +93,7 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail')
             ->assertSet('emailSent', false)
             ->assertSet('emailError', 'Email do solicitante não disponível');
@@ -101,7 +101,7 @@ class PainelResponderEmailTest extends TestCase
 
     public function test_send_email_failure_shows_error(): void
     {
-        $action = $this->mock(SendPrayerResponseEmail::class);
+        $action = $this->mock(SendPrayerResponseEmailService::class);
         $action->shouldReceive('send')
             ->once()
             ->andThrow(new \Exception('Connection timed out'));
@@ -116,7 +116,7 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail')
             ->assertSet('emailSent', false)
             ->assertSet('emailSending', false)
@@ -125,7 +125,7 @@ class PainelResponderEmailTest extends TestCase
 
     public function test_send_email_logs_info_on_success(): void
     {
-        $this->mock(SendPrayerResponseEmail::class)
+        $this->mock(SendPrayerResponseEmailService::class)
             ->shouldReceive('send')
             ->once();
 
@@ -143,7 +143,7 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail');
     }
 
@@ -163,13 +163,13 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail');
     }
 
     public function test_send_email_logs_error_on_failure(): void
     {
-        $this->mock(SendPrayerResponseEmail::class)
+        $this->mock(SendPrayerResponseEmailService::class)
             ->shouldReceive('send')
             ->once()
             ->andThrow(new \Exception('SMTP error'));
@@ -188,13 +188,13 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail');
     }
 
     public function test_send_email_with_anonymous_name(): void
     {
-        $action = $this->mock(SendPrayerResponseEmail::class);
+        $action = $this->mock(SendPrayerResponseEmailService::class);
         $action->shouldReceive('send')
             ->once()
             ->withArgs(fn (string $to, string $name) => $name === 'Anônimo');
@@ -209,7 +209,7 @@ class PainelResponderEmailTest extends TestCase
             'date_answered' => null,
         ]);
 
-        Livewire::test('app::painel-responder', ['prayerRequest' => $request])
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail')
             ->assertSet('emailSent', true);
     }

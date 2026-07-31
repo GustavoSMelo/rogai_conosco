@@ -2,18 +2,18 @@
 
 namespace Tests\Unit;
 
-use App\Actions\SendPrayerResponseEmail;
+use App\Services\SendPrayerResponseEmailService;
 use Tests\TestCase;
 
 class SendPrayerResponseEmailTest extends TestCase
 {
-    private SendPrayerResponseEmail $action;
+    private SendPrayerResponseEmailService $action;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->action = new SendPrayerResponseEmail();
+        $this->action = new SendPrayerResponseEmailService();
     }
 
     public function test_builds_email_with_media_url(): void

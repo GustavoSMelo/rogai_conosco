@@ -37,14 +37,6 @@
     }
 }
 
-.overdue-date {
-    @apply text-red-600 font-medium;
-}
-
-.overdue-badge {
-    @apply bg-red-100 text-red-700 font-medium;
-}
-
 @keyframes painel-fade-in {
     from {
         opacity: 0;
@@ -56,8 +48,201 @@
     }
 }
 
+/* --- Layout --- */
+
+.painel-container {
+    @apply mx-auto max-w-5xl px-6 py-10 sm:px-8;
+}
+
+.painel-container-narrow {
+    @apply mx-auto max-w-3xl px-6 py-10 sm:px-8;
+}
+
+.painel-header {
+    @apply flex items-center justify-between mb-10;
+}
+
+.painel-header-narrow {
+    @apply flex items-center justify-between mb-8;
+}
+
+.painel-header-inner {
+    @apply flex items-center gap-3;
+}
+
+.painel-header-actions {
+    @apply flex items-center gap-3;
+}
+
+.painel-login-body {
+    @apply flex min-h-screen flex-col items-center justify-center px-6;
+}
+
+.painel-login-box {
+    @apply w-full max-w-sm;
+}
+
+.painel-login-header {
+    @apply text-center mb-10;
+}
+
+.painel-login-footer {
+    @apply text-center mt-8;
+}
+
+/* --- Brand --- */
+
+.painel-brand-link {
+    @apply flex items-center gap-2 no-underline transition-opacity duration-150;
+}
+.painel-brand-link:hover {
+    @apply opacity-70;
+}
+
+.painel-brand-link-lg {
+    @apply inline-flex items-center gap-3 no-underline;
+}
+
+.painel-brand-logo {
+    @apply h-8 w-8 object-contain opacity-85;
+}
+
+.painel-brand-logo-lg {
+    @apply h-10 w-10 object-contain opacity-85;
+}
+
+.painel-brand-text {
+    @apply font-serif text-lg text-brand-primary font-bold;
+}
+
+.painel-brand-text-xl {
+    @apply font-serif text-xl text-brand-primary;
+}
+
+/* --- Breadcrumb --- */
+
+.painel-crumb-sep {
+    @apply text-brand-muted/40 text-sm;
+}
+
+.painel-crumb-link {
+    @apply font-serif text-lg text-brand-ink no-underline transition-colors duration-150;
+}
+.painel-crumb-link:hover {
+    @apply text-brand-primary;
+}
+
+.painel-crumb-current {
+    @apply font-serif text-lg text-brand-muted;
+}
+
+/* --- Buttons --- */
+
+.painel-btn-ghost {
+    @apply rounded-[5px] border border-brand-primary/30 bg-white px-4 py-2 text-sm font-medium text-brand-muted transition-all duration-150;
+}
+.painel-btn-ghost:hover {
+    @apply bg-brand-primary-light;
+}
+
+.painel-filter-row {
+    @apply flex gap-3 mb-8;
+}
+
+.painel-filter-btn {
+    @apply rounded-[5px] border px-4 py-2 text-sm font-medium transition-all duration-150;
+}
+
+.painel-filter-btn-idle {
+    @apply border-brand-primary/30 bg-white text-brand-muted;
+}
+.painel-filter-btn-idle:hover {
+    @apply bg-brand-primary-light;
+}
+
+.painel-filter-btn-active {
+    @apply border-brand-primary bg-brand-primary text-white;
+}
+
+.painel-btn-logout {
+    @apply rounded-[5px] border border-brand-accent/30 bg-white px-4 py-2 text-sm font-medium text-brand-accent transition-all duration-150;
+}
+.painel-btn-logout:hover {
+    @apply bg-brand-accent-light;
+}
+
+.painel-btn-respond {
+    @apply rounded-[5px] bg-brand-primary px-4 py-1.5 text-xs font-medium text-white no-underline transition-all duration-150;
+}
+.painel-btn-respond:hover {
+    @apply shadow-md;
+}
+
+.painel-btn-primary-lg {
+    @apply w-full mt-6 rounded-[5px] bg-brand-primary px-6 py-3 font-medium text-white transition-all duration-150;
+}
+.painel-btn-primary-lg:hover {
+    @apply shadow-md;
+}
+
+.painel-btn-notify {
+    @apply flex-1 flex items-center justify-center gap-2 rounded-[5px] px-6 py-3 text-sm font-medium text-white transition-all duration-150;
+}
+.painel-btn-notify:hover {
+    @apply shadow-md;
+}
+
+.painel-btn-whatsapp-active {
+    @apply bg-green-700;
+}
+.painel-btn-whatsapp-active:hover {
+    @apply bg-green-800;
+}
+
+.painel-btn-email-active {
+    @apply bg-brand-accent;
+}
+.painel-btn-email-active:hover {
+    @apply bg-brand-accent/90;
+}
+
+.painel-btn-disabled {
+    @apply bg-brand-muted cursor-not-allowed;
+}
+
+.painel-btn-status {
+    @apply w-full flex items-center justify-center gap-2 rounded-[5px] px-6 py-3 text-sm font-medium transition-all duration-150;
+}
+.painel-btn-status:hover {
+    @apply shadow-md;
+}
+
+.painel-btn-status-idle {
+    @apply border border-brand-primary/30 bg-white text-brand-muted;
+}
+.painel-btn-status-idle:hover {
+    @apply bg-brand-primary-light border-brand-primary/60;
+}
+
+.painel-btn-status-done {
+    @apply bg-green-700 text-white cursor-not-allowed;
+}
+
+.painel-upload-btn {
+    @apply inline-block cursor-pointer rounded-[5px] border border-brand-primary/30 bg-white px-5 py-2 text-sm font-medium text-brand-muted transition-all duration-150;
+}
+.painel-upload-btn:hover {
+    @apply bg-brand-primary-light border-brand-primary/60;
+}
+
+/* --- Cards --- */
+
 .painel-card {
+    @apply rounded-sm bg-white p-6 shadow-sm transition-all duration-150;
     animation: painel-fade-in 400ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+.painel-card:hover {
+    @apply shadow-md;
 }
 
 .painel-card:nth-child(1) { animation-delay: 0ms; }
@@ -73,4 +258,427 @@
     .painel-card {
         animation: none;
     }
+}
+
+.painel-login-card {
+    @apply rounded-sm bg-white p-8 shadow-sm;
+}
+
+.painel-responder-card {
+    @apply rounded-sm bg-white p-8 shadow-sm mb-6;
+}
+
+.painel-card-top {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
+}
+
+.painel-card-main {
+    @apply flex-1 min-w-0;
+}
+
+.painel-card-title-row {
+    @apply flex items-center gap-3 mb-2 flex-wrap;
+}
+
+.painel-card-title {
+    @apply font-serif text-lg text-brand-ink truncate;
+}
+
+.painel-card-title-muted {
+    @apply text-brand-muted;
+}
+
+.painel-card-footer {
+    @apply mt-3 flex items-center justify-between;
+}
+
+.painel-card-side {
+    @apply shrink-0;
+}
+
+.painel-card-side-inner {
+    @apply flex flex-col items-end gap-2;
+}
+
+/* --- Typography --- */
+
+.painel-heading {
+    @apply font-serif text-xl text-brand-ink mb-6;
+}
+
+.painel-login-title {
+    @apply font-serif text-xl text-brand-ink text-center mb-1;
+}
+
+.painel-login-subtitle {
+    @apply text-sm text-brand-muted text-center mb-8;
+}
+
+.painel-section-title {
+    @apply font-serif text-base text-brand-ink mb-4;
+}
+
+.painel-empty-title {
+    @apply font-serif text-xl text-brand-ink mb-2;
+}
+
+.painel-empty-text {
+    @apply text-sm text-brand-muted max-w-sm;
+}
+
+/* --- Details / labels --- */
+
+.painel-details {
+    @apply space-y-4 mb-8;
+}
+
+.painel-details-row {
+    @apply flex flex-wrap gap-6;
+}
+
+.painel-field-label {
+    @apply block text-xs text-brand-muted/60 uppercase tracking-wider mb-1;
+}
+
+.painel-field-value {
+    @apply font-serif text-lg text-brand-ink;
+}
+
+.painel-field-value-sm {
+    @apply text-sm text-brand-ink;
+}
+
+.painel-message-text {
+    @apply text-sm leading-relaxed text-brand-ink/85 bg-brand-primary-light/40 rounded-sm p-4;
+}
+
+.painel-message {
+    @apply text-sm leading-relaxed text-brand-ink/85 line-clamp-3;
+}
+
+.painel-meta {
+    @apply mt-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-brand-muted/70;
+}
+
+.painel-footer-count {
+    @apply text-center text-xs text-brand-muted/50 mt-8 font-bold;
+}
+
+.painel-footer-count-alt {
+    @apply text-center text-xs text-brand-muted/50 mt-2 font-bold;
+}
+
+.painel-footer-link {
+    @apply text-sm text-brand-primary no-underline transition-colors duration-150;
+}
+.painel-footer-link:hover {
+    @apply text-brand-accent;
+}
+
+.painel-back {
+    @apply text-center;
+}
+
+/* --- Badges / tags --- */
+
+.painel-badge {
+    @apply inline-block rounded-full px-3 py-0.5 text-xs;
+}
+
+.painel-badge-overdue {
+    @apply bg-red-100 text-red-700 font-medium;
+}
+
+.painel-badge-pending {
+    @apply bg-brand-primary-light text-brand-primary;
+}
+
+.painel-badge-answered {
+    @apply bg-green-100 text-green-700 font-medium;
+}
+
+.painel-type-tag {
+    @apply inline-block rounded-sm border border-brand-primary/20 px-3 py-1 text-xs text-brand-muted;
+}
+
+.painel-date {
+    @apply text-xs text-brand-muted/50;
+}
+
+.painel-date-overdue {
+    @apply text-red-600 font-medium;
+}
+
+.painel-date-answered {
+    @apply text-xs text-green-700 font-medium;
+}
+
+.painel-overdue-icon {
+    @apply shrink-0;
+}
+
+/* --- Forms --- */
+
+.painel-form {
+    @apply space-y-5;
+}
+
+.painel-form-label {
+    @apply block text-sm font-medium text-brand-ink mb-2;
+}
+
+.painel-form-input {
+    @apply mt-1 block w-full rounded-sm border border-brand-primary/30 bg-white px-4 py-3 text-brand-ink placeholder:text-brand-muted/60;
+}
+.painel-form-input:focus {
+    @apply border-brand-primary ring-1 ring-brand-primary;
+}
+
+.painel-form-error {
+    @apply text-sm text-brand-accent;
+}
+
+/* --- Sections --- */
+
+.painel-section {
+    @apply border-t border-brand-primary/10 pt-6 mb-8;
+}
+
+.painel-section-last {
+    @apply border-t border-brand-primary/10 pt-6;
+}
+
+/* --- Contact --- */
+
+.painel-contact-list {
+    @apply space-y-3;
+}
+
+.painel-contact-item {
+    @apply flex items-center gap-3;
+}
+
+.painel-contact-icon {
+    @apply text-brand-muted/60 shrink-0;
+}
+
+.painel-contact-none {
+    @apply text-sm text-brand-muted italic;
+}
+
+/* --- Upload --- */
+
+.painel-dropzone {
+    @apply rounded-sm border-2 border-dashed p-8 text-center transition-all duration-300;
+}
+
+.painel-dropzone-active {
+    @apply border-brand-primary bg-brand-primary-light/60 scale-[1.02];
+}
+
+.painel-dropzone-idle {
+    @apply border-brand-primary/30;
+}
+
+.painel-upload-card {
+    @apply flex flex-col items-center gap-3;
+}
+
+.painel-file-card {
+    @apply w-full max-w-xs rounded-sm bg-brand-primary-light/30 p-3 text-left;
+}
+
+.painel-file-name {
+    @apply text-sm text-brand-ink font-medium truncate;
+}
+
+.painel-file-meta {
+    @apply text-xs text-brand-muted/70;
+}
+
+.painel-media-preview {
+    @apply w-full max-w-xs;
+}
+
+.painel-video {
+    @apply w-full rounded-sm shadow-sm;
+}
+
+.painel-audio {
+    @apply w-full;
+}
+
+.painel-audio-wrap {
+    @apply flex items-center justify-center rounded-sm bg-brand-primary-light/60 p-4;
+}
+
+.painel-remove-link {
+    @apply flex items-center gap-1.5 text-xs text-brand-accent transition-colors;
+}
+.painel-remove-link:hover {
+    @apply text-brand-accent/80;
+}
+
+.painel-upload-progress {
+    @apply flex flex-col items-center gap-4;
+}
+
+.painel-upload-progress-row {
+    @apply flex items-center gap-3 w-full max-w-xs;
+}
+
+.painel-upload-progress-icon {
+    @apply shrink-0 w-10 h-10 rounded-sm bg-brand-primary-light flex items-center justify-center;
+}
+
+.painel-upload-progress-svg {
+    @apply w-5 h-5 text-brand-primary animate-pulse;
+}
+
+.painel-upload-progress-text {
+    @apply flex-1 min-w-0 text-left;
+}
+
+.painel-upload-name {
+    @apply text-sm text-brand-ink font-medium truncate;
+}
+
+.painel-upload-sub {
+    @apply text-xs text-brand-muted/60;
+}
+
+.painel-upload-track {
+    @apply w-full max-w-xs h-1.5 rounded-full bg-brand-primary-light overflow-hidden;
+}
+
+.painel-upload-bar {
+    @apply h-full rounded-full bg-brand-primary transition-all duration-300 ease-out;
+}
+
+.painel-upload-icon {
+    @apply mx-auto mb-4 text-brand-muted/40;
+}
+
+.painel-upload-hint {
+    @apply text-sm text-brand-muted mb-2;
+}
+
+.painel-upload-or {
+    @apply text-xs text-brand-muted/50 mb-4;
+}
+
+/* --- Alerts --- */
+
+.painel-alert-error {
+    @apply rounded-sm bg-red-50 border border-red-200 p-4 text-center;
+}
+
+.painel-alert-error-upload {
+    @apply mb-4;
+}
+
+.painel-alert-error-notify {
+    @apply mt-4;
+}
+
+.painel-alert-error-text {
+    @apply text-xs text-red-700;
+}
+
+.painel-alert-error-text-sm {
+    @apply text-sm text-red-700 font-medium;
+}
+
+.painel-alert-success {
+    @apply mt-4 rounded-sm bg-green-50 border border-green-200 p-4 text-center;
+}
+
+.painel-alert-success-text {
+    @apply text-sm text-green-700 font-medium;
+}
+
+/* --- Notify --- */
+
+.painel-notify-row {
+    @apply flex flex-col sm:flex-row gap-4;
+}
+
+.painel-spinner {
+    @apply animate-spin h-4 w-4;
+}
+
+/* --- URL input --- */
+
+.painel-url-label {
+    @apply block text-xs text-brand-muted/60 uppercase tracking-wider mb-2;
+}
+
+.painel-url-row {
+    @apply mt-4;
+}
+
+.painel-url-field {
+    @apply relative;
+}
+
+.painel-url-input {
+    @apply block w-full rounded-sm border px-4 py-3 pr-10 text-sm text-brand-ink placeholder:text-brand-muted/60 transition-all duration-150;
+}
+.painel-url-input:focus {
+    @apply ring-1;
+}
+
+.painel-url-valid {
+    @apply border-green-500;
+}
+.painel-url-valid:focus {
+    @apply border-green-500 ring-green-500/30;
+}
+
+.painel-url-invalid {
+    @apply border-red-400;
+}
+.painel-url-invalid:focus {
+    @apply border-red-400 ring-red-400/30;
+}
+
+.painel-url-idle {
+    @apply border-brand-primary/30;
+}
+.painel-url-idle:focus {
+    @apply border-brand-primary ring-brand-primary;
+}
+
+.painel-url-icon {
+    @apply absolute right-3 top-1/2 -translate-y-1/2;
+}
+
+.painel-url-icon-valid {
+    @apply text-green-600;
+}
+
+.painel-url-icon-invalid {
+    @apply text-red-500;
+}
+
+.painel-url-hint {
+    @apply mt-1.5 text-xs text-brand-muted/50;
+}
+
+.painel-url-hint-mono {
+    @apply font-mono;
+}
+
+/* --- Empty state --- */
+
+.painel-empty-state {
+    @apply flex flex-col items-center justify-center py-24 text-center;
+}
+
+.painel-empty-icon {
+    @apply text-brand-primary/30 mb-6;
+}
+
+.painel-list {
+    @apply space-y-4;
 }
