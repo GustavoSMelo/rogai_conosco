@@ -2,16 +2,35 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Facades\Http;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class PrayerResultPageTest extends TestCase
 {
     public function test_ai_prayer_result_renders_correctly(): void
     {
+        Http::fake([
+            config('services.openrouter.url') => Http::response([
+                'choices' => [
+                    ['message' => ['content' => 'Senhor, concedei-nos a paz. Amém.']],
+                ],
+            ]),
+        ]);
+
+        Livewire::test('app::prayer-result')
+            ->set('type', 'ai')
+            ->call('loadAiPrayer')
+            ->assertSee('Sua oração foi ouvida');
+    }
+
+    public function test_ai_prayer_shows_loading_state(): void
+    {
         $response = $this->get('/prayer/result?type=ai&religion=catholic');
 
         $response->assertStatus(200);
-        $response->assertSee('Sua oração foi ouvida');
+        $response->assertSee('Gerando sua oração...');
+        $response->assertDontSee('result-heading', false);
     }
 
     public function test_instant_prayer_shows_loading_state(): void
@@ -81,7 +100,7 @@ class PrayerResultPageTest extends TestCase
 
     public function test_result_page_uses_result_specific_css_classes(): void
     {
-        $response = $this->get('/prayer/result?type=ai&religion=catholic');
+        $response = $this->get('/prayer/result?type=person-prayer&religion=catholic');
 
         $response->assertSee('result-card', false);
         $response->assertSee('result-heading', false);
@@ -100,7 +119,7 @@ class PrayerResultPageTest extends TestCase
 
     public function test_result_page_has_reveal_animations(): void
     {
-        $response = $this->get('/prayer/result?type=ai&religion=catholic');
+        $response = $this->get('/prayer/result?type=person-prayer&religion=catholic');
 
         $response->assertSee('reveal-delay-1', false);
         $response->assertSee('reveal-delay-2', false);
@@ -109,16 +128,23 @@ class PrayerResultPageTest extends TestCase
 
     public function test_all_result_types_show_donation_button(): void
     {
-        $ai = $this->get('/prayer/result?type=ai&religion=catholic');
         $person = $this->get('/prayer/result?type=person-prayer&religion=catholic');
+        $bible = $this->get('/prayer/result?type=person-bible&religion=catholic');
 
-        $ai->assertSee('Apoie esta missão');
         $person->assertSee('Apoie esta missão');
+        $bible->assertSee('Apoie esta missão');
     }
 
     public function test_instant_loading_state_hides_donation_button(): void
     {
         $response = $this->get('/prayer/result?type=instant&religion=catholic');
+
+        $response->assertDontSee('Apoie esta missão');
+    }
+
+    public function test_ai_loading_state_hides_donation_button(): void
+    {
+        $response = $this->get('/prayer/result?type=ai&religion=catholic');
 
         $response->assertDontSee('Apoie esta missão');
     }
@@ -139,9 +165,26 @@ class PrayerResultPageTest extends TestCase
 
     public function test_ai_result_shows_instant_prayer_cross_link(): void
     {
+        Http::fake([
+            config('services.openrouter.url') => Http::response([
+                'choices' => [
+                    ['message' => ['content' => 'Senhor, concedei-nos a paz. Amém.']],
+                ],
+            ]),
+        ]);
+
+        Livewire::test('app::prayer-result')
+            ->set('type', 'ai')
+            ->call('loadAiPrayer')
+            ->assertSee('Pedir oração instantânea');
+    }
+
+    public function test_ai_result_hides_cross_links_while_loading(): void
+    {
         $response = $this->get('/prayer/result?type=ai&religion=catholic');
 
-        $response->assertSee('Pedir oração instantânea');
+        $response->assertDontSee('Pedir oração por IA');
+        $response->assertDontSee('Pedir oração instantânea');
     }
 
     public function test_instant_result_hides_cross_links_while_loading(): void

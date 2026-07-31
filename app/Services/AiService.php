@@ -9,10 +9,39 @@ class AiService
 {
     public function generate(string $description, string $religion): string
     {
-        return sprintf(
-            "Senhor, que conheces o fundo do nosso coração, ouve esta oração que elevamos a ti.\n\nPedido: %s\n\nConcede, segundo a tua vontade, aquilo que está no coração de quem clama a ti. Que a paz que excede todo entendimento guarde os corações e as mentes. Que o teu amor envolva, a tua força sustente e a tua luz ilumine cada passo.\n\nEm teu nome confiamos. Amém.",
-            $description,
-        );
+        $prompt =
+            "Religião: " .
+            $religion .
+            "\n\n" .
+            "Descricao: " .
+            $description .
+            "\n\n" .
+            "Escreva uma oracao tocante e respeitosa em portugues, alinhada com a religiao informada, que acolha o pedido acima. Responda APENAS com o texto da oracao, sem titulo, sem aspas e sem formatacao extra.";
+
+        try {
+            $response = Http::withHeaders([
+                "Authorization" => "Bearer " . config("services.openrouter.key"),
+                "Content-Type" => "application/json",
+            ])->post(config("services.openrouter.url"), [
+                "model" => config("services.openrouter.model"),
+                "messages" => [["role" => "user", "content" => $prompt]],
+            ]);
+
+            $content = $response->json('choices.0.message.content');
+
+            if (!is_string($content) || trim($content) === '') {
+                return $this->fallbackPrayer();
+            }
+
+            return trim($content);
+        } catch (\Throwable $e) {
+            return $this->fallbackPrayer();
+        }
+    }
+
+    private function fallbackPrayer(): string
+    {
+        return "Pai nosso que estais nos céus, santificado seja o vosso nome. Venha a nós o vosso reino, seja feita a vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje. Perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido. E não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.";
     }
 
     public function findBestPrayMatch(string $religion, string $prayDescription): ?array

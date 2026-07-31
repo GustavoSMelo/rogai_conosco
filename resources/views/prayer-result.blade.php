@@ -15,6 +15,7 @@ new class extends Component {
     public array $extractedTags = [];
     public ?float $matchScore = null;
     public bool $loadingInstant = false;
+    public bool $loadingAi = false;
     public array $meta = [];
 
     public function mount(): void
@@ -36,7 +37,7 @@ new class extends Component {
         }
 
         if ($this->type === 'ai') {
-            $this->prayer = app(AiService::class)->generate($this->description, $this->religion);
+            $this->loadingAi = true;
         }
 
         if ($this->type === 'instant') {
@@ -55,6 +56,16 @@ new class extends Component {
                 default => 'Sua intenção de oração foi recebida. Uma pessoa real está orando por você.',
             },
         ];
+    }
+
+    public function loadAiPrayer(): void
+    {
+        if ($this->type !== 'ai' || $this->prayer !== null) {
+            return;
+        }
+
+        $this->prayer = app(AiService::class)->generate($this->description, $this->religion);
+        $this->loadingAi = false;
     }
 
     public function loadInstantPrayer(): void
@@ -108,9 +119,9 @@ new class extends Component {
 
 ?>
 
-<div wire:init="$wire.loadInstantPrayer()" class="mx-auto max-w-measure text-center">
+<div wire:init="$wire.loadInstantPrayer(); $wire.loadAiPrayer()" class="mx-auto max-w-measure text-center">
 
-    @if ($type === 'instant' && $loadingInstant)
+    @if (($type === 'instant' && $loadingInstant) || ($type === 'ai' && $loadingAi))
         <div class="result-card reveal visible reveal-delay-1">
             <div class="flex flex-col items-center justify-center py-20 space-y-8">
                 <div class="flex gap-3" role="status" aria-label="Carregando oração">
@@ -119,8 +130,13 @@ new class extends Component {
                     <span class="loading-dot"></span>
                 </div>
                 <div class="text-center space-y-2">
-                    <p class="font-serif text-lg text-brand-primary">Preparando sua oração...</p>
-                    <p class="text-sm text-brand-muted">Buscando a mensagem ideal para seu momento</p>
+                    @if ($type === 'ai')
+                        <p class="font-serif text-lg text-brand-primary">Gerando sua oração...</p>
+                        <p class="text-sm text-brand-muted">Inspirando-se na sua fé para escrever sua oração</p>
+                    @else
+                        <p class="font-serif text-lg text-brand-primary">Preparando sua oração...</p>
+                        <p class="text-sm text-brand-muted">Buscando a mensagem ideal para seu momento</p>
+                    @endif
                     <p class="text-sm text-brand-muted">(aguarde alguns instantes)</p>
                 </div>
             </div>
@@ -193,6 +209,9 @@ new class extends Component {
                     Você receberá uma notificação quando estiver pronta.
                 </p>
             @endif
+            <p class="result-person-hint mb-6 reveal visible reveal-delay-2">
+                Caso precise de uma oração o mais urgente possível, temos essas opções instantâneas para você, logo abaixo.
+            </p>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
                 <a href="{{ route('prayer.result', ['type' => 'ai', 'religion' => $religion]) }}"
                    class="result-btn-primary">

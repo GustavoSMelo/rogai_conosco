@@ -74,6 +74,10 @@
     @apply text-sm text-brand-muted;
 }
 
+.result-person-hint {
+    @apply text-sm text-brand-accent;
+}
+
 .result-quote {
     @apply bg-brand-primary/5 rounded-xl px-6 py-8 text-brand-ink/90 font-serif leading-relaxed border border-brand-primary/15;
 }

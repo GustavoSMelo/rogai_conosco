@@ -76,4 +76,55 @@ class AiServiceTest extends TestCase
         $this->assertIsArray($result);
         $this->assertSame('Healing Prayer', $result['title']);
     }
+
+    public function test_generate_returns_ai_generated_prayer_on_success(): void
+    {
+        Http::fake([
+            config('services.openrouter.url') => Http::response([
+                'choices' => [
+                    ['message' => ['content' => 'Senhor, concedei-nos a paz e a força. Amém.']],
+                ],
+            ]),
+        ]);
+
+        $result = app(AiService::class)->generate('paz e saúde', 'catholic');
+
+        $this->assertSame('Senhor, concedei-nos a paz e a força. Amém.', $result);
+    }
+
+    public function test_generate_falls_back_to_template_on_http_failure(): void
+    {
+        Http::fake([
+            config('services.openrouter.url') => Http::response(null, 500),
+        ]);
+
+        $result = app(AiService::class)->generate('paz e saúde', 'catholic');
+
+        $this->assertStringContainsString('Pai nosso', $result);
+        $this->assertStringContainsString('Amém', $result);
+    }
+
+    public function test_generate_falls_back_to_template_on_empty_response(): void
+    {
+        Http::fake([
+            config('services.openrouter.url') => Http::response([]),
+        ]);
+
+        $result = app(AiService::class)->generate('paz e saúde', 'catholic');
+
+        $this->assertStringContainsString('Pai nosso', $result);
+        $this->assertStringContainsString('Amém', $result);
+    }
+
+    public function test_generate_falls_back_to_template_on_connection_exception(): void
+    {
+        Http::fake(function ($request) {
+            throw new \Illuminate\Http\Client\ConnectionException('Connection refused');
+        });
+
+        $result = app(AiService::class)->generate('paz e saúde', 'catholic');
+
+        $this->assertStringContainsString('Pai nosso', $result);
+        $this->assertStringContainsString('Amém', $result);
+    }
 }
