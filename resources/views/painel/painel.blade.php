@@ -204,20 +204,22 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
     {{-- Empty state --}}
     @if ($isEmpty)
         <div class="painel-empty-state">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="painel-empty-icon" aria-hidden="true">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-            @if ($filter === 'answered')
-                <h2 class="painel-empty-title">Nenhum pedido respondido</h2>
-                <p class="painel-empty-text">
-                    Nenhum pedido de oração foi respondido até agora.
-                </p>
-            @else
-                <h2 class="painel-empty-title">Nenhum pedido pendente</h2>
-                <p class="painel-empty-text">
-                    Todos os pedidos de oração foram respondidos. Volte mais tarde para verificar novamente.
-                </p>
-            @endif
+            <div class="painel-empty-card">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="painel-empty-icon" aria-hidden="true">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                @if ($filter === 'answered')
+                    <h2 class="painel-empty-title">Nenhum pedido respondido</h2>
+                    <p class="painel-empty-text">
+                        Nenhum pedido de oração foi respondido até agora.
+                    </p>
+                @else
+                    <h2 class="painel-empty-title">Nenhum pedido pendente</h2>
+                    <p class="painel-empty-text">
+                        Todos os pedidos de oração foram respondidos. Volte mais tarde para verificar novamente.
+                    </p>
+                @endif
+            </div>
         </div>
     @endif
 

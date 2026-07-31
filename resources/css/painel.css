@@ -323,7 +323,7 @@
 }
 
 .painel-empty-text {
-    @apply text-sm text-brand-muted max-w-sm;
+    @apply mx-auto text-sm text-brand-muted max-w-sm;
 }
 
 /* --- Details / labels --- */
@@ -675,8 +675,12 @@
     @apply flex flex-col items-center justify-center py-24 text-center;
 }
 
+.painel-empty-card {
+    @apply w-full rounded-sm bg-white p-8 shadow-sm text-center;
+}
+
 .painel-empty-icon {
-    @apply text-brand-primary/30 mb-6;
+    @apply block mx-auto mb-6 text-brand-primary/30;
 }
 
 .painel-list {

@@ -88,6 +88,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] clas
                 </button>
             </form>
         </div>
+        </div>
 
         <p class="painel-login-footer">
             <a href="{{ route('welcome') }}" class="painel-footer-link">

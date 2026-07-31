@@ -34,6 +34,18 @@ class DashboardAuthTest extends TestCase
             ->assertSee('Acesso Restrito');
     }
 
+    public function test_login_page_html_is_balanced(): void
+    {
+        $response = $this->get('/painel/login');
+
+        $html = $response->getContent();
+
+        preg_match_all('/<div[\s>]/', $html, $opens);
+        preg_match_all('/<\/div>/', $html, $closes);
+
+        $this->assertCount(count($closes[0]), $opens[0]);
+    }
+
     public function test_login_with_correct_password_redirects_to_dashboard(): void
     {
         Livewire::test('painel::painel-login')
