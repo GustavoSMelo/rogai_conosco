@@ -1,7 +1,8 @@
 <?php
 
-use App\Services\SendPrayerResponseEmailService;
 use App\Models\PrayerRequest;
+use App\Services\SendPrayerResponseEmailService;
+use App\Services\WhatsAppDeepLinkService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -10,27 +11,49 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] class extends Component {
+new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] class extends Component
+{
     use WithFileUploads;
 
     public PrayerRequest $request;
+
     public string $decryptedMessage = '';
+
     public ?string $decryptedEmail = null;
+
     public ?string $decryptedWhatsapp = null;
+
     public string $mediaUrl = '';
+
+    public ?string $mediaLink = null;
+
     public $mediaFile = null;
+
     public ?string $mediaFileUrl = null;
+
     public ?string $mediaFilePath = null;
+
     public ?string $mediaFileName = null;
+
     public ?string $mediaFileType = null;
+
     public ?string $mediaFileSize = null;
+
     public bool $uploadError = false;
+
     public ?string $uploadErrorMessage = null;
+
     public bool $whatsappSent = false;
+
     public bool $emailSent = false;
+
     public bool $emailSending = false;
+
     public ?string $emailError = null;
+
     public bool $markedAnswered = false;
+
+    public ?string $whatsappUrl = null;
 
     public function mount(PrayerRequest $prayerRequest): void
     {
@@ -38,14 +61,14 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
 
         try {
             $this->decryptedMessage = Crypt::decryptString($prayerRequest->message);
-        } catch (\Exception) {
+        } catch (Exception) {
             $this->decryptedMessage = $prayerRequest->message;
         }
 
         if ($prayerRequest->email) {
             try {
                 $this->decryptedEmail = Crypt::decryptString($prayerRequest->email);
-            } catch (\Exception) {
+            } catch (Exception) {
                 $this->decryptedEmail = $prayerRequest->email;
             }
         }
@@ -53,7 +76,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
         if ($prayerRequest->whatsapp) {
             try {
                 $this->decryptedWhatsapp = Crypt::decryptString($prayerRequest->whatsapp);
-            } catch (\Exception) {
+            } catch (Exception) {
                 $this->decryptedWhatsapp = $prayerRequest->whatsapp;
             }
         }
@@ -70,7 +93,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
         $this->mediaFileName = $this->mediaFile->getClientOriginalName();
         $this->mediaFileType = $this->mediaFile->getClientMimeType();
         $sizeKB = round($this->mediaFile->getSize() / 1024, 1);
-        $this->mediaFileSize = $sizeKB >= 1024 ? round($sizeKB / 1024, 1) . ' MB' : $sizeKB . ' KB';
+        $this->mediaFileSize = $sizeKB >= 1024 ? round($sizeKB / 1024, 1).' MB' : $sizeKB.' KB';
         $this->uploadError = false;
         $this->uploadErrorMessage = null;
 
@@ -91,9 +114,14 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
         $this->mediaUrl = '';
     }
 
-    public function simulateWhatsApp(): void
+    public function markWhatsappOpened(): void
     {
         $this->whatsappSent = true;
+
+        Log::info('WhatsApp aberto', [
+            'request_id' => $this->request->id,
+            'phone' => $this->decryptedWhatsapp,
+        ]);
     }
 
     public function markAsAnswered(): void
@@ -118,9 +146,10 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
     {
         $this->emailError = null;
 
-        if (!$this->decryptedEmail) {
+        if (! $this->decryptedEmail) {
             $this->emailError = 'Email do solicitante não disponível';
             Log::warning('Email não disponível', ['request_id' => $this->request->id]);
+
             return;
         }
 
@@ -129,7 +158,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
         try {
             [$mediaFilePath, $mediaFileName] = $this->resolveMediaForSend();
 
-            app(\App\Services\SendPrayerResponseEmailService::class)->send(
+            app(SendPrayerResponseEmailService::class)->send(
                 to: $this->decryptedEmail,
                 name: $this->request->name ?? 'Anônimo',
                 prayerMessage: $this->decryptedMessage,
@@ -144,7 +173,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                 'request_id' => $this->request->id,
                 'email' => $this->decryptedEmail,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->emailError = 'Falha ao enviar email. Tente novamente.';
             Log::error('Falha ao enviar email', [
                 'request_id' => $this->request->id,
@@ -158,12 +187,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
     private function resolveMediaForSend(): array
     {
         // Se temos arquivo temporário válido E (path inexistente OU arquivo sumiu), re-store
-        if ($this->mediaFile && (!$this->mediaFilePath || !file_exists($this->mediaFilePath))) {
+        if ($this->mediaFile && (! $this->mediaFilePath || ! file_exists($this->mediaFilePath))) {
             $path = $this->mediaFile->store('response-media', 'public');
             $this->mediaFilePath = Storage::disk('public')->path($path);
             $this->mediaFileName ??= $this->mediaFile->getClientOriginalName();
             $this->mediaFileUrl = Storage::disk('public')->url($path);
             $this->mediaUrl = $this->mediaFileUrl;
+
             return [$this->mediaFilePath, $this->mediaFileName];
         }
 
@@ -203,7 +233,28 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
 
     public function render()
     {
+        $this->whatsappUrl = $this->isValidMediaLink($this->mediaLink)
+            ? app(WhatsAppDeepLinkService::class)->build(
+                phone: $this->decryptedWhatsapp,
+                name: $this->request->name ?? '',
+                prayerMessage: $this->decryptedMessage,
+                mediaUrl: $this->mediaLink,
+            )
+            : null;
+
         return $this->view();
+    }
+
+    private function isValidMediaLink(?string $url): bool
+    {
+        if ($url === null || ! str_starts_with($url, 'https://')) {
+            return false;
+        }
+
+        return (bool) preg_match(
+            '~^https://[^/\s?#]+\.(com\.br|com|dev\.br|dev|app\.br|app)([/?#]|$)~i',
+            $url,
+        );
     }
 };
 
@@ -411,13 +462,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                 </div>
 
                 <div class="painel-url-row" x-data="{
-                    url: $wire.mediaUrl || '',
+                    url: $wire.mediaLink || '',
                     isValidUrl(val) {
                         if (!val) return null;
-                        return val.startsWith('http://') || val.startsWith('https://') || val.startsWith('/');
+                        return /^https:\/\/[^\/\s?#]+\.(com\.br|com|dev\.br|dev|app\.br|app)([\/?#]|$)/i.test(val);
                     }
                 }" x-init="$watch('url', val => {
-                    $wire.set('mediaUrl', val);
+                    $wire.set('mediaLink', val);
                 })">
                     <label for="media-url" class="painel-url-label">Ou cole um link</label>
                     <div class="painel-url-field">
@@ -451,7 +502,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                     </div>
                     <p class="painel-url-hint">
                         <template x-if="!url">Cole o link público do arquivo .mp3 ou .mp4</template>
-                        <template x-if="url && isValidUrl(url) === false">O link precisa começar com <span class="painel-url-hint-mono">https://</span></template>
+                        <template x-if="url && isValidUrl(url) === false">Use <span class="painel-url-hint-mono">https://</span> com domínio <span class="painel-url-hint-mono">.com</span>, <span class="painel-url-hint-mono">.com.br</span>, <span class="painel-url-hint-mono">.dev</span>, <span class="painel-url-hint-mono">.dev.br</span>, <span class="painel-url-hint-mono">.app</span> ou <span class="painel-url-hint-mono">.app.br</span></template>
                         <template x-if="url && isValidUrl(url)">Link válido</template>
                     </p>
                 </div>
@@ -461,17 +512,31 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
             <div class="painel-section-last">
                 <h2 class="painel-section-title">Notificar</h2>
                 <div class="painel-notify-row">
-                    <button
-                        type="button"
-                        wire:click="simulateWhatsApp"
-                        class="painel-btn-notify {{ $whatsappSent ? 'painel-btn-disabled' : 'painel-btn-whatsapp-active' }}"
-                        @if ($whatsappSent) disabled @endif
-                    >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                        </svg>
-                        {{ $whatsappSent ? 'WhatsApp Enviado' : 'Enviar WhatsApp' }}
-                    </button>
+                    @if ($whatsappUrl && !$whatsappSent)
+                        <a
+                            href="{{ $whatsappUrl }}"
+                            target="_blank"
+                            rel="noopener"
+                            wire:click="markWhatsappOpened"
+                            class="painel-btn-notify painel-btn-whatsapp-active"
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                            Enviar WhatsApp
+                        </a>
+                    @else
+                        <button
+                            type="button"
+                            class="painel-btn-notify painel-btn-disabled"
+                            disabled
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                            {{ $whatsappSent ? 'WhatsApp Enviado' : 'Enviar WhatsApp' }}
+                        </button>
+                    @endif
                     <button
                         type="button"
                         wire:click="sendEmail"
@@ -494,6 +559,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                         @endif
                     </button>
                 </div>
+                @if (!$decryptedWhatsapp)
+                    <p class="painel-contact-none">Solicitante não informou número de WhatsApp.</p>
+                @elseif (!$mediaLink)
+                    <p class="painel-contact-none">Informe um link de mídia para enviar por WhatsApp.</p>
+                @elseif (!$this->isValidMediaLink($mediaLink))
+                    <p class="painel-contact-none">Link de mídia inválido. Use https:// com domínio .com, .com.br, .dev, .dev.br, .app ou .app.br.</p>
+                @endif
                 @if ($emailError)
                     <div class="painel-alert-error painel-alert-error-notify">
                         <p class="painel-alert-error-text-sm">{{ $emailError }}</p>

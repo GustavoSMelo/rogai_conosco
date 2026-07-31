@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Carbon\Carbon;
 
 new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends Component {
     public array $requests = [];
