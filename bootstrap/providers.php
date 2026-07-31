@@ -8,4 +8,5 @@ return [
     AppServiceProvider::class,
     TelescopeServiceProvider::class,
     VoltServiceProvider::class,
+    Mailtrap\Bridge\Laravel\MailtrapSdkProvider::class,
 ];

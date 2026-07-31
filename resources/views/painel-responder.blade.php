@@ -1,19 +1,35 @@
 <?php
 
+use App\Actions\SendPrayerResponseEmail;
 use App\Models\PrayerRequest;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] class extends Component {
+    use WithFileUploads;
+
     public PrayerRequest $request;
     public string $decryptedMessage = '';
     public ?string $decryptedEmail = null;
     public ?string $decryptedWhatsapp = null;
     public string $mediaUrl = '';
+    public $mediaFile = null;
+    public ?string $mediaFileUrl = null;
+    public ?string $mediaFilePath = null;
+    public ?string $mediaFileName = null;
+    public ?string $mediaFileType = null;
+    public ?string $mediaFileSize = null;
+    public bool $uploadError = false;
+    public ?string $uploadErrorMessage = null;
     public bool $whatsappSent = false;
     public bool $emailSent = false;
+    public bool $emailSending = false;
+    public ?string $emailError = null;
 
     public function mount(PrayerRequest $prayerRequest): void
     {
@@ -42,14 +58,100 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
         }
     }
 
+    public function updatedMediaFile(): void
+    {
+        $this->validate([
+            'mediaFile' => 'file|mimes:mp3,mp4|max:51200',
+        ]);
+
+        $this->mediaFileName = $this->mediaFile->getClientOriginalName();
+        $this->mediaFileType = $this->mediaFile->getClientMimeType();
+        $sizeKB = round($this->mediaFile->getSize() / 1024, 1);
+        $this->mediaFileSize = $sizeKB >= 1024 ? round($sizeKB / 1024, 1) . ' MB' : $sizeKB . ' KB';
+        $this->uploadError = false;
+        $this->uploadErrorMessage = null;
+
+        $path = $this->mediaFile->store('response-media', 'public');
+        $this->mediaFilePath = Storage::disk('public')->path($path);
+        $this->mediaFileUrl = Storage::disk('public')->url($path);
+        $this->mediaUrl = $this->mediaFileUrl;
+    }
+
+    public function removeMedia(): void
+    {
+        $this->mediaFile = null;
+        $this->mediaFileUrl = null;
+        $this->mediaFilePath = null;
+        $this->mediaFileName = null;
+        $this->mediaFileType = null;
+        $this->mediaFileSize = null;
+        $this->mediaUrl = '';
+    }
+
     public function simulateWhatsApp(): void
     {
         $this->whatsappSent = true;
     }
 
-    public function simulateEmail(): void
+    public function sendEmail(): void
     {
-        $this->emailSent = true;
+        $this->emailError = null;
+
+        if (!$this->decryptedEmail) {
+            $this->emailError = 'Email do solicitante não disponível';
+            Log::warning('Email não disponível', ['request_id' => $this->request->id]);
+            return;
+        }
+
+        $this->emailSending = true;
+
+        try {
+            [$mediaFilePath, $mediaFileName] = $this->resolveMediaForSend();
+
+            app(\App\Actions\SendPrayerResponseEmail::class)->send(
+                to: $this->decryptedEmail,
+                name: $this->request->name ?? 'Anônimo',
+                prayerMessage: $this->decryptedMessage,
+                mediaUrl: $this->mediaUrl ?: null,
+                mediaFilePath: $mediaFilePath,
+                mediaFileName: $mediaFileName,
+            );
+
+            $this->emailSent = true;
+
+            Log::info('Email enviado', [
+                'request_id' => $this->request->id,
+                'email' => $this->decryptedEmail,
+            ]);
+        } catch (\Exception $e) {
+            $this->emailError = 'Falha ao enviar email. Tente novamente.';
+            Log::error('Falha ao enviar email', [
+                'request_id' => $this->request->id,
+                'error' => $e->getMessage(),
+            ]);
+        } finally {
+            $this->emailSending = false;
+        }
+    }
+
+    private function resolveMediaForSend(): array
+    {
+        // Se temos arquivo temporário válido E (path inexistente OU arquivo sumiu), re-store
+        if ($this->mediaFile && (!$this->mediaFilePath || !file_exists($this->mediaFilePath))) {
+            $path = $this->mediaFile->store('response-media', 'public');
+            $this->mediaFilePath = Storage::disk('public')->path($path);
+            $this->mediaFileName ??= $this->mediaFile->getClientOriginalName();
+            $this->mediaFileUrl = Storage::disk('public')->url($path);
+            $this->mediaUrl = $this->mediaFileUrl;
+            return [$this->mediaFilePath, $this->mediaFileName];
+        }
+
+        // Sem temp file: usa path salvo SE existir, senão retorna nulls
+        if ($this->mediaFilePath && file_exists($this->mediaFilePath)) {
+            return [$this->mediaFilePath, $this->mediaFileName];
+        }
+
+        return [null, $this->mediaFileName];
     }
 
     public function prayerTypeLabel(string $type): string
@@ -168,34 +270,169 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
             {{-- Media upload --}}
             <div class="border-t border-brand-primary/10 pt-6 mb-8">
                 <h2 class="font-serif text-base text-brand-ink mb-4">Mídia da Resposta</h2>
-                <div class="rounded-sm border-2 border-dashed border-brand-primary/30 p-8 text-center transition-colors duration-150 hover:border-brand-primary/60">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-brand-muted/40" aria-hidden="true">
-                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
-                        <line x1="7" y1="2" x2="7" y2="22"/>
-                        <line x1="17" y1="2" x2="17" y2="22"/>
-                        <line x1="2" y1="12" x2="22" y2="12"/>
-                        <line x1="2" y1="7" x2="7" y2="7"/>
-                        <line x1="2" y1="17" x2="7" y2="17"/>
-                        <line x1="17" y1="7" x2="22" y2="7"/>
-                        <line x1="17" y1="17" x2="22" y2="17"/>
-                    </svg>
-                    <p class="text-sm text-brand-muted mb-2">Arraste o arquivo de áudio ou vídeo aqui</p>
-                    <p class="text-xs text-brand-muted/50 mb-4">ou</p>
-                    <label class="inline-block cursor-pointer rounded-[5px] border border-brand-primary/30 bg-white px-5 py-2 text-sm font-medium text-brand-muted transition-all duration-150 hover:bg-brand-primary-light">
-                        Selecionar arquivo
-                        <input type="file" accept="audio/*,video/*" class="hidden">
-                    </label>
+
+                <div
+                    x-data="{
+                        dragging: false,
+                        prog: 0,
+                        sending: false,
+                        fileName: '',
+                        fileSize: '',
+                        uploadError: false,
+                        uploadErrorMessage: '',
+                        maxBytes: 52428800,
+                        watchdog: null,
+                        handleUpload(f) {
+                            if (!f) return;
+                            if (f.size > this.maxBytes) {
+                                this.uploadError = true;
+                                this.uploadErrorMessage = 'Arquivo excede o limite de 50 MB.';
+                                return;
+                            }
+                            this.fileName = f.name;
+                            this.fileSize = (f.size / 1024 / 1024).toFixed(1) + ' MB';
+                            this.sending = true;
+                            this.prog = 0;
+                            this.uploadError = false;
+                            this.uploadErrorMessage = '';
+                            clearTimeout(this.watchdog);
+                            this.watchdog = setTimeout(() => {
+                                if (this.sending) {
+                                    this.sending = false;
+                                    this.uploadError = true;
+                                    this.uploadErrorMessage = 'O upload demorou demais. Tente novamente.';
+                                }
+                            }, 120000);
+                            $wire.upload('mediaFile', f,
+                                () => { clearTimeout(this.watchdog); this.sending = false; },
+                                () => { clearTimeout(this.watchdog); this.sending = false; this.uploadError = true; this.uploadErrorMessage = 'Erro no envio. O arquivo pode ser grande demais (limite de 50 MB).'; },
+                                p => { this.prog = p; });
+                        }
+                    }"
+                    x-on:dragenter.prevent="dragging = true"
+                    x-on:dragover.prevent="dragging = true"
+                    x-on:dragleave.prevent="dragging = false"
+                    x-on:drop.prevent="dragging = false; handleUpload($event.dataTransfer.files[0])"
+                    class="rounded-sm border-2 border-dashed p-8 text-center transition-all duration-300"
+                    :class="dragging ? 'border-brand-primary bg-brand-primary-light/60 scale-[1.02]' : 'border-brand-primary/30'"
+                >
+                    <input type="file" accept=".mp3,.mp4" x-ref="fileInput" class="hidden"
+                           x-on:change="handleUpload($event.target.files[0]); $event.target.value = ''">
+
+                    @if ($mediaFileUrl)
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="w-full max-w-xs rounded-sm bg-brand-primary-light/30 p-3 text-left">
+                                <p class="text-sm text-brand-ink font-medium truncate">{{ $mediaFileName ?? 'Arquivo' }}</p>
+                                <p class="text-xs text-brand-muted/70">{{ $mediaFileType ?? '' }}@if($mediaFileSize) — {{ $mediaFileSize }}@endif</p>
+                            </div>
+                            <div class="w-full max-w-xs">
+                                @if (str_ends_with($mediaFileUrl, '.mp4'))
+                                    <video controls class="w-full rounded-sm shadow-sm" src="{{ $mediaFileUrl }}"></video>
+                                @else
+                                    <div class="flex items-center justify-center rounded-sm bg-brand-primary-light/60 p-4">
+                                        <audio controls class="w-full" src="{{ $mediaFileUrl }}"></audio>
+                                    </div>
+                                @endif
+                            </div>
+                            <button type="button" wire:click="removeMedia" class="flex items-center gap-1.5 text-xs text-brand-accent hover:text-brand-accent/80 transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Remover arquivo
+                            </button>
+                        </div>
+                    @else
+                        <template x-if="sending">
+                            <div class="flex flex-col items-center gap-4">
+                                <div class="flex items-center gap-3 w-full max-w-xs">
+                                    <div class="shrink-0 w-10 h-10 rounded-sm bg-brand-primary-light flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-brand-primary animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                                            <polyline points="14 2 14 8 20 8"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0 text-left">
+                                        <p class="text-sm text-brand-ink font-medium truncate" x-text="fileName || 'Enviando…'"></p>
+                                        <p class="text-xs text-brand-muted/60"><span x-text="fileSize ? fileSize + ' — ' : ''"></span><span x-text="prog < 100 ? prog + '%' : 'Concluído'"></span></p>
+                                    </div>
+                                </div>
+                                <div class="w-full max-w-xs h-1.5 rounded-full bg-brand-primary-light overflow-hidden">
+                                    <div class="h-full rounded-full bg-brand-primary transition-all duration-300 ease-out" :style="'width: ' + prog + '%'"></div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="!sending">
+                            <div>
+                                <template x-if="uploadError">
+                                    <div class="mb-4 rounded-sm bg-red-50 border border-red-200 p-4">
+                                        <p class="text-xs text-red-700" x-text="uploadErrorMessage || 'Erro ao enviar. Tente novamente.'"></p>
+                                    </div>
+                                </template>
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 text-brand-muted/40" aria-hidden="true">
+                                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                                    <line x1="7" y1="2" x2="7" y2="22"/>
+                                    <line x1="17" y1="2" x2="17" y2="22"/>
+                                    <line x1="2" y1="12" x2="22" y2="12"/>
+                                    <line x1="2" y1="7" x2="7" y2="7"/>
+                                    <line x1="2" y1="17" x2="7" y2="17"/>
+                                    <line x1="17" y1="7" x2="22" y2="7"/>
+                                    <line x1="17" y1="17" x2="22" y2="17"/>
+                                </svg>
+                                <p class="text-sm text-brand-muted mb-2">Arraste o arquivo de áudio ou vídeo aqui</p>
+                                <p class="text-xs text-brand-muted/50 mb-4">ou</p>
+                                <label x-on:click.prevent="$refs.fileInput.click()" class="inline-block cursor-pointer rounded-[5px] border border-brand-primary/30 bg-white px-5 py-2 text-sm font-medium text-brand-muted transition-all duration-150 hover:bg-brand-primary-light hover:border-brand-primary/60">
+                                    Selecionar arquivo
+                                </label>
+                            </div>
+                        </template>
+                    @endif
                 </div>
 
-                <div class="mt-4">
-                    <label for="media-url" class="block text-xs text-brand-muted/60 uppercase tracking-wider mb-2">Ou insira uma URL</label>
-                    <input
-                        type="url"
-                        id="media-url"
-                        wire:model="mediaUrl"
-                        placeholder="https://example.com/video-oracao.mp4"
-                        class="block w-full rounded-sm border border-brand-primary/30 bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-muted/60 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
-                    >
+                <div class="mt-4" x-data="{
+                    url: $wire.mediaUrl || '',
+                    isValidUrl(val) {
+                        if (!val) return null;
+                        return val.startsWith('http://') || val.startsWith('https://') || val.startsWith('/');
+                    }
+                }" x-init="$watch('url', val => {
+                    $wire.set('mediaUrl', val);
+                })">
+                    <label for="media-url" class="block text-xs text-brand-muted/60 uppercase tracking-wider mb-2">Ou cole um link</label>
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="media-url"
+                            x-model="url"
+                            x-on:blur="if (url && !url.startsWith('http') && !url.startsWith('/')) { url = 'https://' + url }"
+                            placeholder="https://exemplo.com/minha-oracao.mp3"
+                            class="block w-full rounded-sm border px-4 py-3 pr-10 text-sm text-brand-ink placeholder:text-brand-muted/60 focus:ring-1 transition-all duration-150"
+                            :class="isValidUrl(url) === false
+                                ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30'
+                                : isValidUrl(url) === true
+                                    ? 'border-green-500 focus:border-green-500 focus:ring-green-500/30'
+                                    : 'border-brand-primary/30 focus:border-brand-primary focus:ring-brand-primary'"
+                        >
+                        <template x-if="url && isValidUrl(url)">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-green-600">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </span>
+                        </template>
+                        <template x-if="url && isValidUrl(url) === false">
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                            </span>
+                        </template>
+                    </div>
+                    <p class="mt-1.5 text-xs text-brand-muted/50">
+                        <template x-if="!url">Cole o link público do arquivo .mp3 ou .mp4</template>
+                        <template x-if="url && isValidUrl(url) === false">O link precisa começar com <span class="font-mono">https://</span></template>
+                        <template x-if="url && isValidUrl(url)">Link válido</template>
+                    </p>
                 </div>
             </div>
 
@@ -216,29 +453,39 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                     </button>
                     <button
                         type="button"
-                        wire:click="simulateEmail"
+                        wire:click="sendEmail"
+                        wire:loading.attr="disabled"
                         class="flex-1 flex items-center justify-center gap-2 rounded-[5px] px-6 py-3 text-sm font-medium text-white transition-all duration-150 hover:shadow-md {{ $emailSent ? 'bg-brand-muted cursor-not-allowed' : 'bg-brand-accent hover:bg-brand-accent/90' }}"
-                        @if ($emailSent) disabled @endif
+                        @if ($emailSent || $emailSending) disabled @endif
                     >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                        {{ $emailSent ? 'Email Enviado' : 'Enviar Email' }}
+                        @if ($emailSending)
+                            <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                            </svg>
+                            Enviando...
+                        @else
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            {{ $emailSent ? 'Email Enviado' : 'Enviar Email' }}
+                        @endif
                     </button>
                 </div>
-                @if ($whatsappSent || $emailSent)
+                @if ($emailError)
+                    <div class="mt-4 rounded-sm bg-red-50 border border-red-200 p-4 text-center">
+                        <p class="text-sm text-red-700 font-medium">{{ $emailError }}</p>
+                    </div>
+                @endif
+                @if ($whatsappSent && !$emailSent)
                     <div class="mt-4 rounded-sm bg-green-50 border border-green-200 p-4 text-center">
-                        <p class="text-sm text-green-700 font-medium">
-                            @if ($whatsappSent && $emailSent)
-                                Notificações enviadas por WhatsApp e Email.
-                            @elseif ($whatsappSent)
-                                Notificação enviada por WhatsApp.
-                            @else
-                                Notificação enviada por Email.
-                            @endif
-                        </p>
-                        <p class="text-xs text-green-600/70 mt-1">Funcionalidade simulada — integração real será implementada.</p>
+                        <p class="text-sm text-green-700 font-medium">Notificação enviada por WhatsApp.</p>
+                    </div>
+                @endif
+                @if ($emailSent)
+                    <div class="mt-4 rounded-sm bg-green-50 border border-green-200 p-4 text-center">
+                        <p class="text-sm text-green-700 font-medium">Email enviado com sucesso.</p>
                     </div>
                 @endif
             </div>

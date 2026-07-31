@@ -39,4 +39,9 @@ return [
         "key" => env("OPENROUTER_API_KEY"),
         "model" => env("OPENROUTER_MODEL"),
     ],
+
+    "mailtrap-sdk" => [
+        "host" => env("MAILTRAP_HOST", "send.api.mailtrap.io"),
+        "api_key" => env("MAILTRAP_API_KEY"),
+    ],
 ];

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends Component {
     public array $requests = [];
+    public int $prayerRequestCount = 0;
     public bool $isEmpty = true;
 
     public function mount(): void
@@ -31,8 +32,10 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
     {
         $pending = PrayerRequest::where('has_answered', false)
             ->where('delivery', 'person')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
+
+        $this->prayerRequestCount = PrayerRequest::query()->count();
 
         $this->requests = $pending->map(function (PrayerRequest $req) {
             $message = $req->message;
@@ -231,8 +234,11 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             @endforeach
         </div>
 
-        <p class="text-center text-xs text-brand-muted/50 mt-8">
+        <p class="text-center text-xs text-brand-muted/50 mt-8 font-bold">
             {{ count($requests) }} pedido(s) pendente(s)
+        </p>
+        <p class="text-center text-xs text-brand-muted/50 mt-2 font-bold">
+            {{ $prayerRequestCount }} oracoes realizadas no total
         </p>
     @endif
 
