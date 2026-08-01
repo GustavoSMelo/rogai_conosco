@@ -153,7 +153,7 @@ new class extends Component {
                    class="result-btn-primary">
                     Pedir oração instantânea
                 </a>
-                <a href="/doar"
+                <a href="/donate"
                    class="result-btn-outline">
                     Apoie esta missão
                 </a>
@@ -189,7 +189,7 @@ new class extends Component {
                    class="result-btn-primary">
                     Pedir oração por IA
                 </a>
-                <a href="/doar"
+                <a href="/donate"
                    class="result-btn-outline">
                     Apoie esta missão
                 </a>
@@ -221,7 +221,7 @@ new class extends Component {
                    class="result-btn-secondary">
                     Pedir oração instantânea
                 </a>
-                <a href="/doar"
+                <a href="/donate"
                    class="result-btn-outline">
                     Apoie esta missão
                 </a>

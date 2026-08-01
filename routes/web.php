@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 Route::livewire("/", "app::welcome")->name("welcome");
 Route::livewire("/prayer/result", "app::prayer-result")->name("prayer.result");
 
+Route::view("/donate", "donate")->name("donate");
+
 Route::livewire("/painel/login", "painel::painel-login")->name("painel.login");
 
 Route::middleware(DashboardAuthenticate::class)->group(function () {

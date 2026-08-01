@@ -491,7 +491,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                         <p class="welcome-footer-mission-text">
                             Grátis &middot; Privado &middot; Sustentado por doações
                         </p>
-                        <a href="/doar" class="welcome-footer-link">
+                        <a href="/donate" class="welcome-footer-link">
                             Apoie esta missão
                         </a>
                     </div>
