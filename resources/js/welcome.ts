@@ -278,6 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.style.overflow = "hidden";
             resetContactFields();
             goToStep(1);
+            if (nameInput) nameInput.focus();
         });
     }
 
@@ -322,13 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (prayerForm) {
         prayerForm.addEventListener("keydown", (e: KeyboardEvent) => {
             if (e.key === "Enter") {
-                const step1 = document.getElementById("modal-step-1");
-                if (step1 && !step1.classList.contains("hidden")) {
-                    e.preventDefault();
-                    const continueBtn =
-                        document.getElementById("step-1-continue");
-                    if (continueBtn) continueBtn.click();
-                }
+                e.preventDefault();
             }
         });
     }

@@ -683,8 +683,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                                 class="welcome-form-input">
                             <option value="catholic">Católica</option>
                             <option value="orthodox">Ortodoxa</option>
-                            <option value="protestant">Protestante</option>
-                            <option value="other">Outra</option>
+                            <option value="protestant">Protestante/Evangelica</option>
+                            <option value="other">Outras</option>
                         </select>
                     </div>
 

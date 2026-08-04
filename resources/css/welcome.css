@@ -13,7 +13,7 @@
 }
 
 .welcome-brand-link {
-    @apply flex items-center gap-3 no-underline transition-opacity duration-150;
+    @apply flex items-center gap-3 border-b border-brand-primary/25 pb-4 no-underline transition-opacity duration-150;
 }
 .welcome-brand-link:hover {
     @apply opacity-70;
@@ -190,7 +190,7 @@ textarea.welcome-form-input {
 }
 
 .welcome-brand-link-sm {
-    @apply flex items-center gap-2 no-underline transition-opacity duration-150;
+    @apply flex items-center gap-2 border-b border-brand-primary/25 pb-3 no-underline transition-opacity duration-150;
 }
 .welcome-brand-link-sm:hover {
     @apply opacity-70;

@@ -350,7 +350,7 @@ dialog:not([open]) {
 }
 
 .modal-content {
-    @apply bg-brand-bg px-8 py-10 relative;
+    @apply bg-brand-bg px-8 py-10 relative rounded-sm overflow-hidden;
 }
 
 @media (min-width: 640px) {

@@ -18,7 +18,7 @@
 
     @vite(['resources/css/app.css', 'resources/css/donate.css'])
 </head>
-<body class="donate-page">
+<body class="donate-page" style="background-image: linear-gradient(rgba(240, 240, 216, 0.92), rgba(240, 240, 216, 0.92)), url('{{ asset('images/bgrogai-conosco.png') }}');">
 
     {{-- Header --}}
     <header class="donate-header">
@@ -38,284 +38,92 @@
             <div class="donate-hero-inner">
                 <p class="donate-kicker">Sustentado por doações</p>
                 <h1 class="donate-heading">Sua generosidade mantém a oração acessível</h1>
-                <p class="donate-subline">Cada doação ajuda alguém a receber oração — gratuitamente, sem cadastro, sem julgamento.</p>
+                <p class="donate-subline">Cada doação ajuda alguém a receber oração. Gratuitamente, sem cadastro, sem julgamento.</p>
             </div>
         </section>
 
-        {{-- Amount selector --}}
-        <section class="donate-offering donate-reveal">
-            <div class="donate-offering-header">
-                <h2 class="donate-section-heading">Escolha um valor</h2>
-                <p class="donate-section-hint">clique em um valor ou digite um valor personalizado</p>
+        {{-- Payment methods: PIX + bank transfer --}}
+        <section class="donate-methods" id="donate-methods">
+            <div class="donate-methods-header">
+                <h2 class="donate-section-heading">Como doar</h2>
+                <p class="donate-section-hint">Pix ou transferência bancária. Qualquer valor é bem-vindo.</p>
+                <p class="donate-chosen-hint" id="donate-chosen-hint" hidden>Você escolheu <strong></strong> — use os dados abaixo para doar.</p>
             </div>
 
-            {{-- Mobile: horizontal scroll --}}
-            <div class="donate-scroll-area md:hidden">
-                <div class="donate-scroll-track" id="donate-scroll-track">
-                    <button class="donate-amount-card" data-amount="1" aria-pressed="false">
-                        <div class="donate-amount-icon-candle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l0 10"/><path d="M9 22l0-8a3 3 0 0 1 6 0l0 8z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;1</div>
-                        <div class="donate-amount-label">uma oração</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
+            <div class="donate-methods-grid">
+
+                {{-- PIX --}}
+                <div class="donate-method-card donate-method-pix">
+                    <div class="donate-method-head">
+                        <span class="donate-method-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 7l-5-5-5 5"/><path d="M7 17l5 5 5-5"/></svg>
+                        </span>
+                        <h3 class="donate-method-title">Pix</h3>
+                        <span class="donate-method-badge">Instantâneo</span>
+                    </div>
+                    <p class="donate-method-desc">
+                        Pagamento instantâneo, de qualquer banco, direto pelo celular.
+                    </p>
+
+                    <div class="donate-pix-qr">
+                        <img src="{{ asset('images/QRcode.png') }}"
+                             alt="QR Code Pix para doação"
+                             class="donate-pix-qr-img">
+                    </div>
+
+                    <button type="button" id="pix-copy-btn" class="donate-pix-copy-btn" aria-label="Copiar código Pix">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span id="pix-copy-text">Copiar código Pix</span>
                     </button>
-                    <button class="donate-amount-card" data-amount="2" aria-pressed="false">
-                        <div class="donate-amount-icon-heart">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;2</div>
-                        <div class="donate-amount-label">um gesto de fé</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="5" aria-pressed="false">
-                        <div class="donate-amount-icon-cup">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;5</div>
-                        <div class="donate-amount-label">um café com oração</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="10" aria-pressed="false">
-                        <div class="donate-amount-icon-bread">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5z"/><path d="M7 14v7"/><path d="M17 14v7"/><path d="M12 14v7"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;10</div>
-                        <div class="donate-amount-label">um lanche abençoado</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="20" aria-pressed="false">
-                        <div class="donate-amount-icon-book">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;20</div>
-                        <div class="donate-amount-label">um livro de orações</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="50" aria-pressed="false">
-                        <div class="donate-amount-icon-home">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;50</div>
-                        <div class="donate-amount-label">acolhida para muitos</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="100" aria-pressed="false">
-                        <div class="donate-amount-icon-community">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;100</div>
-                        <div class="donate-amount-label">uma comunidade orando</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="200" aria-pressed="false">
-                        <div class="donate-amount-icon-globe">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;200</div>
-                        <div class="donate-amount-label">oração sem fronteiras</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="400" aria-pressed="false">
-                        <div class="donate-amount-icon-stars">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;400</div>
-                        <div class="donate-amount-label">código aberto sustentado</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="500" aria-pressed="false">
-                        <div class="donate-amount-icon-leaf">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;500</div>
-                        <div class="donate-amount-label">mês de orações entregues</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="1000" aria-pressed="false">
-                        <div class="donate-amount-icon-dove">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21c.5-4.5 2-8 7-10"/><path d="M9 3c1 2 2 3 4 4"/><path d="M14 10c2 1 6 3 6 5 0 3-3 3.5-6 3-1.5 0-3-.5-4.5-1"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;1.000</div>
-                        <div class="donate-amount-label">um ano de graça</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
+                    <p class="donate-pix-feedback" id="pix-copy-feedback" hidden>Código copiado! É só colar no app do banco.</p>
+                    <p class="donate-method-note">
+                        Abra o app do seu banco, escolha Pix, escaneie o QR Code ou cole o código copiado.
+                    </p>
                 </div>
 
-                {{-- Scroll indicators --}}
-                <button class="donate-scroll-btn donate-scroll-left" id="scroll-left" aria-label="Rolar para esquerda" hidden>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <button class="donate-scroll-btn donate-scroll-right" id="scroll-right" aria-label="Rolar para direita">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
+                {{-- Bank transfer --}}
+                <div class="donate-method-card donate-method-transfer">
+                    <div class="donate-method-head">
+                        <span class="donate-method-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7"/><path d="M5 10v10"/><path d="M19 10v10"/><path d="M3 20h18"/><path d="M9 20v-6h6v6"/></svg>
+                        </span>
+                        <h3 class="donate-method-title">Transferência (TED)</h3>
+                        <span class="donate-method-badge">Banco</span>
+                    </div>
+                    <p class="donate-method-desc">
+                        Transfira direto de qualquer banco para nossa conta.
+                    </p>
+
+                    <dl class="donate-bank-list">
+                        {{-- TODO: preencher com os dados bancários reais --}}
+                        <div class="donate-bank-row">
+                            <dt>Banco</dt>
+                            <dd>Bradesco</dd>
+                        </div>
+                        <div class="donate-bank-row">
+                            <dt>Agência</dt>
+                            <dd>2856</dd>
+                        </div>
+                        <div class="donate-bank-row">
+                            <dt>Conta</dt>
+                            <dd>31974-0</dd>
+                        </div>
+                        <div class="donate-bank-row">
+                            <dt>Titular</dt>
+                            <dd>Gustavo Santos Melo</dd>
+                        </div>
+                        <div class="donate-bank-row">
+                            <dt>CNPJ / CPF</dt>
+                            <dd>477.049.548-61</dd>
+                        </div>
+                    </dl>
+
+                    <p class="donate-method-note">
+                        A maioria dos bancos não cobra TED. Qualquer valor ajuda a manter a oração gratuita e acessível.
+                    </p>
+                </div>
+
             </div>
-
-            {{-- Desktop: tiered rows --}}
-            <div class="donate-tiers hidden md:block">
-                <div class="donate-tier-row">
-                    <button class="donate-amount-card" data-amount="1" aria-pressed="false">
-                        <div class="donate-amount-icon-candle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l0 10"/><path d="M9 22l0-8a3 3 0 0 1 6 0l0 8z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;1</div>
-                        <div class="donate-amount-label">uma oração</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="2" aria-pressed="false">
-                        <div class="donate-amount-icon-heart">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;2</div>
-                        <div class="donate-amount-label">um gesto de fé</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="5" aria-pressed="false">
-                        <div class="donate-amount-icon-cup">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;5</div>
-                        <div class="donate-amount-label">um café com oração</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                </div>
-                <div class="donate-tier-row">
-                    <button class="donate-amount-card" data-amount="10" aria-pressed="false">
-                        <div class="donate-amount-icon-bread">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5z"/><path d="M7 14v7"/><path d="M17 14v7"/><path d="M12 14v7"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;10</div>
-                        <div class="donate-amount-label">um lanche abençoado</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="20" aria-pressed="false">
-                        <div class="donate-amount-icon-book">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;20</div>
-                        <div class="donate-amount-label">um livro de orações</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="50" aria-pressed="false">
-                        <div class="donate-amount-icon-home">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;50</div>
-                        <div class="donate-amount-label">acolhida para muitos</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                </div>
-                <div class="donate-tier-row">
-                    <button class="donate-amount-card" data-amount="100" aria-pressed="false">
-                        <div class="donate-amount-icon-community">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;100</div>
-                        <div class="donate-amount-label">uma comunidade orando</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="200" aria-pressed="false">
-                        <div class="donate-amount-icon-globe">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;200</div>
-                        <div class="donate-amount-label">oração sem fronteiras</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="400" aria-pressed="false">
-                        <div class="donate-amount-icon-stars">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;400</div>
-                        <div class="donate-amount-label">código aberto sustentado</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                </div>
-                <div class="donate-tier-row">
-                    <button class="donate-amount-card" data-amount="500" aria-pressed="false">
-                        <div class="donate-amount-icon-leaf">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;500</div>
-                        <div class="donate-amount-label">mês de orações entregues</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                    <button class="donate-amount-card" data-amount="1000" aria-pressed="false">
-                        <div class="donate-amount-icon-dove">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21c.5-4.5 2-8 7-10"/><path d="M9 3c1 2 2 3 4 4"/><path d="M14 10c2 1 6 3 6 5 0 3-3 3.5-6 3-1.5 0-3-.5-4.5-1"/></svg>
-                        </div>
-                        <div class="donate-amount-value">R$&nbsp;1.000</div>
-                        <div class="donate-amount-label">um ano de graça</div>
-                        <div class="donate-amount-check">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            {{-- Custom amount --}}
-            <div class="donate-custom-row">
-                <div class="donate-custom-input-wrap">
-                    <span class="donate-custom-prefix">R$</span>
-                    <input type="number"
-                           id="custom-amount"
-                           class="donate-custom-input"
-                           min="1"
-                           step="1"
-                           placeholder="Outro valor"
-                           aria-label="Valor personalizado">
-                </div>
-            </div>
-        </section>
-
-        {{-- CTA --}}
-        <section class="donate-cta donate-reveal">
-            <button id="donate-submit" class="donate-cta-btn" disabled aria-label="Confirmar doação">
-                Escolha um valor acima
-            </button>
-            <p class="donate-cta-note">Nenhum gateway de pagamento ativo ainda. Esta página é um compromisso visual com a missão.</p>
         </section>
 
         {{-- Mission statement --}}
@@ -386,68 +194,26 @@
 
     <script>
         (function () {
-            const track = document.getElementById('donate-scroll-track');
-            const leftBtn = document.getElementById('scroll-left');
-            const rightBtn = document.getElementById('scroll-right');
-            const cards = document.querySelectorAll('.donate-amount-card');
-            const customInput = document.getElementById('custom-amount');
-            const submitBtn = document.getElementById('donate-submit');
             const shareCopyBtn = document.getElementById('share-copy-btn');
             const shareCopyText = document.getElementById('share-copy-text');
             const shareFeedback = document.getElementById('share-feedback');
+            const pixCopyBtn = document.getElementById('pix-copy-btn');
+            const pixCopyText = document.getElementById('pix-copy-text');
+            const pixCopyFeedback = document.getElementById('pix-copy-feedback');
 
-            let selectedAmount = null;
+            const pixPayload = '00020126330014BR.GOV.BCB.PIX0111477409548615204000053039865802BR5919GUSTAVO SANTOS MELO6009SAO PAULO62070503***63049695';
 
-            function updateScrollButtons() {
-                if (!track) return;
-                leftBtn.hidden = track.scrollLeft <= 8;
-                rightBtn.hidden = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
-            }
-
-            if (track) {
-                leftBtn.addEventListener('click', () => {
-                    track.scrollBy({ left: -200, behavior: 'smooth' });
+            if (pixCopyBtn) {
+                pixCopyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(pixPayload).then(() => {
+                        pixCopyText.textContent = 'Código copiado!';
+                        pixCopyFeedback.hidden = false;
+                        setTimeout(() => {
+                            pixCopyText.textContent = 'Copiar código Pix';
+                            pixCopyFeedback.hidden = true;
+                        }, 2500);
+                    });
                 });
-                rightBtn.addEventListener('click', () => {
-                    track.scrollBy({ left: 200, behavior: 'smooth' });
-                });
-                track.addEventListener('scroll', updateScrollButtons, { passive: true });
-                updateScrollButtons();
-            }
-
-            function selectAmount(amount, card) {
-                cards.forEach(c => c.setAttribute('aria-pressed', 'false'));
-                if (card) card.setAttribute('aria-pressed', 'true');
-                selectedAmount = amount;
-                customInput.value = '';
-                updateSubmit();
-            }
-
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    selectAmount(Number(card.dataset.amount), card);
-                });
-            });
-
-            customInput.addEventListener('input', () => {
-                const v = Number(customInput.value);
-                if (v > 0) {
-                    cards.forEach(c => c.setAttribute('aria-pressed', 'false'));
-                    selectedAmount = v;
-                } else {
-                    selectedAmount = null;
-                }
-                updateSubmit();
-            });
-
-            function updateSubmit() {
-                if (selectedAmount && selectedAmount > 0) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = `Doar R$ ${selectedAmount.toLocaleString('pt-BR')}`;
-                } else {
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'Escolha um valor acima';
-                }
             }
 
             shareCopyBtn.addEventListener('click', () => {
