@@ -20,8 +20,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
         return [
             'name' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:10000'],
-            'email' => ['required', 'email', 'max:255'],
-            'whatsapp' => ['required', 'string', 'max:30'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'whatsapp' => ['nullable', 'string', 'max:30'],
             'religion' => ['nullable', 'string', 'max:100'],
             'prayerType' => ['required', 'string', 'in:ai,instant,person-prayer-audio,person-prayer-video,person-bible-audio,person-bible-video,person-bible-prayer-audio,person-bible-prayer-video'],
         ];
@@ -31,6 +31,11 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
     {
         if (blank(trim($this->message))) {
             $this->addError('message', 'Por favor, descreva seu pedido de oração.');
+            return;
+        }
+
+        if (blank(trim((string) $this->email)) && blank(trim((string) $this->whatsapp))) {
+            $this->addError('contact', 'Informe pelo menos um meio de contato: WhatsApp ou e-mail.');
             return;
         }
 
@@ -90,13 +95,27 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                 <a href="#delivery" class="welcome-sidebar-link">Como funciona</a>
                 <a href="#anonymity" class="welcome-sidebar-link">Anonimato</a>
                 <a href="#opensource" class="welcome-sidebar-link">Open Source</a>
-                <button type="button"
-                        onclick="document.getElementById('prayer-modal').showModal()"
-                        class="welcome-sidebar-btn">
-                    Pedido de oração
-                </button>
+                <div class="welcome-nav-buttons">
+                    <button type="button"
+                            onclick="document.getElementById('prayer-modal').showModal()"
+                            class="welcome-sidebar-btn">
+                        Pedido de oração
+                    </button>
+                    <a href="{{ route('donate') }}" class="welcome-sidebar-btn">
+                        Apoiar
+                    </a>
+                </div>
             </nav>
             <div class="mt-auto">
+                <a href="https://github.com/GustavoSMelo/rogai_conosco"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="welcome-github-btn">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                    </svg>
+                    Ver no GitHub
+                </a>
                 <p class="welcome-sidebar-text">Feito com fé. Sustentado por doações.</p>
             </div>
         </aside>
@@ -144,13 +163,27 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                     <a href="#delivery" class="nav-link welcome-mobile-nav-link">Como funciona</a>
                     <a href="#anonymity" class="nav-link welcome-mobile-nav-link">Anonimato</a>
                     <a href="#opensource" class="nav-link welcome-mobile-nav-link">Open Source</a>
-                    <button type="button"
-                            class="nav-link welcome-mobile-nav-btn"
-                            onclick="document.getElementById('prayer-modal').showModal(); closeMobileNav();">
-                        Pedido de oração
-                    </button>
+                    <div class="welcome-nav-buttons">
+                        <button type="button"
+                                class="nav-link welcome-mobile-nav-btn"
+                                onclick="document.getElementById('prayer-modal').showModal(); closeMobileNav();">
+                            Pedido de oração
+                        </button>
+                        <a href="{{ route('donate') }}" class="nav-link welcome-mobile-nav-btn">
+                            Apoiar
+                        </a>
+                    </div>
                 </div>
                 <div class="mt-auto">
+                    <a href="https://github.com/anomalyco/rogai_conosco"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="welcome-github-btn">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                        </svg>
+                        Ver no GitHub
+                    </a>
                     <p class="welcome-sidebar-text">Feito com fé. Sustentado por doações.</p>
                 </div>
             </div>
@@ -466,7 +499,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                             </div>
                         </div>
                         <div class="welcome-btn-wrapper">
-                            <a href="https://github.com/anomalyco/rogai_conosco"
+                            <a href="https://github.com/GustavoSMelo/rogai_conosco"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="welcome-btn-outline">
@@ -555,19 +588,32 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
 
                     <div>
                         <label for="modal-whatsapp" class="welcome-form-label">
-                            WhatsApp
+                            WhatsApp <span class="welcome-form-hint">(opcional)</span>
                         </label>
-                    <input type="tel"
-                           id="modal-whatsapp"
-                           wire:model.blur="whatsapp"
-                           placeholder="+55 (11) 99999-9999"
-                           class="welcome-form-input">
-                        <p id="whatsapp-error" class="welcome-form-error hidden mt-1">WhatsApp é obrigatório</p>
+                        <label class="welcome-form-consent-row">
+                            <input type="checkbox"
+                                   id="modal-whatsapp-consent"
+                                   class="welcome-form-checkbox">
+                            <span class="welcome-form-consent-label">Quero receber minha oração pelo WhatsApp</span>
+                        </label>
+                        <input type="tel"
+                               id="modal-whatsapp"
+                               wire:model.blur="whatsapp"
+                               placeholder="+55 (11) 99999-9999"
+                               class="welcome-form-input disabled:opacity-50"
+                               disabled>
+                        <p id="whatsapp-error" class="welcome-form-error hidden mt-1">Informe um WhatsApp válido</p>
                     </div>
 
                     <div>
                         <label for="modal-email" class="welcome-form-label">
-                            E-mail
+                            E-mail <span class="welcome-form-hint">(opcional)</span>
+                        </label>
+                        <label class="welcome-form-consent-row">
+                            <input type="checkbox"
+                                   id="modal-email-consent"
+                                   class="welcome-form-checkbox">
+                            <span class="welcome-form-consent-label">Quero receber minha oração por e-mail</span>
                         </label>
                         <input type="email"
                                id="modal-email"
@@ -575,17 +621,22 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
                                placeholder="seu@email.com"
                                inputmode="email"
                                autocomplete="email"
-                               class="welcome-form-input"
-                               maxlength="255">
+                               class="welcome-form-input disabled:cursor-not-allowed disabled:opacity-60"
+                               maxlength="255"
+                               disabled>
                         <p id="email-error" class="welcome-form-error hidden mt-1">E-mail inválido</p>
                     </div>
 
                     <div class="welcome-modal-info-box">
                         <p class="welcome-modal-info-text">
                             <strong class="text-brand-ink">Informações de contato</strong>
-                            São opcionais, mas nos ajudam a entrar em contato se você solicitar uma oração gravada em vídeo.
+                            Escolha ao menos um meio para receber sua oração. Sem obrigação de se identificar.
                         </p>
                     </div>
+
+                    <p id="contact-error" class="welcome-form-error hidden">
+                        Informe pelo menos um meio de contato: WhatsApp ou e-mail.
+                    </p>
 
                     <div class="welcome-modal-buttons">
                         <button type="button"

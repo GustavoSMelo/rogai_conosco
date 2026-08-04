@@ -20,10 +20,21 @@
 }
 
 .welcome-sidebar-btn {
-    @apply mt-4 self-start rounded-[5px] border border-brand-primary px-5 py-2 text-sm font-medium text-brand-primary no-underline transition-colors duration-150;
+    @apply w-full self-start rounded-[5px] border border-brand-primary px-5 py-2 text-center text-sm font-medium text-brand-primary no-underline transition-colors duration-150;
 }
 .welcome-sidebar-btn:hover {
     @apply bg-brand-primary-light;
+}
+
+.welcome-nav-buttons {
+    @apply mt-4 flex flex-col gap-4;
+}
+
+.welcome-github-btn {
+    @apply mb-3 flex w-full items-center justify-center gap-2 rounded-[5px] border border-brand-primary/30 px-3 py-2 text-sm font-medium text-brand-ink no-underline transition-colors duration-150;
+}
+.welcome-github-btn:hover {
+    @apply border-brand-primary bg-brand-primary-light text-brand-primary;
 }
 
 .welcome-mobile-header {
@@ -45,7 +56,7 @@
 }
 
 .welcome-mobile-nav-btn {
-    @apply mt-4 self-start rounded-[5px] border border-brand-primary px-5 py-2 text-base font-medium text-brand-primary transition-colors duration-150;
+    @apply w-full self-start rounded-[5px] border border-brand-primary px-5 py-2 text-center text-base font-medium text-brand-primary transition-colors duration-150;
 }
 .welcome-mobile-nav-btn:hover {
     @apply bg-brand-primary-light;
@@ -89,7 +100,7 @@
     @apply inline-block rounded-[5px] border border-white/70 px-10 py-4 font-medium text-white no-underline transition-all duration-150;
 }
 .welcome-hero-btn:hover {
-    @apply border-brand-accent bg-brand-accent shadow-lg;
+    @apply border-brand-accent bg-brand-accent;
 }
 
 .welcome-hero-link {
@@ -307,6 +318,18 @@ textarea.welcome-form-input {
 
 .welcome-form-error {
     @apply text-sm text-brand-accent;
+}
+
+.welcome-form-consent-row {
+    @apply mt-3 flex cursor-pointer items-center gap-2.5 select-none;
+}
+
+.welcome-form-checkbox {
+    @apply size-4 cursor-pointer accent-brand-accent;
+}
+
+.welcome-form-consent-label {
+    @apply text-sm leading-snug text-brand-muted;
 }
 
 .welcome-footer-link {

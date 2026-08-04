@@ -198,14 +198,14 @@ new class extends Component {
 
     @else
         <div class="result-card reveal visible reveal-delay-1">
-            <h1 class="result-heading mb-4">Sua intenção está em oração</h1>
+            <h1 class="result-heading mb-4">Oração em produção</h1>
             <p class="result-body mb-6 reveal visible reveal-delay-2">
-                Sua intenção foi recebida com fé e respeito.
+                Sua oração foi recebida com fé e respeito.
                 <strong>Uma pessoa real está orando por você.</strong>
             </p>
             @if (in_array($type, ['person-prayer-audio', 'person-prayer-video', 'person-bible-audio', 'person-bible-video', 'person-bible-prayer-audio', 'person-bible-prayer-video']))
                 <p class="result-body mb-8 reveal visible reveal-delay-2">
-                    A oração em vídeo será gravada e estará disponível em até <strong>2 dias</strong>.
+                    A oração em audio/vídeo será gravada e estará disponível em até <strong>2 dias</strong>.
                     Você receberá uma notificação quando estiver pronta.
                 </p>
             @endif

@@ -40,6 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const stepDot1 = document.getElementById("step-dot-1");
     const stepDot2 = document.getElementById("step-dot-2");
     const stepLabel = document.getElementById("step-label");
+    const whatsappConsent = document.getElementById(
+        "modal-whatsapp-consent",
+    ) as HTMLInputElement | null;
+    const emailConsent = document.getElementById(
+        "modal-email-consent",
+    ) as HTMLInputElement | null;
+    const contactError = document.getElementById("contact-error");
 
     const clearStep1Errors = (): void => {
         const errors = document.querySelectorAll(
@@ -52,6 +59,50 @@ document.addEventListener("DOMContentLoaded", () => {
         const err = document.getElementById("description-error");
         if (err) err.classList.add("hidden");
     };
+
+    const resetContactFields = (): void => {
+        if (whatsappConsent) whatsappConsent.checked = false;
+        if (emailConsent) emailConsent.checked = false;
+        if (whatsappInput) {
+            whatsappInput.value = "";
+            whatsappInput.disabled = true;
+            whatsappInput.dispatchEvent(new Event("input"));
+        }
+        if (emailInput) {
+            emailInput.value = "";
+            emailInput.disabled = true;
+            emailInput.dispatchEvent(new Event("input"));
+        }
+        if (contactError) contactError.classList.add("hidden");
+    };
+
+    const toggleContactField = (
+        consent: HTMLInputElement | null,
+        input: HTMLInputElement | null,
+        errorId: string,
+    ): void => {
+        if (!consent || !input) return;
+        const wanted = consent.checked;
+        input.disabled = !wanted;
+        if (!wanted) {
+            input.value = "";
+            input.dispatchEvent(new Event("input"));
+            const error = document.getElementById(errorId);
+            if (error) error.classList.add("hidden");
+        }
+    };
+
+    if (whatsappConsent) {
+        whatsappConsent.addEventListener("change", () => {
+            toggleContactField(whatsappConsent, whatsappInput, "whatsapp-error");
+        });
+    }
+
+    if (emailConsent) {
+        emailConsent.addEventListener("change", () => {
+            toggleContactField(emailConsent, emailInput, "email-error");
+        });
+    }
 
     let whatsappMask: ReturnType<typeof IMask> | null = null;
 
@@ -161,12 +212,21 @@ document.addEventListener("DOMContentLoaded", () => {
         continueBtn.addEventListener("click", () => {
             const whatsappError = document.getElementById("whatsapp-error");
             const emailError = document.getElementById("email-error");
+            const whatsappWanted = whatsappConsent?.checked ?? false;
+            const emailWanted = emailConsent?.checked ?? false;
+
+            if (!whatsappWanted && !emailWanted) {
+                if (contactError) contactError.classList.remove("hidden");
+                return;
+            }
+            if (contactError) contactError.classList.add("hidden");
+
             const whatsappValue = whatsappInput?.value.trim() || "";
             const emailValue = emailInput?.value.trim() || "";
             const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
             let hasError = false;
 
-            if (!whatsappMask?.masked.isComplete) {
+            if (whatsappWanted && !whatsappMask?.masked.isComplete) {
                 if (whatsappError) {
                     whatsappError.classList.remove("hidden");
                     hasError = true;
@@ -175,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (whatsappError) whatsappError.classList.add("hidden");
             }
 
-            if (!emailValid) {
+            if (emailWanted && !emailValid) {
                 if (emailError) {
                     emailError.classList.remove("hidden");
                     hasError = true;
@@ -211,10 +271,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         modal.addEventListener("close", () => {
             document.body.style.overflow = "";
+            resetContactFields();
             goToStep(1);
         });
         modal.addEventListener("open", () => {
             document.body.style.overflow = "hidden";
+            resetContactFields();
             goToStep(1);
         });
     }

@@ -284,7 +284,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
             <div class="painel-details">
                 <div>
                     <span class="painel-field-label">Nome</span>
-                    <span class="painel-field-value">{{ $request->name ?? 'Anônimo' }}</span>
+                    <span class="painel-field-value">{{ strlen($request->name) ? $request->name : 'Anônimo' }}</span>
                 </div>
 
                 <div>
@@ -541,8 +541,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                         type="button"
                         wire:click="sendEmail"
                         wire:loading.attr="disabled"
-                        class="painel-btn-notify {{ $emailSent ? 'painel-btn-disabled' : 'painel-btn-email-active' }}"
-                        @if ($emailSent || $emailSending) disabled @endif
+                        class="painel-btn-notify {{ (!$decryptedEmail || $emailSent) ? 'painel-btn-disabled' : 'painel-btn-email-active' }}"
+                        @if ($emailSent || $emailSending || !$decryptedEmail) disabled @endif
                     >
                         @if ($emailSending)
                             <svg class="painel-spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -565,6 +565,9 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                     <p class="painel-contact-none">Informe um link de mídia para enviar por WhatsApp.</p>
                 @elseif (!$this->isValidMediaLink($mediaLink))
                     <p class="painel-contact-none">Link de mídia inválido. Use https:// com domínio .com, .com.br, .dev, .dev.br, .app ou .app.br.</p>
+                @endif
+                @if (!$decryptedEmail)
+                    <p class="painel-contact-none">Solicitante não informou e-mail.</p>
                 @endif
                 @if ($emailError)
                     <div class="painel-alert-error painel-alert-error-notify">
