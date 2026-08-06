@@ -11,8 +11,12 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
     public int $prayerRequestCount = 0;
     public int $pendingCount = 0;
     public int $answeredCount = 0;
+    public int $archivedCount = 0;
     public string $filter = 'pending';
     public bool $isEmpty = true;
+    public bool $showDeleteModal = false;
+    public int $deleteRequestId = 0;
+    public string $deleteReason = '';
 
     public function mount(): void
     {
@@ -26,7 +30,11 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
 
     public function setFilter(string $filter): void
     {
-        $this->filter = $filter === 'answered' ? 'answered' : 'pending';
+        $this->filter = match ($filter) {
+            'answered' => 'answered',
+            'archived' => 'archived',
+            default => 'pending',
+        };
         $this->loadRequests();
     }
 
@@ -34,6 +42,70 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
     {
         session()->forget('dashboard_authenticated');
         $this->redirect(route('painel.login'));
+    }
+
+    public function openDeleteModal(int $id): void
+    {
+        $request = PrayerRequest::where('id', $id)
+            ->where('has_answered', false)
+            ->where('delivery', 'person')
+            ->first();
+
+        if (!$request) {
+            return;
+        }
+
+        $this->deleteRequestId = $id;
+        $this->deleteReason = '';
+        $this->showDeleteModal = true;
+    }
+
+    public function cancelDelete(): void
+    {
+        $this->showDeleteModal = false;
+        $this->deleteRequestId = 0;
+        $this->deleteReason = '';
+    }
+
+    public function deleteRequest(): void
+    {
+        $this->validate([
+            'deleteReason' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $request = PrayerRequest::where('id', $this->deleteRequestId)
+            ->where('has_answered', false)
+            ->where('delivery', 'person')
+            ->first();
+
+        if (!$request) {
+            $this->cancelDelete();
+
+            return;
+        }
+
+        $request->update(['delete_reason' => $this->deleteReason]);
+        $request->delete();
+
+        $this->cancelDelete();
+        $this->loadRequests();
+    }
+
+    public function unarchiveRequest(int $id): void
+    {
+        $request = PrayerRequest::onlyTrashed()
+            ->where('id', $id)
+            ->where('delivery', 'person')
+            ->first();
+
+        if (!$request) {
+            return;
+        }
+
+        $request->update(['delete_reason' => null]);
+        $request->restore();
+
+        $this->loadRequests();
     }
 
     private function loadRequests(): void
@@ -46,22 +118,33 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             ->where('delivery', 'person')
             ->count();
 
+        $this->archivedCount = PrayerRequest::onlyTrashed()
+            ->where('delivery', 'person')
+            ->count();
+
         $isAnsweredFilter = $this->filter === 'answered';
+        $isArchivedFilter = $this->filter === 'archived';
 
-        $query = PrayerRequest::where('has_answered', $isAnsweredFilter)
-            ->where('delivery', 'person');
-
-        if ($isAnsweredFilter) {
-            $query->orderBy('date_answered', 'desc');
+        if ($isArchivedFilter) {
+            $query = PrayerRequest::onlyTrashed()
+                ->where('delivery', 'person')
+                ->orderBy('deleted_at', 'desc');
         } else {
-            $query->orderBy('created_at', 'asc');
+            $query = PrayerRequest::where('has_answered', $isAnsweredFilter)
+                ->where('delivery', 'person');
+
+            if ($isAnsweredFilter) {
+                $query->orderBy('date_answered', 'desc');
+            } else {
+                $query->orderBy('created_at', 'asc');
+            }
         }
 
         $requests = $query->get();
 
         $this->prayerRequestCount = PrayerRequest::query()->count();
 
-        $this->requests = $requests->map(function (PrayerRequest $req) use ($isAnsweredFilter) {
+        $this->requests = $requests->map(function (PrayerRequest $req) use ($isAnsweredFilter, $isArchivedFilter) {
             $message = $req->message;
             try {
                 $message = Crypt::decryptString($req->message);
@@ -84,7 +167,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 }
             }
 
-            $isOverdue = !$isAnsweredFilter && $req->created_at->diffInHours(now()) > 48;
+            $isOverdue = !$isArchivedFilter && !$isAnsweredFilter && $req->created_at->diffInHours(now()) > 48;
 
             return [
                 'id' => $req->id,
@@ -97,6 +180,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 'religion' => $req->religion,
                 'created_at' => $req->created_at,
                 'date_answered' => $req->date_answered,
+                'deleted_at' => $req->deleted_at,
+                'delete_reason' => $req->delete_reason,
                 'elapsed' => $isAnsweredFilter && $req->date_answered
                     ? 'Respondido em ' . $req->date_answered->format('d/m/Y')
                     : $req->created_at->diffForHumans(parts: 2),
@@ -169,15 +254,26 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 type="button"
                 wire:click="refresh"
                 class="painel-btn-ghost"
+                aria-label="Atualizar pedidos"
             >
-                Atualizar
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="sm:hidden" aria-hidden="true">
+                    <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+                    <path d="M21 3v6h-6"/>
+                </svg>
+                <span class="hidden sm:inline">Atualizar</span>
             </button>
             <button
                 type="button"
                 wire:click="logout"
                 class="painel-btn-logout"
+                aria-label="Sair do painel"
             >
-                Sair
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="sm:hidden" aria-hidden="true">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span class="hidden sm:inline">Sair</span>
             </button>
         </div>
     </div>
@@ -198,6 +294,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
         >
             Respondidos ({{ $answeredCount }})
         </button>
+        <button
+            type="button"
+            wire:click="setFilter('archived')"
+            class="painel-filter-btn {{ $filter === 'archived' ? 'painel-filter-btn-active' : 'painel-filter-btn-idle' }}"
+        >
+            Arquivados ({{ $archivedCount }})
+        </button>
     </div>
 
     {{-- Empty state --}}
@@ -211,6 +314,11 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                     <h2 class="painel-empty-title">Nenhum pedido respondido</h2>
                     <p class="painel-empty-text">
                         Nenhum pedido de oração foi respondido até agora.
+                    </p>
+                @elseif ($filter === 'archived')
+                    <h2 class="painel-empty-title">Nenhum pedido arquivado</h2>
+                    <p class="painel-empty-text">
+                        Nenhum pedido de oração foi arquivado até agora.
                     </p>
                 @else
                     <h2 class="painel-empty-title">Nenhum pedido pendente</h2>
@@ -226,15 +334,31 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
     @if (!$isEmpty)
         <div class="painel-list">
             @foreach ($requests as $req)
-                <div class="painel-card">
+                <div class="painel-card {{ $filter === 'archived' ? 'painel-card-archived' : '' }}">
                     <div class="painel-card-top">
                         <div class="painel-card-main">
                             <div class="painel-card-title-row">
-                                @if ($req['is_overdue'])
+                                @if ($filter === 'archived')
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="painel-archive-icon" aria-hidden="true">
+                                        <rect x="2" y="3" width="20" height="5" rx="1"/>
+                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+                                        <path d="M10 12h4"/>
+                                    </svg>
+                                @elseif ($req['date_answered'])
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="painel-check-icon" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="m8.5 12.5 2.5 2.5 4.5-5.5"/>
+                                    </svg>
+                                @elseif ($req['is_overdue'])
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="painel-overdue-icon" aria-hidden="true">
                                         <circle cx="12" cy="12" r="10"/>
                                         <line x1="12" y1="8" x2="12" y2="12"/>
                                         <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                    </svg>
+                                @else
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="painel-clock-icon" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 6v6l4 2"/>
                                     </svg>
                                 @endif
                                 <h3 class="painel-card-title">
@@ -244,9 +368,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                                         {{ $req['name'] }}
                                     @endif
                                 </h3>
-                                <span class="painel-badge {{ $req['is_overdue'] ? 'painel-badge-overdue' : ($req['date_answered'] ? 'painel-badge-answered' : 'painel-badge-pending') }}">
-                                    {{ $req['elapsed'] }}
-                                </span>
+                                @if ($filter === 'archived')
+                                    <span class="painel-badge painel-badge-archived">Arquivado</span>
+                                @else
+                                    <span class="painel-badge {{ $req['is_overdue'] ? 'painel-badge-overdue' : ($req['date_answered'] ? 'painel-badge-answered' : 'painel-badge-pending') }}">
+                                        {{ $req['elapsed'] }}
+                                    </span>
+                                @endif
                             </div>
                             <p class="painel-message">
                                 {{ $req['message'] }}
@@ -275,19 +403,60 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                         <span>Entrega: {{ $this->deliveryLabel($req['delivery']) }}</span>
                     </div>
 
+                    @if ($filter === 'archived' && $req['delete_reason'])
+                        <div class="painel-archived-reason-box">
+                            <span class="painel-archived-reason-label">Motivo do arquivamento</span>
+                            <p class="painel-archived-reason">{{ $req['delete_reason'] }}</p>
+                        </div>
+                    @endif
+
                     <div class="painel-card-footer">
                         <div class="painel-date {{ $req['is_overdue'] ? 'painel-date-overdue' : '' }}">
                             {{ $req['created_at']->format('d/m/Y H:i') }}
                         </div>
-                        @if ($req['date_answered'])
+                        @if ($filter === 'archived')
+                            <div class="painel-archived-footer">
+                                <span class="painel-date-archived">
+                                    Arquivado em {{ $req['deleted_at']?->format('d/m/Y H:i') }}
+                                </span>
+                                <button
+                                    type="button"
+                                    wire:click="unarchiveRequest({{ $req['id'] }})"
+                                    class="painel-btn-unarchive"
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/>
+                                        <path d="M4 13h6"/>
+                                        <path d="m9 9-3 3 3 3"/>
+                                        <path d="M9 12h11"/>
+                                    </svg>
+                                    Desarquivar
+                                </button>
+                            </div>
+                        @elseif ($req['date_answered'])
                             <span class="painel-date-answered">
                                 Respondido em {{ $req['date_answered']->format('d/m/Y') }}
                             </span>
                         @else
-                            <a href="{{ route('painel.responder', $req['id']) }}"
-                               class="painel-btn-respond">
-                                Responder
-                            </a>
+                            <div class="painel-card-actions">
+                                <a href="{{ route('painel.responder', $req['id']) }}"
+                                   class="painel-btn-respond">
+                                    Responder
+                                </a>
+                                <button
+                                    type="button"
+                                    wire:click="openDeleteModal({{ $req['id'] }})"
+                                    class="painel-btn-trash"
+                                    aria-label="Não responder este pedido"
+                                    title="Não responder este pedido"
+                                >
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M3 6h18"/>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -295,11 +464,59 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
         </div>
 
         <p class="painel-footer-count">
-            {{ count($requests) }} pedido(s) {{ $filter === 'answered' ? 'respondido(s)' : 'pendente(s)' }}
+            {{ count($requests) }} pedido(s) {{ $filter === 'answered' ? 'respondido(s)' : ($filter === 'archived' ? 'arquivado(s)' : 'pendente(s)') }}
         </p>
         <p class="painel-footer-count-alt">
             {{ $prayerRequestCount }} oracoes realizadas no total
         </p>
+    @endif
+
+    {{-- Delete reason modal --}}
+    @if ($showDeleteModal)
+        <div class="painel-modal-overlay" wire:click.self="cancelDelete">
+            <div class="painel-modal" role="dialog" aria-modal="true" aria-labelledby="painel-delete-modal-title">
+                <button
+                    type="button"
+                    wire:click="cancelDelete"
+                    class="painel-modal-close"
+                    aria-label="Fechar"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+                <h3 id="painel-delete-modal-title" class="painel-modal-title">
+                    Não responder este pedido
+                </h3>
+                <p class="painel-modal-subtitle">
+                    Informe o motivo pelo qual este pedido não será respondido. O pedido ficará registrado como excluído.
+                </p>
+                <form wire:submit="deleteRequest" class="painel-modal-form">
+                    <label for="painel-delete-reason" class="painel-form-label">
+                        Motivo
+                    </label>
+                    <textarea
+                        id="painel-delete-reason"
+                        wire:model="deleteReason"
+                        class="painel-form-input"
+                        rows="4"
+                        placeholder="Ex.: sem meio de contato válido..."
+                    ></textarea>
+                    @error('deleteReason')
+                        <p class="painel-form-error">{{ $message }}</p>
+                    @enderror
+                    <div class="painel-modal-buttons">
+                        <button type="button" wire:click="cancelDelete" class="painel-modal-cancel">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="painel-modal-confirm">
+                            Confirmar exclusão
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     @endif
 
     @vite('resources/css/painel.css')

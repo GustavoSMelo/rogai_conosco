@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedString;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PrayerRequest extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'message',
@@ -16,6 +20,7 @@ class PrayerRequest extends Model
         'prayer_type',
         'has_answered',
         'date_answered',
+        'delete_reason',
     ];
 
     protected function casts(): array
@@ -23,8 +28,9 @@ class PrayerRequest extends Model
         return [
             'created_at' => 'datetime',
             'date_answered' => 'date',
-            'whatsapp' => \App\Casts\EncryptedString::class,
-            'email' => \App\Casts\EncryptedString::class,
+            'deleted_at' => 'datetime',
+            'whatsapp' => EncryptedString::class,
+            'email' => EncryptedString::class,
         ];
     }
 }

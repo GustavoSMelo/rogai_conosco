@@ -51,7 +51,7 @@
 /* --- Layout --- */
 
 .painel-container {
-    @apply mx-auto max-w-5xl px-6 py-10 sm:px-8;
+    @apply mx-auto max-w-5xl px-5 py-8 sm:px-8 sm:py-10;
 }
 
 .painel-container-narrow {
@@ -59,11 +59,11 @@
 }
 
 .painel-header {
-    @apply flex items-center justify-between mb-10;
+    @apply flex items-center justify-between gap-3 mb-8 sm:mb-10;
 }
 
 .painel-header-narrow {
-    @apply flex items-center justify-between mb-8;
+    @apply flex items-center justify-between gap-3 mb-8;
 }
 
 .painel-header-inner {
@@ -71,7 +71,7 @@
 }
 
 .painel-header-actions {
-    @apply flex items-center gap-3;
+    @apply flex items-center gap-2 sm:gap-3;
 }
 
 .painel-login-body {
@@ -112,7 +112,7 @@
 }
 
 .painel-brand-text {
-    @apply font-serif text-lg text-brand-primary font-bold;
+    @apply font-serif text-lg text-brand-primary font-bold hidden sm:inline;
 }
 
 .painel-brand-text-xl {
@@ -139,18 +139,18 @@
 /* --- Buttons --- */
 
 .painel-btn-ghost {
-    @apply rounded-[5px] border border-brand-primary/30 bg-white px-4 py-2 text-sm font-medium text-brand-muted transition-all duration-150;
+    @apply inline-flex items-center justify-center gap-2 rounded-[5px] border border-brand-primary/30 bg-white px-3 py-2 text-sm font-medium text-brand-muted transition-all duration-150 sm:px-4;
 }
 .painel-btn-ghost:hover {
     @apply bg-brand-primary-light;
 }
 
 .painel-filter-row {
-    @apply flex gap-3 mb-8;
+    @apply mb-8 grid grid-cols-3 gap-2 sm:flex sm:gap-3;
 }
 
 .painel-filter-btn {
-    @apply rounded-[5px] border px-4 py-2 text-sm font-medium transition-all duration-150;
+    @apply rounded-[5px] border px-2 py-2 text-center text-xs font-medium transition-all duration-150 sm:px-4 sm:text-sm;
 }
 
 .painel-filter-btn-idle {
@@ -165,7 +165,7 @@
 }
 
 .painel-btn-logout {
-    @apply rounded-[5px] border border-brand-accent/30 bg-white px-4 py-2 text-sm font-medium text-brand-accent transition-all duration-150;
+    @apply inline-flex items-center justify-center gap-2 rounded-[5px] border border-brand-accent/30 bg-white px-3 py-2 text-sm font-medium text-brand-accent transition-all duration-150 sm:px-4;
 }
 .painel-btn-logout:hover {
     @apply bg-brand-accent-light;
@@ -176,6 +176,20 @@
 }
 .painel-btn-respond:hover {
     @apply shadow-md;
+}
+
+.painel-card-actions {
+    @apply flex items-center gap-2;
+}
+
+.painel-btn-trash {
+    @apply flex h-8 w-8 items-center justify-center rounded-[5px] border border-brand-accent/30 bg-white text-brand-accent transition-all duration-150;
+}
+.painel-btn-trash:hover {
+    @apply border-brand-accent/60 bg-brand-accent-light;
+}
+.painel-btn-trash:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
 }
 
 .painel-btn-primary-lg {
@@ -238,7 +252,7 @@
 /* --- Cards --- */
 
 .painel-card {
-    @apply rounded-sm bg-white p-6 shadow-sm transition-all duration-150;
+    @apply rounded-sm bg-white p-5 shadow-sm transition-all duration-150 sm:p-6;
     animation: painel-fade-in 400ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 .painel-card:hover {
@@ -289,7 +303,7 @@
 }
 
 .painel-card-footer {
-    @apply mt-3 flex items-center justify-between;
+    @apply mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
 }
 
 .painel-card-side {
@@ -413,8 +427,63 @@
     @apply text-xs text-green-700 font-medium;
 }
 
+/* --- Archive view --- */
+
+.painel-archive-icon {
+    @apply shrink-0 text-brand-muted/60;
+}
+
+.painel-badge-archived {
+    @apply bg-brand-primary-light text-brand-primary font-medium;
+}
+
+.painel-card-archived {
+    @apply border border-brand-primary/10 bg-white/80 shadow-none;
+}
+.painel-card-archived:hover {
+    @apply shadow-sm;
+}
+
+.painel-archived-reason-box {
+    @apply mt-4 rounded-sm bg-brand-primary-light/30 p-4;
+}
+
+.painel-archived-reason-label {
+    @apply block text-xs uppercase tracking-wider text-brand-muted/60;
+}
+
+.painel-archived-reason {
+    @apply mt-1 font-serif text-sm italic leading-relaxed text-brand-ink/80;
+}
+
+.painel-archived-footer {
+    @apply flex flex-wrap items-center justify-end gap-x-6 gap-y-3;
+}
+
+.painel-date-archived {
+    @apply text-xs font-medium text-brand-muted;
+}
+
+.painel-btn-unarchive {
+    @apply inline-flex items-center gap-2 rounded-[5px] border border-brand-primary/40 bg-white px-4 py-1.5 text-xs font-medium text-brand-primary transition-all duration-150;
+}
+.painel-btn-unarchive:hover {
+    @apply border-brand-primary bg-brand-primary-light;
+}
+.painel-btn-unarchive:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
 .painel-overdue-icon {
     @apply shrink-0;
+}
+
+.painel-check-icon {
+    @apply shrink-0 text-green-700;
+}
+
+.painel-clock-icon {
+    @apply shrink-0 text-brand-primary;
 }
 
 /* --- Forms --- */
@@ -685,4 +754,60 @@
 
 .painel-list {
     @apply space-y-4;
+}
+
+/* --- Delete modal --- */
+
+.painel-modal-overlay {
+    @apply fixed inset-0 z-modal flex items-center justify-center bg-black/50 p-4;
+}
+
+.painel-modal {
+    @apply relative w-full max-w-md rounded-sm bg-white p-6 shadow-lg sm:p-8;
+}
+
+.painel-modal-close {
+    @apply absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-[5px] text-brand-muted transition-colors duration-150;
+}
+.painel-modal-close:hover {
+    @apply text-brand-ink;
+}
+.painel-modal-close:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.painel-modal-title {
+    @apply font-serif text-xl text-brand-ink pr-8;
+}
+
+.painel-modal-subtitle {
+    @apply mt-2 text-sm text-brand-muted;
+}
+
+.painel-modal-form {
+    @apply mt-5 space-y-4;
+}
+
+.painel-modal-buttons {
+    @apply flex gap-3;
+}
+
+.painel-modal-cancel {
+    @apply flex-1 rounded-[5px] border border-brand-primary/30 bg-white px-6 py-3 font-medium text-brand-muted transition-all duration-150;
+}
+.painel-modal-cancel:hover {
+    @apply bg-brand-primary-light text-brand-ink;
+}
+.painel-modal-cancel:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.painel-modal-confirm {
+    @apply flex-1 rounded-[5px] bg-brand-accent px-6 py-3 font-medium text-white transition-all duration-150;
+}
+.painel-modal-confirm:hover {
+    @apply shadow-md;
+}
+.painel-modal-confirm:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
 }
