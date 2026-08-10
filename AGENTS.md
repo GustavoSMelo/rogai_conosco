@@ -69,11 +69,11 @@ Always run `php artisan test` before committing. Do not commit without passing t
 
 ## AI Code Review
 
-`REVIEW.md` defines the AI code review protocol: hardness parameters (cyclomatic complexity < 12, max 800 lines per module, ≥ 70% coverage per file, PHPDocblocks/TS descriptions, PHPStan 0 errors, PSR-1/PSR-12 via Pint), compliance checks (TDD, architecture, design, static analysis), verification commands, and finding format with severities.
+`.agents/REVIEW.md` defines the AI code review protocol: hardness parameters (cyclomatic complexity < 12, max 800 lines per module, ≥ 70% coverage per file, PHPDocblocks/TS descriptions, PHPStan 0 errors, PSR-1/PSR-12 via Pint), compliance checks (TDD, architecture, design, static analysis), verification commands, and finding format with severities.
 
-To review code, prompt: `Review the code in <path-or-scope> following REVIEW.md. Report findings + severity.`
+To review code, prompt: `Review the code in <path-or-scope> following .agents/REVIEW.md. Report findings + severity.`
 
-The agent reviews only — it must NOT modify code. Full protocol: read `REVIEW.md`.
+The agent reviews only — it must NOT modify code. Full protocol: read `.agents/REVIEW.md`.
 
 ## Dev Environment
 
@@ -118,7 +118,7 @@ ls -la <harness-skills-dir>/  # should show 7 entries
 
 ## Design Context
 
-Brand and design decisions are captured in `PRODUCT.md` (strategy) and `DESIGN.md` (visual system). Key anchors:
+Brand and design decisions are captured in `.agents/PRODUCT.md` (strategy) and `.agents/DESIGN.md` (visual system). Key anchors:
 
 - **Register:** Brand (marketing-first). The site communicates mission before features.
 - **Personality:** Peaceful, trustworthy, humble. Quiet confidence, no hype.
