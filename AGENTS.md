@@ -67,6 +67,14 @@ types: ✨ feat, 🐛 fix, 🧪 test, ♻️ refactor, 📄 spec, 📝 docs, �
 
 Always run `php artisan test` before committing. Do not commit without passing tests.
 
+## AI Code Review
+
+`REVIEW.md` defines the AI code review protocol: hardness parameters (cyclomatic complexity < 12, max 800 lines per module, ≥ 70% coverage per file, PHPDocblocks/TS descriptions, PHPStan 0 errors, PSR-1/PSR-12 via Pint), compliance checks (TDD, architecture, design, static analysis), verification commands, and finding format with severities.
+
+To review code, prompt: `Review the code in <path-or-scope> following REVIEW.md. Report findings + severity.`
+
+The agent reviews only — it must NOT modify code. Full protocol: read `REVIEW.md`.
+
 ## Dev Environment
 
 ```bash
@@ -143,3 +151,12 @@ To prevent lost files for unnecessary reasons or IA allucinations
 
 - For prompts, when user request `commit and push`, just follow the git conventions and commit/push as usual, don't do anything extra
 - Before delete any file, ask first for user authorization
+
+## Quality gate
+
+The code below is a requirement for a good quality of code and also to be more easier for a human read
+
+- The cyclomatic complexity should be lower than 12
+- Each module should be the max of 800 lines of code, more than this number, the code should be parsed in two modules
+- Each code in this application should have a unit test and each file should have at least 70% of coverage
+- Each code should have PHPDocbloc or Typescript function description
