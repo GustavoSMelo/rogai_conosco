@@ -26,11 +26,22 @@ WORKDIR /app
 COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-cache --no-scripts
 
+# Build livewire / vite frontend
+FROM node:22-alpine AS frontend-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY resources ./resources
+COPY vite.config.js ./
+COPY --from=dependency-builder /app/vendor ./vendor
+RUN npm run build
+
 # Returning from my debian image get the project and move to /app, where my laravel app is working, also configuring nginx and fpm-sock
 FROM php-deb
 WORKDIR /app
 
 COPY --from=dependency-builder /app /app
+COPY --from=frontend-builder /app/public/build /app/public/build
 
 RUN mkdir -p /var/run/php && chown -R www-data:www-data /var/run/php
 RUN cp -f /app/php8.5-fpm.sock /usr/local/etc/php-fpm.d/www.conf
