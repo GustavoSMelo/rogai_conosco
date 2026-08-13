@@ -23,8 +23,6 @@ tailwind.config.js
 vite.config.js
 tsconfig.json
 postcss.config.js
-package.json
-package-lock.json
 .npmrc
 .nvmrc
 AGENTS.md
