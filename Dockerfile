@@ -24,7 +24,7 @@ FROM composer:2.9.5 AS dependency-builder
 
 WORKDIR /app
 COPY . .
-RUN composer install --no-dev --optimize-autoloader --no-cache
+RUN composer install --no-dev --optimize-autoloader --no-cache --no-scripts
 
 # Returning from my debian image get the project and move to /app, where my laravel app is working, also configuring nginx and fpm-sock
 FROM php-deb
