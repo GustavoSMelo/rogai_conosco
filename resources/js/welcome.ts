@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (whatsappConsent) {
         whatsappConsent.addEventListener("change", () => {
-            toggleContactField(whatsappConsent, whatsappInput, "whatsapp-error");
+            toggleContactField(
+                whatsappConsent,
+                whatsappInput,
+                "whatsapp-error",
+            );
         });
     }
 
@@ -361,8 +365,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const mobileLinks = document.querySelectorAll(
             '.welcome-mobile-nav-links a[href^="#"]',
         );
-
-        console.log(mobileLinks);
 
         if (!sections.length || !sidebarLinks.length) return;
 

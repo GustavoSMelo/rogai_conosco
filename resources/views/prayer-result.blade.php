@@ -145,9 +145,12 @@ new class extends Component {
     @elseif ($type === 'ai' && $prayer)
         <div class="result-card reveal visible reveal-delay-1">
             <h1 class="result-heading mb-6">Sua oração foi ouvida</h1>
-            <div class="result-quote text-left whitespace-pre-line mb-8 reveal visible reveal-delay-2">
+            <div class="result-quote text-left whitespace-pre-line mb-4 reveal visible reveal-delay-2">
                 {{ $prayer }}
             </div>
+            <p class="result-muted text-xs mb-8 reveal visible reveal-delay-2">
+                Esta oração foi gerada por IA e pode conter erros. Não medimos a qualidade da oração.
+            </p>
             <div class="flex flex-col gap-4 reveal visible reveal-delay-3">
                 <a href="{{ route('prayer.result', ['type' => 'instant', 'religion' => $religion]) }}"
                    class="result-btn-primary">
