@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+@php
+    \Illuminate\Support\Facades\Log::info('Prayer response email view rendered', [
+        'to' => $to ?? null,
+        'name' => $name ?? null,
+        'hasMedia' => ! empty($mediaUrl ?? null),
+    ]);
+@endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

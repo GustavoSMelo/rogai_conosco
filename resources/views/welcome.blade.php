@@ -1,18 +1,27 @@
 <?php
 
 use App\Models\PrayerRequest;
+use App\Services\SendPrayerResponseEmailService;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Illuminate\Support\Facades\Crypt;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you')] class extends Component {
+new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you')] class extends Component
+{
     public ?string $name = null;
+
     public ?string $whatsapp = null;
+
     public ?string $email = null;
+
     public string $message = '';
+
     public string $religion = 'catholic';
+
     public string $prayerType = 'ai';
+
     public bool $showSuccess = false;
 
     protected function rules(): array
@@ -31,11 +40,13 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
     {
         if (blank(trim($this->message))) {
             $this->addError('message', 'Por favor, descreva seu pedido de oração.');
+
             return;
         }
 
         if (blank(trim((string) $this->email)) && blank(trim((string) $this->whatsapp))) {
             $this->addError('contact', 'Informe pelo menos um meio de contato: WhatsApp ou e-mail.');
+
             return;
         }
 
@@ -59,6 +70,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
             'date_answered' => $delivery === 'person' ? null : now(),
         ]);
 
+        $this->sendConfirmationEmail($delivery);
+
         $this->showSuccess = true;
 
         $this->redirect(route('prayer.result', [
@@ -66,6 +79,37 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you'
             'religion' => $this->religion,
             'description' => Crypt::encryptString($this->message),
         ]));
+    }
+
+    private function sendConfirmationEmail(string $delivery): void
+    {
+        if ($delivery !== 'person' || blank(trim((string) $this->email))) {
+            Log::info('Email de confirmação ignorado', [
+                'delivery' => $delivery,
+                'email' => $this->email,
+            ]);
+
+            return;
+        }
+
+        Log::info('Enviando email de confirmação', [
+            'delivery' => $delivery,
+            'email' => $this->email,
+            'name' => $this->name,
+        ]);
+
+        try {
+            app(SendPrayerResponseEmailService::class)->send(
+                to: $this->email,
+                name: $this->name ?: 'Anônimo',
+                prayerMessage: $this->message,
+            );
+        } catch (Throwable $e) {
+            Log::error('Falha ao enviar email de confirmação', [
+                'email' => $this->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 };
 

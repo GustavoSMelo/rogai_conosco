@@ -17,15 +17,13 @@ class SendPrayerResponseEmailService
         ?string $mediaFilePath = null,
         ?string $mediaFileName = null,
     ): void {
-        Log::info("SendPrayerResponseEmail payload", [
-            "to" => $to,
-            "mediaUrl" => $mediaUrl,
-            "mediaFilePath" => $mediaFilePath,
-            "mediaFileName" => $mediaFileName,
-            "fileExists" =>
-                $mediaFilePath !== null && file_exists($mediaFilePath),
-            "fileSize" =>
-                $mediaFilePath !== null && file_exists($mediaFilePath)
+        Log::info('SendPrayerResponseEmail payload', [
+            'to' => $to,
+            'mediaUrl' => $mediaUrl,
+            'mediaFilePath' => $mediaFilePath,
+            'mediaFileName' => $mediaFileName,
+            'fileExists' => $mediaFilePath !== null && file_exists($mediaFilePath),
+            'fileSize' => $mediaFilePath !== null && file_exists($mediaFilePath)
                     ? filesize($mediaFilePath)
                     : null,
         ]);
@@ -39,24 +37,24 @@ class SendPrayerResponseEmailService
             $mediaFileName,
         );
 
-        Log::info("SendPrayerResponseEmail built", [
-            "attachments" => count($email->getAttachments()),
-            "attachmentNames" => array_map(
-                fn($attachment) => $attachment->getFilename(),
+        Log::info('SendPrayerResponseEmail built', [
+            'attachments' => count($email->getAttachments()),
+            'attachmentNames' => array_map(
+                fn ($attachment) => $attachment->getFilename(),
                 $email->getAttachments(),
             ),
         ]);
 
         $response = MailtrapClient::initSendingEmails(
-            apiKey: config("services.mailtrap-sdk.api_key"),
+            apiKey: config('services.mailtrap-sdk.api_key'),
         )->send($email);
 
         $result = json_decode($response->getBody()->getContents(), true) ?? [];
 
-        Log::info("SendPrayerResponseEmail result", [
-            "message_id" => $result["message_id"] ?? null,
-            "success" => $result["success"] ?? null,
-            "status" => $response->getStatusCode(),
+        Log::info('SendPrayerResponseEmail result', [
+            'message_id' => $result['message_id'] ?? null,
+            'success' => $result['success'] ?? null,
+            'status' => $response->getStatusCode(),
         ]);
     }
 
@@ -68,42 +66,42 @@ class SendPrayerResponseEmailService
         ?string $mediaFilePath = null,
         ?string $mediaFileName = null,
     ): MailtrapEmail {
-        $mediaUrl = $this->absoluteMediaUrl($mediaUrl);
+        $mediaUrl = $mediaFilePath ? null : $this->absoluteMediaUrl($mediaUrl);
 
         $email = new MailtrapEmail()
             ->from(
                 new Address(
-                    config("mail.from.address", "hello@example.com"),
-                    config("mail.from.name", "Rogai Conosco"),
+                    config('mail.from.address', 'hello@example.com'),
+                    config('mail.from.name', 'Rogai Conosco'),
                 ),
             )
             ->to($to)
-            ->subject("Rogai Conosco — Sua Oração Foi Respondida")
+            ->subject('Rogai Conosco — Sua Oração Foi Respondida')
             ->text(
-                "Olá, {$name}." .
-                    PHP_EOL .
-                    PHP_EOL .
-                    "Recebemos seu pedido de oração e preparamos uma resposta para você:" .
-                    PHP_EOL .
-                    PHP_EOL .
-                    "\"{$prayerMessage}\"" .
-                    PHP_EOL .
-                    PHP_EOL .
+                "Olá, {$name}.".
+                    PHP_EOL.
+                    PHP_EOL.
+                    'Recebemos seu pedido de oração e preparamos uma resposta para você:'.
+                    PHP_EOL.
+                    PHP_EOL.
+                    "\"{$prayerMessage}\"".
+                    PHP_EOL.
+                    PHP_EOL.
                     ($mediaUrl
-                        ? "Ouvir mensagem: {$mediaUrl}" . PHP_EOL . PHP_EOL
-                        : "") .
-                    "Que Deus abençoe sua vida e traga paz ao seu coração.",
+                        ? "Ouvir mensagem: {$mediaUrl}".PHP_EOL.PHP_EOL
+                        : '').
+                    'Que Deus abençoe sua vida e traga paz ao seu coração.',
             )
             ->html(
-                view("emails.prayer-response", [
-                    "name" => $name,
-                    "prayerMessage" => $prayerMessage,
-                    "mediaUrl" => $mediaUrl,
+                view('emails.prayer-response', [
+                    'name' => $name,
+                    'prayerMessage' => $prayerMessage,
+                    'mediaUrl' => $mediaUrl,
                 ])->render(),
             );
 
         if ($mediaFilePath) {
-            if (!file_exists($mediaFilePath)) {
+            if (! file_exists($mediaFilePath)) {
                 throw new \RuntimeException(
                     "Response media file not found at: {$mediaFilePath}",
                 );
@@ -119,8 +117,8 @@ class SendPrayerResponseEmailService
     {
         if (
             $mediaUrl === null ||
-            str_starts_with($mediaUrl, "http://") ||
-            str_starts_with($mediaUrl, "https://")
+            str_starts_with($mediaUrl, 'http://') ||
+            str_starts_with($mediaUrl, 'https://')
         ) {
             return $mediaUrl;
         }

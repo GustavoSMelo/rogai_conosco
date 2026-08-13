@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Services\SendPrayerResponseEmailService;
 use App\Models\PrayerRequest;
+use App\Services\SendPrayerResponseEmailService;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
@@ -60,7 +60,7 @@ class PainelResponderMediaToEmailTest extends TestCase
         $this->assertSame('oracao.mp3', $mediaFileName);
         $this->assertTrue(file_exists($mediaFilePath), "Attached file missing at {$mediaFilePath}");
 
-        $realAction = new SendPrayerResponseEmailService();
+        $realAction = new SendPrayerResponseEmailService;
         $email = $realAction->buildEmail(
             'maria@example.com',
             'Maria',
@@ -127,6 +127,32 @@ class PainelResponderMediaToEmailTest extends TestCase
         $this->assertNotNull($mediaFilePath);
         $this->assertTrue(file_exists($mediaFilePath), "File should be re-stored before send, missing at {$mediaFilePath}");
         $this->assertSame('oracao.mp3', $mediaFileName);
+
+        Storage::disk('public')->deleteDirectory('response-media');
+    }
+
+    public function test_email_send_is_blocked_when_attachment_exceeds_7mb(): void
+    {
+        $file = UploadedFile::fake()->createWithContent('video.mp4', str_repeat('x', 7340033));
+
+        $request = PrayerRequest::create([
+            'name' => 'Maria',
+            'message' => Crypt::encryptString('Pray for my family'),
+            'delivery' => 'person',
+            'prayer_type' => 'person-prayer-video',
+            'email' => Crypt::encryptString('maria@example.com'),
+            'has_answered' => false,
+            'date_answered' => null,
+        ]);
+
+        $this->mock(SendPrayerResponseEmailService::class)
+            ->shouldNotReceive('send');
+
+        Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
+            ->set('mediaFile', $file)
+            ->call('sendEmail')
+            ->assertSet('emailSent', false)
+            ->assertSet('emailError', 'Arquivo muito grande para envio por e-mail (máximo 7 MB). Use WhatsApp ou um link de mídia.');
 
         Storage::disk('public')->deleteDirectory('response-media');
     }

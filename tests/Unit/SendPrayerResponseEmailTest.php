@@ -13,7 +13,7 @@ class SendPrayerResponseEmailTest extends TestCase
     {
         parent::setUp();
 
-        $this->action = new SendPrayerResponseEmailService();
+        $this->action = new SendPrayerResponseEmailService;
     }
 
     public function test_builds_email_with_media_url(): void
@@ -82,6 +82,31 @@ class SendPrayerResponseEmailTest extends TestCase
             $this->assertCount(1, $attachments);
             $this->assertSame('oracao.mp3', $attachments[0]->getFilename());
             $this->assertSame('fake-audio-content', $attachments[0]->getBody());
+        } finally {
+            unlink($path);
+        }
+    }
+
+    public function test_attached_file_suppresses_media_link_in_body(): void
+    {
+        $path = tempnam(sys_get_temp_dir(), 'oracao');
+        file_put_contents($path, 'fake-video-content');
+
+        try {
+            $email = $this->action->buildEmail(
+                to: 'maria@example.com',
+                name: 'Maria',
+                prayerMessage: 'Pray for my family',
+                mediaUrl: 'https://example.com/video.mp4',
+                mediaFilePath: $path,
+                mediaFileName: 'video.mp4',
+            );
+
+            $attachments = $email->getAttachments();
+            $this->assertCount(1, $attachments);
+            $this->assertSame('video.mp4', $attachments[0]->getFilename());
+            $this->assertStringNotContainsString('https://example.com/video.mp4', $email->getTextBody());
+            $this->assertStringNotContainsString('Ouvir mensagem', $email->getHtmlBody());
         } finally {
             unlink($path);
         }

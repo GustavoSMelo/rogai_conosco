@@ -15,6 +15,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
 {
     use WithFileUploads;
 
+    private const EMAIL_ATTACHMENT_MAX_BYTES = 7340032;
+
     public PrayerRequest $request;
 
     public string $decryptedMessage = '';
@@ -157,6 +159,16 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
 
         try {
             [$mediaFilePath, $mediaFileName] = $this->resolveMediaForSend();
+
+            if ($mediaFilePath !== null && filesize($mediaFilePath) > self::EMAIL_ATTACHMENT_MAX_BYTES) {
+                $this->emailError = 'Arquivo muito grande para envio por e-mail (máximo 7 MB). Use WhatsApp ou um link de mídia.';
+                Log::warning('Email bloqueado: anexo excede 7 MB', [
+                    'request_id' => $this->request->id,
+                    'file_size' => filesize($mediaFilePath),
+                ]);
+
+                return;
+            }
 
             app(SendPrayerResponseEmailService::class)->send(
                 to: $this->decryptedEmail,
