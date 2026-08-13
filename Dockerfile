@@ -31,7 +31,7 @@ FROM node:22-alpine AS frontend-builder
 WORKDIR /app
 COPY . .
 COPY --from=dependency-builder /app/vendor ./vendor
-RUN npm ci && npm run build
+RUN npm install && npm ci && npm run build
 
 # Returning from my debian image get the project and move to /app, where my laravel app is working, also configuring nginx and fpm-sock
 FROM php-deb
