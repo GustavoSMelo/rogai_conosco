@@ -1,58 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rogai Conosco
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Prayer request platform — anonymous prayer requests with 3 delivery forms.
 
-## About Laravel
+Users can request prayers anonymously or register. Registered users can view history, leave reviews, and track emotional trends.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## How it works
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **Recorded prayer** — audio/video, delivered via WhatsApp/email, 24–48h SLA. A real person prays for you.
+2. **Instant prayer** — pre-written biblical prayers matched to the request.
+3. **AI-generated prayer** — LLM-based instant prayer (OpenRouter), informed by the user's faith and religious tradition.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tech stack
 
-## Learning Laravel
+| Layer     | Technology                                   |
+|-----------|----------------------------------------------|
+| Backend   | PHP 8.5, Laravel 13                          |
+| Frontend  | Livewire 3, Volt 1.7, Tailwind CSS 4, Vite 8, TypeScript, Blade |
+| Database  | SQLite (dev), MariaDB (prod / devcontainer)  |
+| AI        | OpenRouter API (chat completions)            |
+| Testing   | PHPUnit 12 (Unit + Feature), Pint, Larastan  |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requirements
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.5+
+- Composer 2
+- Node.js 22+ and npm
+- [Optional] Docker + VS Code Dev Containers extension (or GitHub Codespaces)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Setup with Dev Container (recommended)
 
-## Agentic Development
+The repo ships a ready-made dev environment in `.devcontainer/` — PHP 8.5, MariaDB, Composer, Node, CLI agentic tools (opencode, claude-code, openspec, impeccable).
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### VS Code
+
+1. Open the repository in VS Code.
+2. Install the **Dev Containers** extension (`ms-azuretools.vscode-containers`).
+3. Run **Dev Containers: Reopen in Container** (or `Ctrl+Shift+P` → "Rebuild and Reopen in Container").
+4. On first creation, the post-create script installs dependencies, copies `.env.devcontainer` to `.env`, and builds the frontend automatically.
+5. Start the dev servers:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer run dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The post-create script already ran `composer install`, `npm install` and `npm run build`, so you can also just run `php artisan serve` + `npm run dev` separately if you prefer.
 
-## Contributing
+Services available inside the container:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Service | URL/port                |
+|---------|-------------------------|
+| App     | http://localhost:8000   |
+| Vite    | http://localhost:5173   |
+| MariaDB | localhost:3306 (db: `rogaiconosco`, user/pass: `rogaiconosco`) |
 
-## Code of Conduct
+### GitHub Codespaces
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Open the repo on GitHub → **Code** → **Codespaces** → **Create codespace on main**. Same setup runs automatically.
 
-## Security Vulnerabilities
+### Enable AI features in the container
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+`.env.devcontainer` does not include AI keys. To enable AI-generated prayers, add to your `.env` inside the container:
 
-## License
+```
+OPENROUTER_API_KEY=sk-or-...
+OPENROUTER_MODEL=your/model
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Then restart the servers.
+
+## Setup without Dev Container
+
+Manual setup on your machine (SQLite used by default — no database server needed).
+
+```bash
+git clone git@github.com:GustavoSMelo/rogai_conosco.git
+cd rogai_conosco
+
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+
+npm install
+npm run build
+```
+
+Start the full dev environment (server + queue + logs + Vite, all at once):
+
+```bash
+composer run dev
+```
+
+Or run processes separately:
+
+```bash
+php artisan serve            # app at http://localhost:8000
+php artisan queue:listen     # process queued jobs
+npm run dev                  # Vite dev server
+```
+
+One-shot setup (equivalent to the devcontainer post-create):
+
+```bash
+composer run setup
+```
+
+### Environment variables
+
+Key variables in `.env`:
+
+| Variable                 | Description                                       |
+|--------------------------|---------------------------------------------------|
+| `DB_CONNECTION`          | `sqlite` (default, dev) or `mysql`/`mariadb`      |
+| `OPENROUTER_API_KEY`     | API key for AI-generated prayers (OpenRouter)     |
+| `OPENROUTER_MODEL`       | Model id used for AI prayers                      |
+| `DASHBOARD_PASSWORD`     | Password for the internal dashboard               |
+| `MAIL_MAILER`            | `log` in dev; configure SMTP/Mailtrap for delivery|
+
+## Testing
+
+```bash
+php artisan test            # all tests
+php artisan test --coverage # coverage report (target ≥ 75%)
+php artisan test --filter=SomeTest
+```
+
+Code quality gate (also enforced by the pre-commit hook in `.githooks/`):
+
+```bash
+vendor/bin/pint             # PSR-1/PSR-12 formatting
+vendor/bin/phpstan analyse  # static analysis (0 errors)
+```
+
+## Production (Docker)
+
+A production compose file (Nginx + PHP-FPM + MariaDB) lives at the repo root:
+
+```bash
+docker compose up -d --build
+```
+
+Set `DB_*` environment variables in your shell or `.env` before running (the compose file consumes `${DB_PASSWORD}`, `${DB_DATABASE}`, `${DB_USERNAME}`, `${DB_PORT}`).
