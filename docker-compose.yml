@@ -11,7 +11,7 @@ services:
         command: /bin/sh -c /app/start.sh
         environment:
             DB_HOST: rogai-db
-            APP_URL: "http://localhost:8082"
+            APP_URL: "https://rogaiconosco.com.br"
         restart: always
         deploy:
             resources:
