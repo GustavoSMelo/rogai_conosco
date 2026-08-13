@@ -117,6 +117,22 @@ Key variables in `.env`:
 | `DASHBOARD_PASSWORD`     | Password for the internal dashboard               |
 | `MAIL_MAILER`            | `log` in dev; configure SMTP/Mailtrap for delivery|
 
+### Dashboard password
+
+The dashboard requires an encrypted password stored as `DASHBOARD_PASSWORD` in `.env`. Generate it with:
+
+```bash
+php artisan dashboard:password "my-secret-password"
+```
+
+Or omit the argument to be prompted interactively:
+
+```bash
+php artisan dashboard:password
+```
+
+Copy the printed `DASHBOARD_PASSWORD=<encrypted>` line into your `.env` and restart the servers.
+
 ## Testing
 
 ```bash
