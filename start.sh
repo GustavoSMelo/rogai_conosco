@@ -7,11 +7,17 @@ until php artisan tinker --execute="DB::connection()->getPdo()"; do
     sleep 2
 done
 
+
 echo "Connected to database"
+
+php artisan package:discover --ansi
+php artisan config:cache
 php artisan config:clear
 php artisan migrate --seed --force
 php artisan cache:clear
 php artisan view:clear
+
+exec "$@"
 
 # Generate encrypted dashboard password from DASHBOARD_PLAIN_PASSWORD or interactive prompt
 if [ -t 0 ] && [ -z "${DASHBOARD_PLAIN_PASSWORD}" ]; then
