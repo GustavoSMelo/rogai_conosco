@@ -19,9 +19,7 @@ _ide_helper_models.php
 .phpactor.json
 phpstan.neon.dist
 phpunit.xml
-tailwind.config.js
 tsconfig.json
-postcss.config.js
 .npmrc
 .nvmrc
 AGENTS.md
