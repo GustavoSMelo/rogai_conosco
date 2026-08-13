@@ -20,7 +20,6 @@ _ide_helper_models.php
 phpstan.neon.dist
 phpunit.xml
 tailwind.config.js
-vite.config.js
 tsconfig.json
 postcss.config.js
 .npmrc
