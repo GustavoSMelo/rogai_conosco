@@ -2,7 +2,7 @@ services:
     rogai-backend:
         build: .
         ports:
-            - 8081:8080
+            - 8082:8080
         networks:
             - db_to_backend
         depends_on:
@@ -11,7 +11,7 @@ services:
         command: /bin/sh -c /app/start.sh
         environment:
             DB_HOST: rogai-db
-            APP_URL: "http://localhost:8081"
+            APP_URL: "http://localhost:8082"
         restart: always
         deploy:
             resources:
