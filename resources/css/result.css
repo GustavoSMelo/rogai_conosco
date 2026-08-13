@@ -1,6 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .result-card {
     @apply bg-white p-8 rounded-xl;
-    box-shadow: 0 1px 3px rgba(28, 28, 20, 0.08), 0 1px 2px rgba(28, 28, 20, 0.06);
+    box-shadow:
+        0 1px 3px rgba(28, 28, 20, 0.08),
+        0 1px 2px rgba(28, 28, 20, 0.06);
 }
 
 @media (min-width: 640px) {
@@ -10,12 +16,12 @@
 }
 
 .result-page-body {
-    background-image: url('../images/bgrogai-conosco.png');
+    background-image: url("../images/bgrogai-conosco.png");
     @apply bg-cover bg-center bg-no-repeat bg-fixed relative;
 }
 
 .result-page-body::before {
-    content: '';
+    content: "";
     @apply fixed inset-0 z-0 pointer-events-none;
     background-color: rgba(240, 240, 216, 0.85);
 }
@@ -107,8 +113,15 @@
 }
 
 @keyframes pulse-loading {
-    0%, 100% { opacity: 0.3; transform: scale(0.95); }
-    50% { opacity: 1; transform: scale(1); }
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.95);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .loading-dot {
@@ -116,15 +129,29 @@
     animation: pulse-loading 1.4s ease-in-out infinite both;
 }
 
-.loading-dot:nth-child(1) { animation-delay: 0s; }
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+.loading-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+.loading-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.loading-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 /* Subcategory chips */
-.subcategory-chip-0 { @apply bg-brand-primary-light text-brand-primary; }
-.subcategory-chip-1 { @apply bg-brand-accent-light text-brand-accent; }
-.subcategory-chip-2 { @apply bg-[#d8e8d8] text-[#5a7a5a]; }
-.subcategory-chip-3 { @apply bg-[#e8d8d0] text-[#7a5a4a]; }
+.subcategory-chip-0 {
+    @apply bg-brand-primary-light text-brand-primary;
+}
+.subcategory-chip-1 {
+    @apply bg-brand-accent-light text-brand-accent;
+}
+.subcategory-chip-2 {
+    @apply bg-[#d8e8d8] text-[#5a7a5a];
+}
+.subcategory-chip-3 {
+    @apply bg-[#e8d8d0] text-[#7a5a4a];
+}
 
 /* Fade-up reveal */
 .reveal {
