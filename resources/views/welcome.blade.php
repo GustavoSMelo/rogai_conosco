@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco Someone is praying for you')] class extends Component
+new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
 {
     public ?string $name = null;
 
