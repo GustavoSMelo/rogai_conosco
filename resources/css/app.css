@@ -25,6 +25,27 @@
         @apply outline-2 outline-offset-2 outline-brand-accent rounded-sm;
     }
 
+    ::-webkit-scrollbar {
+        @apply size-2.5;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-brand-bg;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-brand-primary/70;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-brand-primary;
+    }
+
+    html {
+        scrollbar-color: rgba(125, 138, 90, 0.7) rgba(240, 240, 216, 1);
+        scrollbar-width: thin;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         html {
             scroll-behavior: auto;

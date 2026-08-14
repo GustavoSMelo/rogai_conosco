@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.error-page {
+    @apply flex min-h-screen flex-col bg-cover bg-center bg-no-repeat bg-fixed text-brand-ink antialiased;
+    background-image: linear-gradient(rgba(240, 240, 216, 0.92), rgba(240, 240, 216, 0.92)),
+        url("../images/bgrogai-conosco.png");
+}
+
+.error-content {
+    @apply flex flex-1 flex-col items-center justify-center px-6 py-20 text-center;
+}
+
+.error-brand-link {
+    @apply flex items-center gap-2.5 no-underline transition-opacity duration-150;
+}
+.error-brand-link:hover {
+    @apply opacity-70;
+}
+.error-brand-link:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.error-logo {
+    @apply h-8 w-8 object-contain;
+}
+
+.error-brand-text {
+    @apply font-serif text-lg text-brand-primary;
+}
+
+.error-kicker {
+    @apply mt-10 text-xs font-medium tracking-widest text-brand-muted;
+}
+
+.error-heading {
+    @apply mt-4 max-w-2xl text-balance font-serif text-[clamp(1.9rem,4.5vw,3.25rem)] leading-[1.15] text-brand-ink;
+}
+
+.error-subline {
+    @apply mt-6 max-w-[45ch] text-lg leading-relaxed text-brand-muted;
+}
+
+.error-verse {
+    @apply mt-10 border-t border-brand-primary/25 pt-8 font-serif text-lg italic text-brand-accent;
+}
+
+.error-verse-cite {
+    @apply mt-2 block text-sm not-italic text-brand-muted;
+}
+
+.error-btn {
+    @apply mt-10 inline-block rounded-[5px] bg-[#5f6b41] px-10 py-3.5 font-medium text-white no-underline transition-colors duration-150;
+}
+.error-btn:hover {
+    @apply bg-[#525d37];
+}
+.error-btn:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-accent;
+}
+
+.error-footer {
+    @apply px-6 pb-8 text-center;
+}
+
+.error-footer p {
+    @apply text-xs text-brand-muted/70;
+}
+
+@keyframes error-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-reveal {
+    animation: error-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.error-reveal-delay-1 {
+    animation-delay: 0.08s;
+}
+
+.error-reveal-delay-2 {
+    animation-delay: 0.18s;
+}
+
+.error-reveal-delay-3 {
+    animation-delay: 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .error-reveal,
+    .error-reveal-delay-1,
+    .error-reveal-delay-2,
+    .error-reveal-delay-3 {
+        animation: none;
+    }
+}

@@ -10,6 +10,7 @@ export default defineConfig({
         "resources/css/painel.css",
         "resources/css/result.css",
         "resources/css/donate.css",
+        "resources/css/error.css",
         "resources/js/welcome.ts",
         "resources/js/donate.ts",
       ],
