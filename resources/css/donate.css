@@ -306,7 +306,7 @@
 }
 
 .donate-methods-grid {
-    @apply mt-6 grid gap-5 sm:grid-cols-2;
+    @apply mt-6 grid gap-5 sm:mx-auto sm:max-w-lg;
 }
 
 .donate-method-card {
@@ -324,11 +324,6 @@
     background: rgba(138, 90, 71, 0.08);
 }
 
-.donate-method-transfer .donate-method-icon {
-    @apply text-brand-primary;
-    background: rgba(125, 138, 90, 0.12);
-}
-
 .donate-method-title {
     @apply font-serif text-lg text-brand-ink;
 }
@@ -336,10 +331,6 @@
 .donate-method-badge {
     @apply ml-auto rounded-sm border border-brand-accent/30 px-2 py-0.5 text-[0.65rem] uppercase tracking-wide text-brand-accent/80;
     letter-spacing: 0.06em;
-}
-
-.donate-method-transfer .donate-method-badge {
-    @apply border-brand-primary/30 text-brand-primary;
 }
 
 .donate-method-desc {
@@ -370,22 +361,6 @@
 
 .donate-pix-feedback {
     @apply mt-2 text-center text-sm font-medium text-brand-accent/80;
-}
-
-.donate-bank-list {
-    @apply mt-5 space-y-3;
-}
-
-.donate-bank-row {
-    @apply flex items-baseline justify-between gap-4 border-b border-brand-primary/10 pb-2.5 text-sm;
-}
-
-.donate-bank-row dt {
-    @apply shrink-0 text-brand-muted;
-}
-
-.donate-bank-row dd {
-    @apply text-right font-medium text-brand-ink break-words;
 }
 
 .donate-method-note {

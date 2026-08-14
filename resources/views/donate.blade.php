@@ -46,7 +46,7 @@
         <section class="donate-methods" id="donate-methods">
             <div class="donate-methods-header">
                 <h2 class="donate-section-heading">Como doar</h2>
-                <p class="donate-section-hint">Pix ou transferência bancária. Qualquer valor é bem-vindo.</p>
+                <p class="donate-section-hint">Pix. Qualquer valor é bem-vindo.</p>
                 <p class="donate-chosen-hint" id="donate-chosen-hint" hidden>Você escolheu <strong></strong> — use os dados abaixo para doar.</p>
             </div>
 
@@ -78,48 +78,6 @@
                     <p class="donate-pix-feedback" id="pix-copy-feedback" hidden>Código copiado! É só colar no app do banco.</p>
                     <p class="donate-method-note">
                         Abra o app do seu banco, escolha Pix, escaneie o QR Code ou cole o código copiado.
-                    </p>
-                </div>
-
-                {{-- Bank transfer --}}
-                <div class="donate-method-card donate-method-transfer">
-                    <div class="donate-method-head">
-                        <span class="donate-method-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7"/><path d="M5 10v10"/><path d="M19 10v10"/><path d="M3 20h18"/><path d="M9 20v-6h6v6"/></svg>
-                        </span>
-                        <h3 class="donate-method-title">Transferência (TED)</h3>
-                        <span class="donate-method-badge">Banco</span>
-                    </div>
-                    <p class="donate-method-desc">
-                        Transfira direto de qualquer banco para nossa conta.
-                    </p>
-
-                    <dl class="donate-bank-list">
-                        {{-- TODO: preencher com os dados bancários reais --}}
-                        <div class="donate-bank-row">
-                            <dt>Banco</dt>
-                            <dd>Bradesco</dd>
-                        </div>
-                        <div class="donate-bank-row">
-                            <dt>Agência</dt>
-                            <dd>2856</dd>
-                        </div>
-                        <div class="donate-bank-row">
-                            <dt>Conta</dt>
-                            <dd>31974-0</dd>
-                        </div>
-                        <div class="donate-bank-row">
-                            <dt>Titular</dt>
-                            <dd>Gustavo Santos Melo</dd>
-                        </div>
-                        <div class="donate-bank-row">
-                            <dt>CNPJ / CPF</dt>
-                            <dd>477.049.548-61</dd>
-                        </div>
-                    </dl>
-
-                    <p class="donate-method-note">
-                        A maioria dos bancos não cobra TED. Qualquer valor ajuda a manter a oração gratuita e acessível.
                     </p>
                 </div>
 
