@@ -125,4 +125,6 @@ return [
 
     'dashboard_password' => env('DASHBOARD_PASSWORD'),
 
+    'dashboard_token_ttl' => env('DASHBOARD_TOKEN_TTL', 1440),
+
 ];

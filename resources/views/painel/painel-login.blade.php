@@ -1,12 +1,15 @@
 <?php
 
+use App\Services\PanelAccessTokenService;
+use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Illuminate\Support\Facades\Crypt;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] class extends Component {
+new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] class extends Component
+{
     public string $password = '';
+
     public ?string $error = null;
 
     public function login(): void
@@ -15,6 +18,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] clas
 
         if (blank($this->password)) {
             $this->error = 'Digite a senha de acesso.';
+
             return;
         }
 
@@ -22,22 +26,28 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Acesso Restrito')] clas
 
         if (blank($stored)) {
             $this->error = 'Senha não configurada.';
+
             return;
         }
 
         try {
             $decrypted = Crypt::decryptString($stored);
-        } catch (\Exception) {
+        } catch (Exception) {
             $this->error = 'Erro ao verificar senha.';
+
             return;
         }
 
-        if (!hash_equals($decrypted, $this->password)) {
+        if (! hash_equals($decrypted, $this->password)) {
             $this->error = 'Senha incorreta.';
+
             return;
         }
 
-        session()->put('dashboard_authenticated', true);
+        session()->regenerate();
+
+        $token = app(PanelAccessTokenService::class)->issue();
+        session()->put('rcapp-token', $token);
 
         $this->redirect(route('painel.dashboard'));
     }

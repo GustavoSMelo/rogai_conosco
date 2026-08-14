@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\PanelAccessToken;
 use App\Models\PrayerRequest;
+use App\Services\PanelAccessTokenService;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Livewire;
@@ -19,6 +21,15 @@ class DashboardAuthTest extends TestCase
         $plaintext = 'secret123';
         $encrypted = Crypt::encryptString($plaintext);
         config()->set('app.dashboard_password', $encrypted);
+    }
+
+    private function authenticate(): static
+    {
+        $token = app(PanelAccessTokenService::class)->issue();
+
+        $this->withSession(['rcapp-token' => $token]);
+
+        return $this;
     }
 
     public function test_redirects_to_login_when_not_authenticated(): void
@@ -103,7 +114,7 @@ class DashboardAuthTest extends TestCase
             'date_answered' => null,
         ]);
 
-        $this->withSession(['dashboard_authenticated' => true])
+        $this->authenticate()
             ->get('/painel')
             ->assertStatus(200)
             ->assertSee('Still waiting for prayer')
@@ -122,7 +133,7 @@ class DashboardAuthTest extends TestCase
             'date_answered' => null,
         ]);
 
-        $this->withSession(['dashboard_authenticated' => true])
+        $this->authenticate()
             ->get('/painel')
             ->assertStatus(200)
             ->assertSee('Anônimo');
@@ -139,7 +150,7 @@ class DashboardAuthTest extends TestCase
             'date_answered' => null,
         ]);
 
-        $this->withSession(['dashboard_authenticated' => true])
+        $this->authenticate()
             ->get('/painel')
             ->assertStatus(200)
             ->assertSee('Nenhum pedido pendente');
@@ -147,11 +158,90 @@ class DashboardAuthTest extends TestCase
 
     public function test_logout_clears_session_and_redirects(): void
     {
-        $this->withSession(['dashboard_authenticated' => true])
+        $this->authenticate()
             ->post('/painel/logout')
             ->assertRedirect('/painel/login');
 
         $this->get('/painel')
             ->assertRedirect('/painel/login');
+    }
+
+    public function test_login_issues_token_and_stores_it_in_session(): void
+    {
+        Livewire::test('painel::painel-login')
+            ->set('password', 'secret123')
+            ->call('login')
+            ->assertRedirect('/painel');
+
+        $this->assertTrue(session()->has('rcapp-token'));
+        $this->assertDatabaseHas('panel_access_tokens', [
+            'token_hash' => hash('sha256', session('rcapp-token')),
+        ]);
+    }
+
+    public function test_login_with_incorrect_password_does_not_issue_token(): void
+    {
+        Livewire::test('painel::painel-login')
+            ->set('password', 'wrong-password')
+            ->call('login')
+            ->assertNoRedirect();
+
+        $this->assertFalse(session()->has('rcapp-token'));
+        $this->assertSame(0, PanelAccessToken::query()->count());
+    }
+
+    public function test_dashboard_redirects_to_login_when_token_is_invalid(): void
+    {
+        $this->withSession(['rcapp-token' => 'invalid-token'])
+            ->get('/painel')
+            ->assertRedirect('/painel/login');
+    }
+
+    public function test_dashboard_redirects_to_login_when_token_is_expired(): void
+    {
+        $raw = app(PanelAccessTokenService::class)->issue();
+
+        PanelAccessToken::query()
+            ->where('token_hash', hash('sha256', $raw))
+            ->update(['expires_at' => now()->subMinute()]);
+
+        $this->withSession(['rcapp-token' => $raw])
+            ->get('/painel')
+            ->assertRedirect('/painel/login');
+    }
+
+    public function test_dashboard_forwards_requests_with_valid_token(): void
+    {
+        $this->authenticate()
+            ->get('/painel')
+            ->assertStatus(200);
+    }
+
+    public function test_logout_revokes_token_in_database(): void
+    {
+        $this->authenticate();
+
+        $raw = session('rcapp-token');
+
+        $this->post('/painel/logout')
+            ->assertRedirect('/painel/login');
+
+        $this->assertDatabaseMissing('panel_access_tokens', [
+            'token_hash' => hash('sha256', $raw),
+        ]);
+    }
+
+    public function test_expired_token_is_forgotten_from_session(): void
+    {
+        $raw = app(PanelAccessTokenService::class)->issue();
+
+        PanelAccessToken::query()
+            ->where('token_hash', hash('sha256', $raw))
+            ->update(['expires_at' => now()->subMinute()]);
+
+        $this->withSession(['rcapp-token' => $raw])
+            ->get('/painel');
+
+        $this->assertFalse(session()->has('rcapp-token'));
     }
 }

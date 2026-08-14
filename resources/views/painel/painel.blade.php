@@ -1,21 +1,32 @@
 <?php
 
 use App\Models\PrayerRequest;
+use App\Services\PanelAccessTokenService;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends Component {
+new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends Component
+{
     public array $requests = [];
+
     public int $prayerRequestCount = 0;
+
     public int $pendingCount = 0;
+
     public int $answeredCount = 0;
+
     public int $archivedCount = 0;
+
     public string $filter = 'pending';
+
     public bool $isEmpty = true;
+
     public bool $showDeleteModal = false;
+
     public int $deleteRequestId = 0;
+
     public string $deleteReason = '';
 
     public function mount(): void
@@ -40,7 +51,8 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
 
     public function logout(): void
     {
-        session()->forget('dashboard_authenticated');
+        app(PanelAccessTokenService::class)->revoke(session('rcapp-token'));
+        session()->forget('rcapp-token');
         $this->redirect(route('painel.login'));
     }
 
@@ -51,7 +63,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             ->where('delivery', 'person')
             ->first();
 
-        if (!$request) {
+        if (! $request) {
             return;
         }
 
@@ -78,7 +90,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             ->where('delivery', 'person')
             ->first();
 
-        if (!$request) {
+        if (! $request) {
             $this->cancelDelete();
 
             return;
@@ -98,7 +110,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             ->where('delivery', 'person')
             ->first();
 
-        if (!$request) {
+        if (! $request) {
             return;
         }
 
@@ -148,14 +160,14 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             $message = $req->message;
             try {
                 $message = Crypt::decryptString($req->message);
-            } catch (\Exception) {
+            } catch (Exception) {
             }
 
             $email = $req->email;
             if ($email) {
                 try {
                     $email = Crypt::decryptString($email);
-                } catch (\Exception) {
+                } catch (Exception) {
                 }
             }
 
@@ -163,11 +175,11 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
             if ($whatsapp) {
                 try {
                     $whatsapp = Crypt::decryptString($whatsapp);
-                } catch (\Exception) {
+                } catch (Exception) {
                 }
             }
 
-            $isOverdue = !$isArchivedFilter && !$isAnsweredFilter && $req->created_at->diffInHours(now()) > 48;
+            $isOverdue = ! $isArchivedFilter && ! $isAnsweredFilter && $req->created_at->diffInHours(now()) > 48;
 
             return [
                 'id' => $req->id,
@@ -183,7 +195,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Painel')] class extends
                 'deleted_at' => $req->deleted_at,
                 'delete_reason' => $req->delete_reason,
                 'elapsed' => $isAnsweredFilter && $req->date_answered
-                    ? 'Respondido em ' . $req->date_answered->format('d/m/Y')
+                    ? 'Respondido em '.$req->date_answered->format('d/m/Y')
                     : $req->created_at->diffForHumans(parts: 2),
                 'is_overdue' => $isOverdue,
             ];

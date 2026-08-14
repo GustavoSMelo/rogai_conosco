@@ -1,20 +1,23 @@
 <?php
 
 use App\Http\Middleware\DashboardAuthenticate;
+use App\Services\PanelAccessTokenService;
 use Illuminate\Support\Facades\Route;
 
-Route::livewire("/", "app::welcome")->name("welcome");
-Route::livewire("/prayer/result", "app::prayer-result")->name("prayer.result");
+Route::livewire('/', 'app::welcome')->name('welcome');
+Route::livewire('/prayer/result', 'app::prayer-result')->name('prayer.result');
 
-Route::view("/donate", "donate")->name("donate");
+Route::view('/donate', 'donate')->name('donate');
 
-Route::livewire("/painel/login", "painel::painel-login")->name("painel.login");
+Route::livewire('/painel/login', 'painel::painel-login')->name('painel.login');
 
 Route::middleware(DashboardAuthenticate::class)->group(function () {
-    Route::livewire("/painel", "painel::painel")->name("painel.dashboard");
-    Route::livewire("/painel/responder/{prayerRequest}", "painel::painel-responder")->name("painel.responder");
-    Route::post("/painel/logout", function () {
-        session()->forget('dashboard_authenticated');
+    Route::livewire('/painel', 'painel::painel')->name('painel.dashboard');
+    Route::livewire('/painel/responder/{prayerRequest}', 'painel::painel-responder')->name('painel.responder');
+    Route::post('/painel/logout', function () {
+        app(PanelAccessTokenService::class)->revoke(session('rcapp-token'));
+        session()->forget('rcapp-token');
+
         return redirect()->route('painel.login');
     })->name('painel.logout');
 });
