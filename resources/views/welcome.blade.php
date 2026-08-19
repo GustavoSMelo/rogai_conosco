@@ -1,9 +1,10 @@
 <?php
 
+use App\Mail\PrayerRequestConfirmationMail;
 use App\Models\PrayerRequest;
-use App\Services\SendPrayerResponseEmailService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -20,7 +21,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
 
     public string $religion = 'catholic';
 
-    public string $prayerType = 'ai';
+    public string $prayerType = 'person-bible-prayer-video';
 
     public bool $showSuccess = false;
 
@@ -99,11 +100,10 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
         ]);
 
         try {
-            app(SendPrayerResponseEmailService::class)->send(
-                to: $this->email,
+            Mail::to($this->email)->send(new PrayerRequestConfirmationMail(
                 name: $this->name ?: 'Anônimo',
                 prayerMessage: $this->message,
-            );
+            ));
         } catch (Throwable $e) {
             Log::error('Falha ao enviar email de confirmação', [
                 'email' => $this->email,

@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\PrayerRequestConfirmationMail;
 use App\Models\PrayerRequest;
-use App\Services\SendPrayerResponseEmailService;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -32,8 +33,8 @@ class WelcomePrayerRequestTest extends TestCase
             ->assertHasNoErrors();
 
         $this->assertDatabaseHas('prayer_requests', [
-            'prayer_type' => 'ai',
-            'delivery' => 'ai',
+            'prayer_type' => 'person-bible-prayer-video',
+            'delivery' => 'person',
         ]);
     }
 
@@ -47,8 +48,8 @@ class WelcomePrayerRequestTest extends TestCase
             ->assertHasNoErrors();
 
         $this->assertDatabaseHas('prayer_requests', [
-            'prayer_type' => 'ai',
-            'delivery' => 'ai',
+            'prayer_type' => 'person-bible-prayer-video',
+            'delivery' => 'person',
         ]);
     }
 
@@ -68,14 +69,7 @@ class WelcomePrayerRequestTest extends TestCase
 
     public function test_submit_person_type_with_email_sends_confirmation_email(): void
     {
-        $this->mock(SendPrayerResponseEmailService::class)
-            ->shouldReceive('send')
-            ->once()
-            ->withArgs(function (string $to, string $name, string $prayerMessage): bool {
-                return $to === 'alguem@example.com'
-                    && $name === 'Maria'
-                    && $prayerMessage === 'Pedido de oração por um familiar.';
-            });
+        Mail::fake();
 
         Livewire::test('app::welcome')
             ->set('message', 'Pedido de oração por um familiar.')
@@ -86,6 +80,12 @@ class WelcomePrayerRequestTest extends TestCase
             ->call('submit')
             ->assertHasNoErrors();
 
+        Mail::assertSent(PrayerRequestConfirmationMail::class, function (PrayerRequestConfirmationMail $mail): bool {
+            return $mail->hasTo('alguem@example.com')
+                && $mail->name === 'Maria'
+                && $mail->prayerMessage === 'Pedido de oração por um familiar.';
+        });
+
         $this->assertDatabaseHas('prayer_requests', [
             'prayer_type' => 'person-prayer-audio',
             'delivery' => 'person',
@@ -94,8 +94,7 @@ class WelcomePrayerRequestTest extends TestCase
 
     public function test_submit_ai_type_with_email_does_not_send_email(): void
     {
-        $this->mock(SendPrayerResponseEmailService::class)
-            ->shouldNotReceive('send');
+        Mail::fake();
 
         Livewire::test('app::welcome')
             ->set('message', 'Pedido de oração.')
@@ -104,12 +103,13 @@ class WelcomePrayerRequestTest extends TestCase
             ->set('prayerType', 'ai')
             ->call('submit')
             ->assertHasNoErrors();
+
+        Mail::assertNothingSent();
     }
 
     public function test_submit_person_type_without_email_does_not_send_email(): void
     {
-        $this->mock(SendPrayerResponseEmailService::class)
-            ->shouldNotReceive('send');
+        Mail::fake();
 
         Livewire::test('app::welcome')
             ->set('message', 'Pedido de oração.')
@@ -118,5 +118,7 @@ class WelcomePrayerRequestTest extends TestCase
             ->set('prayerType', 'person-bible-video')
             ->call('submit')
             ->assertHasNoErrors();
+
+        Mail::assertNothingSent();
     }
 }
