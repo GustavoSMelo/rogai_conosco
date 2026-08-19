@@ -137,6 +137,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
                 <a href="#hero" class="welcome-sidebar-link">Inicio</a>
                 <a href="#about" class="welcome-sidebar-link">Sobre</a>
                 <a href="#delivery" class="welcome-sidebar-link">Como funciona</a>
+                <a href="#delivery-options" class="welcome-sidebar-link">O que receber</a>
                 <a href="#anonymity" class="welcome-sidebar-link">Anonimato</a>
                 <a href="#opensource" class="welcome-sidebar-link">Open Source</a>
                 <div class="welcome-nav-buttons">
@@ -205,6 +206,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
                     <a href="#hero" class="nav-link welcome-mobile-nav-link">Inicio</a>
                     <a href="#about" class="nav-link welcome-mobile-nav-link">Sobre</a>
                     <a href="#delivery" class="nav-link welcome-mobile-nav-link">Como funciona</a>
+                    <a href="#delivery-options" class="nav-link welcome-mobile-nav-link">O que receber</a>
                     <a href="#anonymity" class="nav-link welcome-mobile-nav-link">Anonimato</a>
                     <a href="#opensource" class="nav-link welcome-mobile-nav-link">Open Source</a>
                     <div class="welcome-nav-buttons">
@@ -433,6 +435,77 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
                                 <div class="welcome-step-label">
                                     <span class="welcome-chip border-brand-ink/20 text-brand-ink/70">Instantâneo</span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {{-- Recorded delivery sub-options --}}
+            {{-- Títulos espelham as opções do select "Tipo de oração" no modal --}}
+            <section id="delivery-options" class="bg-brand-primary-light welcome-section">
+                <div class="mx-auto max-w-6xl">
+                    <div class="reveal mx-auto max-w-measure text-center">
+                        <h2 class="welcome-section-heading">
+                            O que você pode receber
+                        </h2>
+                        <p class="welcome-delivery-subtitle">
+                            Na oração gravada, você escolhe entre três formas de receber. Todas entregues em um único áudio ou vídeo.
+                        </p>
+                    </div>
+                    <div class="welcome-choice-board">
+                        {{-- Apenas oração --}}
+                        <div class="welcome-choice-row reveal reveal-delay-1">
+                            <div class="welcome-choice-icon bg-brand-primary/10 text-brand-primary">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                                </svg>
+                            </div>
+                            <div class="welcome-choice-content">
+                                <h3 class="welcome-choice-title">Apenas oração</h3>
+                                <p class="welcome-choice-text">
+                                    Uma pessoa real ora por você, do seu jeito, no seu momento.
+                                </p>
+                            </div>
+                            <div class="welcome-choice-meta">
+                                <span class="welcome-chip border-brand-primary/30 text-brand-primary">Áudio ou vídeo</span>
+                            </div>
+                        </div>
+                        {{-- Apenas palavra --}}
+                        <div class="welcome-choice-row reveal reveal-delay-2 hover:bg-brand-accent-light/60">
+                            <div class="welcome-choice-icon bg-brand-accent/10 text-brand-accent">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                </svg>
+                            </div>
+                            <div class="welcome-choice-content">
+                                <h3 class="welcome-choice-title">Apenas palavra</h3>
+                                <p class="welcome-choice-text">
+                                    Um versículo da Bíblia é escolhido para a sua situação exata.
+                                </p>
+                            </div>
+                            <div class="welcome-choice-meta">
+                                <span class="welcome-chip border-brand-accent/30 text-brand-accent">Áudio ou vídeo</span>
+                            </div>
+                        </div>
+                        {{-- Oração + palavra --}}
+                        <div class="welcome-choice-row reveal reveal-delay-3 hover:bg-brand-ink/5">
+                            <div class="welcome-choice-icon bg-brand-ink/10 text-brand-ink/70">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/>
+                                    <line x1="16" y1="8" x2="2" y2="22"/>
+                                    <line x1="17.5" y1="15" x2="9" y2="15"/>
+                                </svg>
+                            </div>
+                            <div class="welcome-choice-content">
+                                <h3 class="welcome-choice-title">Oração + palavra</h3>
+                                <p class="welcome-choice-text">
+                                    Você recebe a oração e a palavra em um único áudio ou vídeo. O cuidado e a mensagem juntos.
+                                </p>
+                            </div>
+                            <div class="welcome-choice-meta">
+                                <span class="welcome-chip border-brand-ink/20 text-brand-ink/70">Áudio ou vídeo</span>
                             </div>
                         </div>
                     </div>
@@ -739,14 +812,14 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco')] class extends Component
                         <select id="modal-prayer-type"
                                 wire:model="prayerType"
                                 class="welcome-form-input">
-                            <option value="ai">Oração por IA</option>
-                            <option value="instant">Oração instantânea</option>
+                            <option value="person-bible-prayer-video">Oração + palavra (vídeo)</option>
+                            <option value="person-bible-prayer-audio">Oração + palavra (áudio)</option>
                             <option value="person-prayer-audio">Apenas oração (áudio)</option>
                             <option value="person-prayer-video">Apenas oração (vídeo)</option>
                             <option value="person-bible-audio">Apenas palavra (áudio)</option>
                             <option value="person-bible-video">Apenas palavra (vídeo)</option>
-                            <option value="person-bible-prayer-audio">Oração + palavra (áudio)</option>
-                            <option value="person-bible-prayer-video">Oração + palavra (vídeo)</option>
+                            <option value="instant">Oração instantânea</option>
+                            <option value="ai">Oração por IA</option>
                         </select>
                     </div>
 

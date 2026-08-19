@@ -379,6 +379,49 @@ textarea.welcome-form-input {
     @apply mt-10 grid gap-8 text-left sm:grid-cols-2;
 }
 
+.welcome-choice-board {
+    @apply mt-12 divide-y divide-brand-primary/10 rounded-sm bg-white shadow-sm;
+}
+
+.welcome-choice-row {
+    @apply flex flex-col gap-5 p-6 transition-colors duration-200 sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:py-7;
+}
+.welcome-choice-row:hover {
+    @apply bg-brand-primary-light/60;
+}
+
+.welcome-choice-icon {
+    @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-sm transition-colors duration-200;
+}
+
+.welcome-choice-content {
+    @apply min-w-0 flex-1;
+}
+
+.welcome-choice-title {
+    @apply font-serif text-lg text-brand-ink sm:text-xl;
+}
+
+.welcome-choice-text {
+    @apply mt-1.5 text-sm leading-relaxed text-brand-muted sm:text-base;
+}
+
+.welcome-choice-meta {
+    @apply shrink-0 sm:ml-6;
+}
+
+.reveal.reveal-delay-1.visible {
+    animation-delay: 90ms;
+}
+
+.reveal.reveal-delay-2.visible {
+    animation-delay: 180ms;
+}
+
+.reveal.reveal-delay-3.visible {
+    animation-delay: 270ms;
+}
+
 .welcome-btn-wrapper {
     @apply mt-10;
 }
