@@ -27,7 +27,7 @@ class PainelResponderEmailTest extends TestCase
                     $to === 'maria@example.com'
                     && $name === 'Maria'
                     && $prayerMessage === 'Pray for my family'
-                    && $mediaUrl === 'https://example.com/audio.mp3'
+                    && $mediaUrl === null
                     && $mediaFilePath === $path
                     && $mediaFileName === 'oracao.mp3');
 
@@ -76,6 +76,43 @@ class PainelResponderEmailTest extends TestCase
         Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
             ->call('sendEmail')
             ->assertSet('emailSent', true);
+    }
+
+    public function test_send_email_prefers_media_link_over_uploaded_file(): void
+    {
+        $path = tempnam(sys_get_temp_dir(), 'oracao');
+        file_put_contents($path, 'fake-video-content');
+
+        try {
+            $action = $this->mock(SendPrayerResponseEmailService::class);
+            $action->shouldReceive('send')
+                ->once()
+                ->withArgs(fn (string $to, string $name, string $prayerMessage, ?string $mediaUrl, ?string $mediaFilePath, ?string $mediaFileName) =>
+                    $to === 'maria@example.com'
+                    && $mediaUrl === 'https://drive.com.br/oracao.mp4'
+                    && $mediaFilePath === $path
+                    && $mediaFileName === 'video.mp4');
+
+            $request = PrayerRequest::create([
+                'name' => 'Maria',
+                'message' => Crypt::encryptString('Pray for my family'),
+                'delivery' => 'person',
+                'prayer_type' => 'person-prayer-video',
+                'email' => Crypt::encryptString('maria@example.com'),
+                'has_answered' => false,
+                'date_answered' => null,
+            ]);
+
+            Livewire::test('painel::painel-responder', ['prayerRequest' => $request])
+                ->set('mediaUrl', 'http://localhost/storage/response-media/video.mp4')
+                ->set('mediaLink', 'https://drive.com.br/oracao.mp4')
+                ->set('mediaFilePath', $path)
+                ->set('mediaFileName', 'video.mp4')
+                ->call('sendEmail')
+                ->assertSet('emailSent', true);
+        } finally {
+            unlink($path);
+        }
     }
 
     public function test_send_email_missing_email_shows_error(): void

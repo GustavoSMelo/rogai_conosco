@@ -174,7 +174,7 @@ new #[Layout('layouts::app')] #[Title('Rogai Conosco — Responder Pedido')] cla
                 to: $this->decryptedEmail,
                 name: $this->request->name ?? 'Anônimo',
                 prayerMessage: $this->decryptedMessage,
-                mediaUrl: $this->mediaUrl ?: null,
+                mediaUrl: $this->isValidMediaLink($this->mediaLink) ? $this->mediaLink : null,
                 mediaFilePath: $mediaFilePath,
                 mediaFileName: $mediaFileName,
             );

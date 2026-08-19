@@ -87,7 +87,7 @@ class SendPrayerResponseEmailTest extends TestCase
         }
     }
 
-    public function test_attached_file_suppresses_media_link_in_body(): void
+    public function test_attached_file_keeps_media_link_in_body(): void
     {
         $path = tempnam(sys_get_temp_dir(), 'oracao');
         file_put_contents($path, 'fake-video-content');
@@ -105,8 +105,9 @@ class SendPrayerResponseEmailTest extends TestCase
             $attachments = $email->getAttachments();
             $this->assertCount(1, $attachments);
             $this->assertSame('video.mp4', $attachments[0]->getFilename());
-            $this->assertStringNotContainsString('https://example.com/video.mp4', $email->getTextBody());
-            $this->assertStringNotContainsString('Ouvir mensagem', $email->getHtmlBody());
+            $this->assertStringContainsString('https://example.com/video.mp4', $email->getTextBody());
+            $this->assertStringContainsString('Ouvir mensagem', $email->getHtmlBody());
+            $this->assertStringContainsString('<a href="https://example.com/video.mp4"', $email->getHtmlBody());
         } finally {
             unlink($path);
         }

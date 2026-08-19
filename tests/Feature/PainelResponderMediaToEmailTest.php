@@ -55,7 +55,7 @@ class PainelResponderMediaToEmailTest extends TestCase
         $this->assertNotNull($captured, 'send() was not invoked');
         [, , , $mediaUrl, $mediaFilePath, $mediaFileName] = $captured;
 
-        $this->assertNotNull($mediaUrl);
+        $this->assertNull($mediaUrl);
         $this->assertNotNull($mediaFilePath);
         $this->assertSame('oracao.mp3', $mediaFileName);
         $this->assertTrue(file_exists($mediaFilePath), "Attached file missing at {$mediaFilePath}");
@@ -123,7 +123,7 @@ class PainelResponderMediaToEmailTest extends TestCase
 
         [, , , $mediaUrl, $mediaFilePath, $mediaFileName] = $captured;
 
-        $this->assertNotNull($mediaUrl);
+        $this->assertNull($mediaUrl);
         $this->assertNotNull($mediaFilePath);
         $this->assertTrue(file_exists($mediaFilePath), "File should be re-stored before send, missing at {$mediaFilePath}");
         $this->assertSame('oracao.mp3', $mediaFileName);

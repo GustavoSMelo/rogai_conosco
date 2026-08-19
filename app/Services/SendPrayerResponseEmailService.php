@@ -66,7 +66,7 @@ class SendPrayerResponseEmailService
         ?string $mediaFilePath = null,
         ?string $mediaFileName = null,
     ): MailtrapEmail {
-        $mediaUrl = $mediaFilePath ? null : $this->absoluteMediaUrl($mediaUrl);
+        $mediaUrl = $this->absoluteMediaUrl($mediaUrl);
 
         $email = new MailtrapEmail()
             ->from(
