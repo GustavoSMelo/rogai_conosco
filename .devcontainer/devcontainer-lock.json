@@ -6,14 +6,14 @@
       "integrity": "sha256:92bd9a7d6b294cdf231e7c4c36897da20e09e65d580db516d768c8b309496a76"
     },
     "ghcr.io/devcontainers/features/common-utils:2": {
-      "version": "2.6.0",
-      "resolved": "ghcr.io/devcontainers/features/common-utils@sha256:836cd0dc8d0036367f7dbc63cbdae70f7d43f3819ca9daca637eeb1ca0d99611",
-      "integrity": "sha256:836cd0dc8d0036367f7dbc63cbdae70f7d43f3819ca9daca637eeb1ca0d99611"
+      "version": "2.7.1",
+      "resolved": "ghcr.io/devcontainers/features/common-utils@sha256:e76a6a8a35d1ad824daad1540725e0ec9f8ed2dc00d2850e990a9830013c7d08",
+      "integrity": "sha256:e76a6a8a35d1ad824daad1540725e0ec9f8ed2dc00d2850e990a9830013c7d08"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {
-      "version": "1.1.2",
-      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:7c409bf6316ffd85f04fd92fba85a744282639e603417dd4796409866bdb6805",
-      "integrity": "sha256:7c409bf6316ffd85f04fd92fba85a744282639e603417dd4796409866bdb6805"
+      "version": "1.1.3",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2",
+      "integrity": "sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2"
     },
     "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
       "version": "0.0.8",
@@ -21,9 +21,9 @@
       "integrity": "sha256:fd57a61a5187480b5e73f8041be5b67005be48f06503736df6cfdd8d0f38f3c4"
     },
     "ghcr.io/postfinance/devcontainer-features/node:1": {
-      "version": "1.0.0",
-      "resolved": "ghcr.io/postfinance/devcontainer-features/node@sha256:0fa130db8073c82386f021022fc5faf5908b844723e6c2a8afd0fa0461c19f86",
-      "integrity": "sha256:0fa130db8073c82386f021022fc5faf5908b844723e6c2a8afd0fa0461c19f86"
+      "version": "1.0.1",
+      "resolved": "ghcr.io/postfinance/devcontainer-features/node@sha256:ca4fdf7def6c75262129f0a07fc381392056426162e59026c291f258de9aa332",
+      "integrity": "sha256:ca4fdf7def6c75262129f0a07fc381392056426162e59026c291f258de9aa332"
     },
     "ghcr.io/postfinance/devcontainer-features/opencode:1": {
       "version": "1.1.0",
